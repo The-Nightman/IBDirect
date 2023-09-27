@@ -1,10 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [],
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  purge: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {},
   },
-  plugins: ['prettier-plugin-tailwindcss'],
-}
-
+  plugins: ["prettier-plugin-tailwindcss"],
+};
