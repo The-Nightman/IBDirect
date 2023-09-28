@@ -12,7 +12,7 @@ import { RouterLink } from "vue-router";
       <div class="h-80 px-8 py-14 rounded-b bg-white">
         <div class="flex flex-col justify-between h-full">
           <RouterLink
-            to="/Account/Patient/Login"
+            to="/Portal/Patient/Login"
             class="flex items-center justify-center w-full h-16 rounded text-2xl bg-zinc-300"
             tag="button"
             aria-label="Staff Login"
@@ -20,7 +20,7 @@ import { RouterLink } from "vue-router";
             Patient Login
           </RouterLink>
           <RouterLink
-            to="/Account/Staff/Login"
+            to="/Portal/Staff/Login"
             class="flex items-center justify-center w-full h-16 rounded text-2xl bg-zinc-300"
             tag="button"
             aria-label="Staff Login"
