@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { Header } from "./components"
 </script>
 
 <template>
-  <div>
-  </div>
+  <Header />
+  <RouterView />
 </template>
