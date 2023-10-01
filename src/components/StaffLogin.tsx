@@ -2,12 +2,12 @@ import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
 
 const StaffLogin = () => {
   interface LoginForm {
-    Username: string;
+    Name: string;
     Password: string;
   }
   const [valid, setValid] = useState<boolean>(true);
   const [formData, setFormData] = useState<LoginForm>({
-    Username: "",
+    Name: "",
     Password: "",
   });
 
@@ -49,7 +49,7 @@ const StaffLogin = () => {
               <div className="relative z-0 w-full group">
                 <input
                   type="text"
-                  name="Username"
+                  name="Name"
                   id="Username"
                   className={`block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 ${
                     valid ? "border-gray-300" : "border-red-500"
@@ -60,7 +60,7 @@ const StaffLogin = () => {
                   aria-labelledby="UsernameLabel"
                   aria-describedby="UsernameDesc"
                   aria-invalid={!valid}
-                  value={formData.Username}
+                  value={formData.Name}
                   onChange={handleChange}
                   onBlur={handleValidate}
                 />
