@@ -149,8 +149,8 @@ const DOBForm = () => {
               dobValid.year ? "border-gray-300" : "border-red-500"
             } appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
             required
-            min="0"
-            max="31"
+            min={(new Date().getFullYear()) - 120}
+            max={new Date().getFullYear()}
             aria-required="true"
             aria-labelledby="YearLabel"
             aria-describedby="YearDesc"
