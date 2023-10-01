@@ -80,7 +80,7 @@ const DOBForm = () => {
 
   return (
     <>
-      <legend className="text-xs text-gray-900 mb-5">Date of Birth</legend>
+      <legend className="text-xs text-gray-900 mb-5">Date of Birth DD/MM/YYYY</legend>
       <div className="flex flex-row w-full justify-between">
         <div className="relative z-0 w-10 group">
           <input
