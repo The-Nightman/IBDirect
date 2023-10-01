@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 
-const DOBForm = () => {
+const DOBForm = ({ setDobData }) => {
   interface dobData {
     day: string;
     month: string;
@@ -40,7 +40,9 @@ const DOBForm = () => {
       ...dobFormData,
       year: value,
     });
+    setDobData(dobFormData);
   };
+
   const handleMonthChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value }: { value: string } = e.target;
     if (Number(value) < 1 || Number(value) > 12) {
@@ -58,6 +60,8 @@ const DOBForm = () => {
       ...dobFormData,
       month: value,
     });
+
+    setDobData(dobFormData);
   };
   const handleDayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value }: { value: string } = e.target;
@@ -76,11 +80,14 @@ const DOBForm = () => {
       ...dobFormData,
       day: value,
     });
+    setDobData(dobFormData);
   };
 
   return (
     <>
-      <legend className="text-xs text-gray-900 mb-5">Date of Birth DD/MM/YYYY</legend>
+      <legend className="text-xs text-gray-900 mb-5">
+        Date of Birth DD/MM/YYYY
+      </legend>
       <div className="flex flex-row w-full justify-between">
         <div className="relative z-0 w-10 group">
           <input
@@ -149,7 +156,7 @@ const DOBForm = () => {
               dobValid.year ? "border-gray-300" : "border-red-500"
             } appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
             required
-            min={(new Date().getFullYear()) - 120}
+            min={new Date().getFullYear() - 120}
             max={new Date().getFullYear()}
             aria-required="true"
             aria-labelledby="YearLabel"
