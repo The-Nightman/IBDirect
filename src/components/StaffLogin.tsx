@@ -1,4 +1,5 @@
 import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
+import { staffLoginAPI } from "../api/staffLogin.js";
 
 const StaffLogin = () => {
   interface LoginForm {
@@ -34,6 +35,13 @@ const StaffLogin = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    staffLoginAPI(formData)
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch((err)=> {
+        console.log(err)
+      })
   };
 
   return (
