@@ -1,11 +1,12 @@
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
+import { dobData } from "./PatientLogin";
 
-const DOBForm = ({ setDobData }) => {
-  interface dobData {
-    day: string;
-    month: string;
-    year: string;
-  }
+interface SetProps {
+  dobData: dobData;
+  setDobData: React.Dispatch<React.SetStateAction<dobData>>;
+}
+
+const DOBForm = ({ dobData, setDobData }: SetProps) => {
   interface dobValidData {
     day: boolean;
     month: boolean;
@@ -16,11 +17,6 @@ const DOBForm = ({ setDobData }) => {
     day: true,
     month: true,
     year: true,
-  });
-  const [dobFormData, setDobFormData] = useState<dobData>({
-    day: "",
-    month: "",
-    year: "",
   });
 
   const handleYearChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +32,10 @@ const DOBForm = ({ setDobData }) => {
         year: true,
       });
     }
-    setDobFormData({
-      ...dobFormData,
-      year: value,
+    setDobData({
+      ...dobData,
+      year: value.slice(-4),
     });
-    setDobData(dobFormData);
   };
 
   const handleMonthChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,12 +51,10 @@ const DOBForm = ({ setDobData }) => {
         month: true,
       });
     }
-    setDobFormData({
-      ...dobFormData,
-      month: value,
+    setDobData({
+      ...dobData,
+      month: value.padStart(2, "0").slice(-2),
     });
-
-    setDobData(dobFormData);
   };
   const handleDayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value }: { value: string } = e.target;
@@ -76,11 +69,10 @@ const DOBForm = ({ setDobData }) => {
         day: true,
       });
     }
-    setDobFormData({
-      ...dobFormData,
-      day: value,
+    setDobData({
+      ...dobData,
+      day: value.padStart(2, "0").slice(-2),
     });
-    setDobData(dobFormData);
   };
 
   return (
@@ -104,8 +96,9 @@ const DOBForm = ({ setDobData }) => {
             aria-labelledby="DayLabel"
             aria-describedby="DayDesc"
             aria-invalid={!dobValid.day}
-            value={dobFormData.day}
+            value={dobData.day}
             onChange={handleDayChange}
+            onFocus={(e) => e.target.select()}
           />
           <label
             id="DayLabel"
@@ -133,8 +126,9 @@ const DOBForm = ({ setDobData }) => {
             aria-labelledby="MonthLabel"
             aria-describedby="MonthDesc"
             aria-invalid={!dobValid.month}
-            value={dobFormData.month}
+            value={dobData.month}
             onChange={handleMonthChange}
+            onFocus={(e) => e.target.select()}
           />
           <label
             id="MonthLabel"
@@ -162,8 +156,9 @@ const DOBForm = ({ setDobData }) => {
             aria-labelledby="YearLabel"
             aria-describedby="YearDesc"
             aria-invalid={!dobValid.year}
-            value={dobFormData.year}
+            value={dobData.year}
             onChange={handleYearChange}
+            onFocus={(e) => e.target.select()}
           />
           <label
             id="YearLabel"
