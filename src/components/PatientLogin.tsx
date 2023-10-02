@@ -1,16 +1,19 @@
 import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
 import { DOBForm } from ".";
+import { patientLoginAPI } from "../api/patientLogin.js";
+
+export interface dobData {
+  day: string;
+  month: string;
+  year: string;
+}
 
 const PatientLogin = () => {
   interface LoginForm {
     Name: string;
     Password: string;
   }
-  interface dobData {
-    day: string;
-    month: string;
-    year: string;
-  }
+
   const [valid, setValid] = useState<boolean>(true);
   const [dobData, setDobData] = useState<dobData>({
     day: "",
@@ -31,7 +34,10 @@ const PatientLogin = () => {
   };
 
   const handleValidate = (e: FocusEvent<HTMLInputElement>): void => {
-    if (!/^[A-Z]{2}[a-z]+\D/.test(e.target.value) && e.target.value != "") {
+    if (
+      (!/^[A-Z]{2}\w/.test(e.target.value) && e.target.value != "") ||
+      /\d/g.test(e.target.value)
+    ) {
       e.target.setCustomValidity("Invalid username format");
       setValid(false);
     } else {
@@ -40,25 +46,16 @@ const PatientLogin = () => {
     }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (Number(dobData.day) < 10) {
-      setDobData({
-        ...dobData,
-        day: `0${dobData.day}`,
-      });
-    }
-    if (Number(dobData.month) < 10) {
-      setDobData({
-        ...dobData,
-        month: `0${dobData.month}`,
-      });
-    }
-    const patientName = `${formData.Name}${dobData.day}${dobData.month}${dobData.year}`;
-    setFormData({
-      ...formData,
-      Name: patientName,
-    });
+    const loginObj = { ...formData, Name: `${formData.Name}${dobData.day}${dobData.month}${dobData.year}` };
+    patientLoginAPI(loginObj)
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch((err)=> {
+        console.log(err)
+      })
   };
 
   return (
@@ -71,7 +68,7 @@ const PatientLogin = () => {
           <form onSubmit={handleSubmit}>
             <fieldset className="flex flex-col h-full">
               <legend className="sr-only">Patient login form</legend>
-              <DOBForm setDobData={setDobData} />
+              <DOBForm dobData={dobData} setDobData={setDobData} />
               <div className="relative z-0 w-full mt-8 group">
                 <input
                   type="text"
