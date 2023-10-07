@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import { dobData } from "./PatientLogin";
+import { dobData } from "../Login/PatientLogin";
 
 interface SetProps {
   dobData: dobData;

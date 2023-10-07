@@ -1,6 +1,6 @@
 import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
-import { DOBForm } from ".";
-import { patientLoginAPI } from "../api/patientLogin.js";
+import { DOBForm } from "../index.js";
+import { patientLoginAPI } from "../../api/patientLogin.js";
 
 export interface dobData {
   day: string;
