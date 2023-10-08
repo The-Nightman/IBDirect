@@ -1,5 +1,5 @@
 import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
-import { staffLoginAPI } from "../api/staffLogin.js";
+import { staffLoginAPI } from "../../api/staffLogin.js";
 
 const StaffLogin = () => {
   interface LoginForm {
