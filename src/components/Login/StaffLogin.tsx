@@ -1,7 +1,12 @@
 import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
 import { staffLoginAPI } from "../../api/staffLogin.js";
+import { useAuth } from "../../context/AuthContext.js";
+import { useNavigate } from "react-router-dom";
 
 const StaffLogin = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   interface LoginForm {
     Name: string;
     Password: string;
@@ -37,11 +42,12 @@ const StaffLogin = () => {
     e.preventDefault();
     staffLoginAPI(formData)
       .then((res) => {
-        console.log(res.data)
+        login(res.data.token);
+        navigate("/dashboard");
       })
-      .catch((err)=> {
-        console.log(err)
-      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
