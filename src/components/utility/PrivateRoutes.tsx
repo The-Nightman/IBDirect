@@ -10,7 +10,6 @@ const PrivateRoutes = () => {
   } else {
     auth = false;
   }
-  console.log(auth, user)
   return <>{auth ? <Outlet /> : <Navigate to={"/"}/>}</>;
 };
 export default PrivateRoutes;
