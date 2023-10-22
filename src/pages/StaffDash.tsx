@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { userStaffDetails } from "../api/getStaffUserDetails";
 import { useAuth } from "../context/AuthContext";
-import { StaffDashboard } from "../components";
+import { Link, Outlet } from "react-router-dom";
 
 export default function StaffDash() {
   interface userData {
@@ -44,7 +44,51 @@ export default function StaffDash() {
               <p>{userData.practice}</p>
             </div>
           </div>
-          <StaffDashboard />
+          <div className="md:grid grid-cols-[max-content_auto]">
+            <nav
+              className="hidden md:block p-5"
+              aria-labelledby="dashboardmenulabel"
+            >
+              <h3 className="text-2xl mb-6" id="dashboardmenulabel">
+                Dashboard Menu
+              </h3>
+              <ul className="list-none text-lg space-y-4">
+                <li>
+                  <Link
+                    className="hover:text-blue-700 hover:underline"
+                    to={"/dashboard/patients"}
+                  >
+                    Patients
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="hover:text-blue-700 hover:underline"
+                    to={"/dashboard/staff"}
+                  >
+                    Staff
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="hover:text-blue-700 hover:underline"
+                    to={"/dashboard/appointments"}
+                  >
+                    My Appointments
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="hover:text-blue-700 hover:underline"
+                    to={"/dashboard/mydetails"}
+                  >
+                    My Personal Details
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+            <Outlet />
+          </div>
         </section>
       </div>
     </>
