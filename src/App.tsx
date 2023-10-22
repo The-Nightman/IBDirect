@@ -1,4 +1,4 @@
-import { Header, PrivateRoutes } from "./components";
+import { Header, PrivateRoutes, StaffDashboardPatients } from "./components";
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
 import { LoginSwitchBoard, PatientLogin, StaffLogin } from "./components";
@@ -15,7 +15,9 @@ function App() {
           <Route path="Portal/Staff/Login" element={<StaffLogin />}/>
         </Route>
         <Route element={<PrivateRoutes />}>
-          <Route path="/dashboard" element={<StaffDash />}/>
+          <Route path="/dashboard" element={<StaffDash />}>
+            <Route path="/dashboard/patients" element={<StaffDashboardPatients />} />
+          </Route>
         </Route>
       </Routes>
     </>
