@@ -7,6 +7,7 @@ import StaffDash from "./pages/StaffDash";
 function App() {
   return (
     <>
+    <div className="flex flex-col h-screen">
       <Header />
       <Routes>
         <Route path="/" element={<Root />}>
@@ -20,6 +21,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      </div>
     </>
   );
 }
