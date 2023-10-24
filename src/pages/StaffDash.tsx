@@ -33,9 +33,8 @@ export default function StaffDash() {
 
   return (
     <>
-      <div className="flex justify-center">
-        <section className="shadow-xl">
-          <div className="w-screen flex flex-nowrap flex-col md:flex-row justify-between text-white h-fit min-h-[5rem] py-1 px-2 bg-gradient-to-br from-sky-700 to-blue-400">
+        <section className="flex flex-1 flex-col justify-center">
+          <div className="flex flex-nowrap flex-col md:flex-row justify-between text-white h-fit min-h-[5rem] py-1 px-2 bg-gradient-to-br from-sky-700 to-blue-400">
             <h2 className="text-3xl h-fit">{userData.name}</h2>
             <div className="flex flex-col pt-2 md:pl-8 md:items-end md:flex-row md:">
               <p className="md:pr-4">
@@ -44,9 +43,9 @@ export default function StaffDash() {
               <p>{userData.practice}</p>
             </div>
           </div>
-          <div className="md:grid grid-cols-[max-content_auto]">
+          <div className="md:grid grid-cols-[max-content_auto] h-full">
             <nav
-              className="hidden md:block p-5"
+              className="hidden md:flex flex-col flex-1 p-5 border-slate-400 border-r"
               aria-labelledby="dashboardmenulabel"
             >
               <h3 className="text-2xl mb-6" id="dashboardmenulabel">
@@ -90,7 +89,6 @@ export default function StaffDash() {
             <Outlet />
           </div>
         </section>
-      </div>
     </>
   );
 }
