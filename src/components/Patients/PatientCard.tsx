@@ -13,7 +13,6 @@ const PatientCard = ({ name, dob, diagnosis, stoma }: PatientCardProps) => {
   } else if (stoma === true) {
     stoma = "Y";
   }
-  console.log(typeof dob);
 
   return (
     <>
