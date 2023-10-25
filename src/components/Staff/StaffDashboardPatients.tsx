@@ -37,9 +37,8 @@ const StaffDashboardPatients = () => {
         <ul>
           {patients.map((p) => {
             return (
-              <li className="border-b border-slate-400">
+              <li className="border-b border-slate-400" key={p.patientId}>
                 <PatientCard
-                  key={p.patientId}
                   name={p.name}
                   dob={p.dateOfBirth}
                   diagnosis={p.diagnosis}
