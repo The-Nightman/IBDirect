@@ -1,13 +1,14 @@
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 interface PatientCardProps {
+  id: number;
   name: string;
   dob: string;
   diagnosis: string;
   stoma: boolean | string;
 }
 
-const PatientCard = ({ name, dob, diagnosis, stoma }: PatientCardProps) => {
+const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
   if (stoma === false) {
     stoma = "N";
   } else if (stoma === true) {
@@ -21,7 +22,9 @@ const PatientCard = ({ name, dob, diagnosis, stoma }: PatientCardProps) => {
         <p>{dob.split("-").reverse().join("/")}</p>
         <p>{diagnosis}</p>
         <p>Stoma: {stoma}</p>
-        <MoreHorizIcon />
+        <button type='button' aria-label='More Patient details' >
+          <MoreHorizIcon />
+        </button>
       </div>
     </>
   );
