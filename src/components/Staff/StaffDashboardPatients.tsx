@@ -39,6 +39,7 @@ const StaffDashboardPatients = () => {
             return (
               <li className="border-b border-slate-400" key={p.patientId}>
                 <PatientCard
+                  id={p.patientId}
                   name={p.name}
                   dob={p.dateOfBirth}
                   diagnosis={p.diagnosis}
