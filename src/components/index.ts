@@ -4,6 +4,16 @@ import PatientLogin from "./Login/PatientLogin.tsx";
 import StaffLogin from "./Login/StaffLogin.tsx";
 import DOBForm from "./Forms/DOBform.tsx";
 import PrivateRoutes from "./utility/PrivateRoutes.tsx";
+import StaffDashboardPatients from "./Staff/StaffDashboardPatients.tsx";
+import PatientCard from "./Patients/PatientCard.tsx";
 
-
-export { Header, LoginSwitchBoard, PatientLogin, StaffLogin, DOBForm, PrivateRoutes }
+export {
+  Header,
+  LoginSwitchBoard,
+  PatientLogin,
+  StaffLogin,
+  DOBForm,
+  PrivateRoutes,
+  StaffDashboardPatients,
+  PatientCard,
+};
