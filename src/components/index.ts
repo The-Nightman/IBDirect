@@ -6,6 +6,7 @@ import DOBForm from "./Forms/DOBform.tsx";
 import PrivateRoutes from "./utility/PrivateRoutes.tsx";
 import StaffDashboardPatients from "./Staff/StaffDashboardPatients.tsx";
 import PatientCard from "./Patients/PatientCard.tsx";
+import PatientDetails from "./Patients/PatientDetails.tsx";
 
 export {
   Header,
@@ -16,4 +17,5 @@ export {
   PrivateRoutes,
   StaffDashboardPatients,
   PatientCard,
+  PatientDetails,
 };
