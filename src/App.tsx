@@ -7,20 +7,23 @@ import StaffDash from "./pages/StaffDash";
 function App() {
   return (
     <>
-    <div className="flex flex-col h-screen">
-      <Header />
-      <Routes>
-        <Route path="/" element={<Root />}>
-          <Route path="" element={<LoginSwitchBoard />}/>
-          <Route path="Portal/Patient/Login" element={<PatientLogin />}/>
-          <Route path="Portal/Staff/Login" element={<StaffLogin />}/>
-        </Route>
-        <Route element={<PrivateRoutes />}>
-          <Route path="/dashboard" element={<StaffDash />}>
-            <Route path="/dashboard/patients" element={<StaffDashboardPatients />} />
+      <div className="flex flex-col h-screen">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Root />}>
+            <Route path="" element={<LoginSwitchBoard />} />
+            <Route path="Portal/Patient/Login" element={<PatientLogin />} />
+            <Route path="Portal/Staff/Login" element={<StaffLogin />} />
           </Route>
-        </Route>
-      </Routes>
+          <Route element={<PrivateRoutes />}>
+            <Route path="/dashboard" element={<StaffDash />}>
+              <Route
+                path="/dashboard/patients"
+                element={<StaffDashboardPatients />}
+              />
+            </Route>
+          </Route>
+        </Routes>
       </div>
     </>
   );
