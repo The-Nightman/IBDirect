@@ -2,6 +2,7 @@ import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
 import { staffLoginAPI } from "../../api/staffLogin.js";
 import { useAuth } from "../../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
+import SpinnerStatus from "../UX/Spinner.js";
 
 const StaffLogin = () => {
   const { login } = useAuth();
@@ -11,6 +12,7 @@ const StaffLogin = () => {
     Name: string;
     Password: string;
   }
+  const [loading, setLoading] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(true);
   const [formData, setFormData] = useState<LoginForm>({
     Name: "",
@@ -40,18 +42,21 @@ const StaffLogin = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    setLoading(true);
     staffLoginAPI(formData)
       .then((res) => {
         login(res.data.token);
         navigate("/dashboard");
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
 
   return (
     <>
+      { loading && <SpinnerStatus /> }
       <section className="w-72 mt-8 shadow-xl">
         <div className="flex justify-center h-20 rounded-t bg-gradient-to-br from-sky-700 to-blue-400">
           <h2 className="text-4xl self-center text-white">Sign In</h2>
