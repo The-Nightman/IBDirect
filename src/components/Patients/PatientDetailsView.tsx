@@ -7,10 +7,12 @@ import PermContactCalendarOutlinedIcon from "@mui/icons-material/PermContactCale
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined";
 import { parseDate } from "../../utils/parseDate";
+import { updatePatientNotes } from "../../api/updatePatientNotes";
 
 const PatientDetailsView = () => {
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
   const [editNotes, setEditNotes] = useState<boolean>(false);
+  const [notes, setNotes] = useState<string>("");
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
 
@@ -22,6 +24,7 @@ const PatientDetailsView = () => {
       .catch((err) => {
         console.log(err);
       });
+    setNotes(patientData?.notes ?? "");
 
     const notesAreaResize = () => {
       if (notesAreaRef.current) {
@@ -47,8 +50,21 @@ const PatientDetailsView = () => {
     }
   };
 
+  const handleEditNotes = () => {
+    if (editNotes) {
+      setNotes(patientData?.notes ?? "");
+    }
+    setEditNotes(!editNotes);
+  }
+
   const handleSaveNotes = () => {
-    setEditNotes(false);
+    updatePatientNotes(id, notes)
+      .then((_res) => {
+        setEditNotes(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const parseDiagnosis = () => {
@@ -127,12 +143,15 @@ const PatientDetailsView = () => {
                       ? "bg-zinc-400 hover:bg-zinc-700"
                       : "bg-red-400 hover:bg-red-700"
                   } hover:text-white`}
-                  onClick={() => setEditNotes(!editNotes)}
+                  onClick={handleEditNotes}
                 >
                   {editNotes ? "Cancel Edit" : "Edit Notes"}
                 </button>
                 {editNotes && (
-                  <button className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 hover:text-white" onClick={handleSaveNotes}>
+                  <button
+                    className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 hover:text-white"
+                    onClick={handleSaveNotes}
+                  >
                     Save Notes
                   </button>
                 )}
@@ -141,8 +160,9 @@ const PatientDetailsView = () => {
                 disabled={!editNotes}
                 aria-label="Patient Notes"
                 className="w-full resize-none overflow-hidden"
-                value={patientData?.notes ? patientData.notes : ""}
+                value={notes}
                 ref={notesAreaRef}
+                onChange={(e) => setNotes(e.target.value)}
               />
             </div>
           </div>
