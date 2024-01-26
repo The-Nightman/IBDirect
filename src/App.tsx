@@ -1,7 +1,14 @@
-import { Header, PrivateRoutes, StaffDashboardPatients } from "./components";
+import {
+  Header,
+  LoginSwitchBoard,
+  PatientLogin,
+  StaffLogin,
+  PatientDetailsView,
+  PrivateRoutes,
+  StaffDashboardPatients,
+} from "./components";
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
-import { LoginSwitchBoard, PatientLogin, StaffLogin } from "./components";
 import StaffDash from "./pages/StaffDash";
 
 function App() {
@@ -20,6 +27,10 @@ function App() {
               <Route
                 path="/dashboard/patients"
                 element={<StaffDashboardPatients />}
+              />
+              <Route
+                path="/dashboard/patients/details/:id"
+                element={<PatientDetailsView />}
               />
             </Route>
           </Route>
