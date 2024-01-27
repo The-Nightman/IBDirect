@@ -6,14 +6,15 @@ import SpinnerStatus from "../UX/Spinner.js";
 import Toast from "../UX/Toast.js";
 import { ErrorState } from "../../interfaces/ErrorState.js";
 
+interface LoginForm {
+  Name: string;
+  Password: string;
+}
+
 const StaffLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  interface LoginForm {
-    Name: string;
-    Password: string;
-  }
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const [valid, setValid] = useState<boolean>(true);
