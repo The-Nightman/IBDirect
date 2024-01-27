@@ -8,8 +8,16 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined";
 import { parseDate } from "../../utils/parseDate";
 import { updatePatientNotes } from "../../api/updatePatientNotes";
+import { SpinnerStatus, Toast } from "..";
+import { ErrorState } from "../../interfaces/ErrorState";
 
 const PatientDetailsView = () => {
+  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
+  const [notesError, setNotesError] = useState<ErrorState>({
+    state: false,
+    message: "",
+  });
+  const [loading, setLoading] = useState<boolean>(true);
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
   const [editNotes, setEditNotes] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
@@ -17,12 +25,19 @@ const PatientDetailsView = () => {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
+    setError({ state: false, message: "" });
     getPatientDetails(id)
       .then((res) => {
+        setLoading(false);
         setPatientData(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response === undefined) {
+          setError({ ...error, state: true });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
+        setLoading(false);
       });
     setNotes(patientData?.notes ?? "");
 
@@ -55,7 +70,7 @@ const PatientDetailsView = () => {
       setNotes(patientData?.notes ?? "");
     }
     setEditNotes(!editNotes);
-  }
+  };
 
   const handleSaveNotes = () => {
     updatePatientNotes(id, notes)
@@ -63,7 +78,11 @@ const PatientDetailsView = () => {
         setEditNotes(false);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response === undefined) {
+          setNotesError({ ...error, state: true });
+        } else {
+          setNotesError({ state: true, message: err.response.data });
+        }
       });
   };
 
@@ -75,8 +94,17 @@ const PatientDetailsView = () => {
     }
   };
 
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
+  };
+
+  const closeNotesErrorState = () => {
+    setNotesError({ state: false, message: "" });
+  };
+
   return (
     <>
+      {loading && <SpinnerStatus />}
       <section className="flex flex-col">
         <div className="border-b border-slate-300">
           <button
@@ -88,6 +116,13 @@ const PatientDetailsView = () => {
             <p>Back to Patients</p>
           </button>
         </div>
+        {error.state && (
+          <Toast
+            color={"failure"}
+            message={error.message}
+            handleErrorState={closeErrorState}
+          />
+        )}
         <section className="m-4">
           <div className="mb-10">
             <h2 className="text-3xl font-bold mb-4">
@@ -136,6 +171,13 @@ const PatientDetailsView = () => {
               </div>
             </div>
             <div className="my-4">
+              {notesError.state && (
+                <Toast
+                  color={"failure"}
+                  message={notesError.message}
+                  handleErrorState={closeNotesErrorState}
+                />
+              )}
               <div className="flex justify-between mb-1">
                 <button
                   className={`rounded-sm px-1 ${
