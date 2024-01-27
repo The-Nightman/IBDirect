@@ -9,6 +9,7 @@ import PatientCard from "./Patients/PatientCard.tsx";
 import PatientDetailsView from "./Patients/PatientDetailsView.tsx";
 import Toast from "./UX/Toast.tsx";
 import SpinnerStatus from "./UX/Spinner.tsx";
+import SkeletonPatientCard from "./UX/SkeletonPatientCard.tsx";
 
 export {
   Header,
@@ -22,4 +23,5 @@ export {
   PatientDetailsView,
   Toast,
   SpinnerStatus,
+  SkeletonPatientCard,
 };
