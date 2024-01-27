@@ -57,8 +57,12 @@ const StaffLogin = () => {
         navigate("/dashboard");
       })
       .catch((err) => {
+        if (err.response === undefined) {
+          setError({ ...error, state: true });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
         setLoading(false);
-        setError({ state: true, message: err.response.data });
       });
   };
 
