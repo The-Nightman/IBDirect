@@ -184,8 +184,8 @@ const PatientDetailsView = () => {
                 <button
                   className={`rounded-sm px-1 ${
                     !editNotes
-                      ? "bg-zinc-400 hover:bg-zinc-700"
-                      : "bg-red-400 hover:bg-red-700"
+                      ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
+                      : "bg-red-400 hover:bg-red-700 active:bg-red-500"
                   } hover:text-white`}
                   onClick={handleEditNotes}
                 >
@@ -193,7 +193,7 @@ const PatientDetailsView = () => {
                 </button>
                 {editNotes && (
                   <button
-                    className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 hover:text-white"
+                    className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
                     onClick={handleSaveNotes}
                   >
                     Save Notes
