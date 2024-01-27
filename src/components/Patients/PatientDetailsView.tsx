@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getPatientDetails } from "../../api/getPatientDetails";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PatientDetails } from "../../interfaces/PatientDetails";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import PermContactCalendarOutlinedIcon from "@mui/icons-material/PermContactCalendarOutlined";
@@ -23,6 +23,7 @@ const PatientDetailsView = () => {
   const [notes, setNotes] = useState<string>("");
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setError({ state: false, message: "" });
@@ -108,9 +109,10 @@ const PatientDetailsView = () => {
       <section className="flex flex-col">
         <div className="border-b border-slate-300">
           <button
-            className="flex flex-row items-center gap-2 text-lg p-1"
+            className="flex flex-row items-center gap-2 text-lg p-1 hover:bg-zinc-300 hover:text-blue-600 active:bg-slate-300 active:text-blue-700"
             type="button"
             aria-label="Back to Patients"
+            onClick={() => navigate(-1)}
           >
             <ArrowBackOutlinedIcon />
             <p>Back to Patients</p>
