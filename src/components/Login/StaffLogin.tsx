@@ -2,8 +2,7 @@ import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
 import { staffLoginAPI } from "../../api/staffLogin.js";
 import { useAuth } from "../../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
-import SpinnerStatus from "../UX/Spinner.js";
-import Toast from "../UX/Toast.js";
+import { SpinnerStatus, Toast } from "../";
 import { ErrorState } from "../../interfaces/ErrorState.js";
 
 interface LoginForm {
