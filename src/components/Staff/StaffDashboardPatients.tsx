@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { staffPatientsList } from "../../api/getStaffPatientsList";
-import { PatientCard, SpinnerStatus, SkeletonPatientCard } from "..";
+import { PatientCard, SpinnerStatus, SkeletonPatientCard, Toast } from "..";
 import { useAuth } from "../../context/AuthContext";
+import { ErrorState } from "../../interfaces/ErrorState";
 
 interface PatientsBrief {
   patientId: number;
@@ -12,25 +13,36 @@ interface PatientsBrief {
 }
 
 const StaffDashboardPatients = () => {
+  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const [loading, setLoading] = useState<boolean>(true);
   const [patients, setPatients] = useState<PatientsBrief[]>([]);
 
   const { user } = useAuth();
 
   useEffect(() => {
+    setError({ state: false, message: "" });
     staffPatientsList(user.userID)
       .then((res) => {
         setLoading(false);
         setPatients(res.data);
       })
-      .catch((res) => {
+      .catch((err) => {
+        if (err.response === undefined) {
+          setError({ ...error, state: true });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
         setLoading(false);
-        console.log(res.response);
       });
-  }, []);
+  }, [user.userID]);
+
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
+  };
 
   return (
     <>
+      {loading && <SpinnerStatus />}
       <section className="flex flex-col">
         <div className="grid grid-cols-[25%_20%_auto_20%_10%] h-10 px-4 text-lg border-b border-slate-700 items-center">
           <p>Name</p>
@@ -38,11 +50,22 @@ const StaffDashboardPatients = () => {
           <p>Diagnosis</p>
           <p>Stoma</p>
         </div>
-        {loading && <SpinnerStatus />}
         <ul>
+          {error.state && (
+            <Toast
+              color={"failure"}
+              message={error.message}
+              handleErrorState={closeErrorState}
+            />
+          )}
           {loading && (
             <li className="border-b border-slate-400">
               <SkeletonPatientCard />
+            </li>
+          )}
+          {patients.length === 0 && !loading && !error.state && (
+            <li className="border-b border-slate-400">
+              <p className="text-lg text-center py-4">No patients found</p>
             </li>
           )}
           {patients.map((p) => {
