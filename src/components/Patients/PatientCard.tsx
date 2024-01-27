@@ -1,5 +1,5 @@
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { useNavigate } from 'react-router-dom';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { useNavigate } from "react-router-dom";
 
 interface PatientCardProps {
   id: number;
@@ -20,7 +20,7 @@ const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
 
   const openPatientDetails = () => {
     navigate(`/dashboard/patients/details/${id}`);
-  }
+  };
 
   return (
     <>
@@ -29,7 +29,13 @@ const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
         <p>{dob.split("-").reverse().join("/")}</p>
         <p>{diagnosis}</p>
         <p>Stoma: {stoma}</p>
-        <button type='button' aria-label={`More details ${name}`} onClick={openPatientDetails}>
+        <button
+          className="rounded-full w-10 place-self-center leading-none hover:bg-slate-300 hover:text-blue-600 active:bg-slate-400 active:text-blue-200"
+          type="button"
+          title={`More details ${name}`}
+          aria-label={`More details ${name}`}
+          onClick={openPatientDetails}
+        >
           <MoreHorizIcon />
         </button>
       </div>
