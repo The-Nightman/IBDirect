@@ -49,6 +49,7 @@ const StaffDashboardPatients = () => {
           <p>Date Of Birth</p>
           <p>Diagnosis</p>
           <p>Stoma</p>
+          <p>Details</p>
         </div>
         <ul>
           {error.state && (
