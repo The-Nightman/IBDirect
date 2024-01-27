@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { staffPatientsList } from "../../api/getStaffPatientsList";
-import { PatientCard } from "..";
+import { PatientCard, SpinnerStatus, SkeletonPatientCard } from "..";
 import { useAuth } from "../../context/AuthContext";
 
 interface PatientsBrief {
@@ -12,15 +12,19 @@ interface PatientsBrief {
 }
 
 const StaffDashboardPatients = () => {
-  const { user } = useAuth();
+  const [loading, setLoading] = useState<boolean>(true);
   const [patients, setPatients] = useState<PatientsBrief[]>([]);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     staffPatientsList(user.userID)
       .then((res) => {
+        setLoading(false);
         setPatients(res.data);
       })
       .catch((res) => {
+        setLoading(false);
         console.log(res.response);
       });
   }, []);
@@ -34,7 +38,13 @@ const StaffDashboardPatients = () => {
           <p>Diagnosis</p>
           <p>Stoma</p>
         </div>
+        {loading && <SpinnerStatus />}
         <ul>
+          {loading && (
+            <li className="border-b border-slate-400">
+              <SkeletonPatientCard />
+            </li>
+          )}
           {patients.map((p) => {
             return (
               <li className="border-b border-slate-400" key={p.patientId}>
