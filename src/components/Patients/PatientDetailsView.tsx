@@ -16,6 +16,7 @@ const PatientDetailsView = () => {
   const [notesError, setNotesError] = useState<ErrorState>({
     state: false,
     message: "",
+    color: "failure",
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
@@ -80,12 +81,13 @@ const PatientDetailsView = () => {
     updatePatientNotes(id, notes)
       .then((_res) => {
         setEditNotes(false);
+        setNotesError({ state: true, message: "Notes updated successfully", color: "success" });
       })
       .catch((err) => {
         if (err.response === undefined) {
-          setNotesError({ ...error, state: true });
+          setNotesError({ ...error, state: true, color: "failure" });
         } else {
-          setNotesError({ state: true, message: err.response.data });
+          setNotesError({ state: true, message: err.response.data, color: "failure" });
         }
       });
   };
@@ -103,7 +105,7 @@ const PatientDetailsView = () => {
   };
 
   const closeNotesErrorState = () => {
-    setNotesError({ state: false, message: "" });
+    setNotesError({ state: false, message: "", color: "failure"});
   };
 
   return (
@@ -178,7 +180,7 @@ const PatientDetailsView = () => {
             <div className="my-4">
               {notesError.state && (
                 <Toast
-                  color={"failure"}
+                  color={notesError.color || "failure"}
                   message={notesError.message}
                   handleErrorState={closeNotesErrorState}
                 />
