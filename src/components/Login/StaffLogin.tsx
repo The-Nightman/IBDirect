@@ -2,20 +2,29 @@ import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
 import { staffLoginAPI } from "../../api/staffLogin.js";
 import { useAuth } from "../../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
+import { SpinnerStatus, Toast } from "../";
+import { ErrorState } from "../../interfaces/ErrorState.js";
+
+interface LoginForm {
+  Name: string;
+  Password: string;
+}
 
 const StaffLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  interface LoginForm {
-    Name: string;
-    Password: string;
-  }
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const [valid, setValid] = useState<boolean>(true);
   const [formData, setFormData] = useState<LoginForm>({
     Name: "",
     Password: "",
   });
+
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
+  }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -40,18 +49,26 @@ const StaffLogin = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    closeErrorState();
+    setLoading(true);
     staffLoginAPI(formData)
       .then((res) => {
         login(res.data.token);
         navigate("/dashboard");
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response === undefined) {
+          setError({ ...error, state: true });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
+        setLoading(false);
       });
   };
 
   return (
     <>
+      {loading && <SpinnerStatus />}
       <section className="w-72 mt-8 shadow-xl">
         <div className="flex justify-center h-20 rounded-t bg-gradient-to-br from-sky-700 to-blue-400">
           <h2 className="text-4xl self-center text-white">Sign In</h2>
@@ -122,6 +139,13 @@ const StaffLogin = () => {
                 SIGN IN
               </button>
             </fieldset>
+            {error.state && (
+              <Toast
+                color={"failure"}
+                message={error.message}
+                handleErrorState={closeErrorState}
+              />
+            )}
             <p className="text-[0.5rem] mt-3">
               By proceeding, you confirm that you are the intended member of
               staff or administrator. Please be advised that it is an offence to

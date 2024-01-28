@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getPatientDetails } from "../../api/getPatientDetails";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PatientDetails } from "../../interfaces/PatientDetails";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import PermContactCalendarOutlinedIcon from "@mui/icons-material/PermContactCalendarOutlined";
@@ -8,23 +8,38 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined";
 import { parseDate } from "../../utils/parseDate";
 import { updatePatientNotes } from "../../api/updatePatientNotes";
+import { SpinnerStatus, Toast } from "..";
+import { ErrorState } from "../../interfaces/ErrorState";
 
 const PatientDetailsView = () => {
+  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
+  const [notesError, setNotesError] = useState<ErrorState>({
+    state: false,
+    message: "",
+  });
+  const [loading, setLoading] = useState<boolean>(true);
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
   const [editNotes, setEditNotes] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    setError({ state: false, message: "" });
     getPatientDetails(id)
       .then((res) => {
+        setLoading(false);
         setPatientData(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response === undefined) {
+          setError({ ...error, state: true });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
+        setLoading(false);
       });
-    setNotes(patientData?.notes ?? "");
 
     const notesAreaResize = () => {
       if (notesAreaRef.current) {
@@ -42,6 +57,10 @@ const PatientDetailsView = () => {
     };
   }, [id]);
 
+  useEffect(() => {
+    setNotes(patientData?.notes ?? "");
+  }, [patientData]);
+
   const parseStoma = () => {
     if (patientData?.stoma === false) {
       return "No";
@@ -55,7 +74,7 @@ const PatientDetailsView = () => {
       setNotes(patientData?.notes ?? "");
     }
     setEditNotes(!editNotes);
-  }
+  };
 
   const handleSaveNotes = () => {
     updatePatientNotes(id, notes)
@@ -63,7 +82,11 @@ const PatientDetailsView = () => {
         setEditNotes(false);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response === undefined) {
+          setNotesError({ ...error, state: true });
+        } else {
+          setNotesError({ state: true, message: err.response.data });
+        }
       });
   };
 
@@ -75,19 +98,36 @@ const PatientDetailsView = () => {
     }
   };
 
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
+  };
+
+  const closeNotesErrorState = () => {
+    setNotesError({ state: false, message: "" });
+  };
+
   return (
     <>
+      {loading && <SpinnerStatus />}
       <section className="flex flex-col">
         <div className="border-b border-slate-300">
           <button
-            className="flex flex-row items-center gap-2 text-lg p-1"
+            className="flex flex-row items-center gap-2 text-lg p-1 hover:bg-zinc-300 hover:text-blue-600 active:bg-slate-300 active:text-blue-700"
             type="button"
             aria-label="Back to Patients"
+            onClick={() => navigate(-1)}
           >
             <ArrowBackOutlinedIcon />
             <p>Back to Patients</p>
           </button>
         </div>
+        {error.state && (
+          <Toast
+            color={"failure"}
+            message={error.message}
+            handleErrorState={closeErrorState}
+          />
+        )}
         <section className="m-4">
           <div className="mb-10">
             <h2 className="text-3xl font-bold mb-4">
@@ -136,12 +176,19 @@ const PatientDetailsView = () => {
               </div>
             </div>
             <div className="my-4">
+              {notesError.state && (
+                <Toast
+                  color={"failure"}
+                  message={notesError.message}
+                  handleErrorState={closeNotesErrorState}
+                />
+              )}
               <div className="flex justify-between mb-1">
                 <button
                   className={`rounded-sm px-1 ${
                     !editNotes
-                      ? "bg-zinc-400 hover:bg-zinc-700"
-                      : "bg-red-400 hover:bg-red-700"
+                      ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
+                      : "bg-red-400 hover:bg-red-700 active:bg-red-500"
                   } hover:text-white`}
                   onClick={handleEditNotes}
                 >
@@ -149,7 +196,7 @@ const PatientDetailsView = () => {
                 </button>
                 {editNotes && (
                   <button
-                    className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 hover:text-white"
+                    className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
                     onClick={handleSaveNotes}
                   >
                     Save Notes

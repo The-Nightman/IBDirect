@@ -1,21 +1,19 @@
 import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
-import { DOBForm } from "../index.js";
+import { DOBForm, SpinnerStatus, Toast } from "../index.js";
 import { patientLoginAPI } from "../../api/patientLogin.js";
+import { ErrorState } from "../../interfaces/ErrorState.js";
+import { DobData } from "../../interfaces/DobData.js";
 
-export interface dobData {
-  day: string;
-  month: string;
-  year: string;
+interface LoginForm {
+  Name: string;
+  Password: string;
 }
 
 const PatientLogin = () => {
-  interface LoginForm {
-    Name: string;
-    Password: string;
-  }
-
+  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
+  const [loading, setLoading] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(true);
-  const [dobData, setDobData] = useState<dobData>({
+  const [dobData, setDobData] = useState<DobData>({
     day: "",
     month: "",
     year: "",
@@ -48,18 +46,33 @@ const PatientLogin = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const loginObj = { ...formData, Name: `${formData.Name}${dobData.day}${dobData.month}${dobData.year}` };
+    setLoading(true);
+    const loginObj = {
+      ...formData,
+      Name: `${formData.Name}${dobData.day}${dobData.month}${dobData.year}`,
+    };
     patientLoginAPI(loginObj)
       .then((res) => {
-        console.log(res.data)
+        setLoading(false);
+        console.log(res.data);
       })
-      .catch((err)=> {
-        console.log(err)
-      })
+      .catch((err) => {
+        if (err.response === undefined) {
+          setError({ ...error, state: true });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
+        setLoading(false);
+      });
+  };
+
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
   };
 
   return (
     <>
+      {loading && <SpinnerStatus />}
       <section className="w-72 mt-8 shadow-xl">
         <div className="flex justify-center h-20 rounded-t bg-gradient-to-br from-sky-700 to-blue-400">
           <h2 className="text-4xl self-center text-white">Sign In</h2>
@@ -130,6 +143,13 @@ const PatientLogin = () => {
                 SIGN IN
               </button>
             </fieldset>
+            {error.state && (
+              <Toast
+                color={"failure"}
+                message={error.message}
+                handleErrorState={closeErrorState}
+              />
+            )}
             <p className="text-[0.5rem] mt-3">
               By proceeding, you confirm that you are the intended recipient or
               the parent/legal guardian of the recipient. Please be advised that

@@ -11,14 +11,16 @@ const LoginSwitchBoard = () => {
           <div className="flex flex-col justify-between h-full">
             <Link
               to="/Portal/Patient/Login"
-              className="flex items-center justify-center w-full h-16 rounded text-2xl bg-zinc-300"
+              className="flex items-center justify-center w-full h-16 rounded text-2xl bg-zinc-300 select-none"
+              draggable="false"
               aria-label="Patient Login Button"
             >
               Patient Login
             </Link>
             <Link
               to="/Portal/Staff/Login"
-              className="flex items-center justify-center w-full h-16 rounded text-2xl bg-zinc-300"
+              className="flex items-center justify-center w-full h-16 rounded text-2xl bg-zinc-300 select-none"
+              draggable="false"
               aria-label="Staff Login Button"
             >
               Staff Login
