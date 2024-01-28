@@ -40,7 +40,6 @@ const PatientDetailsView = () => {
         }
         setLoading(false);
       });
-    setNotes(patientData?.notes ?? "");
 
     const notesAreaResize = () => {
       if (notesAreaRef.current) {
@@ -57,6 +56,10 @@ const PatientDetailsView = () => {
       notesAreaRef.current?.removeEventListener("input", notesAreaResize);
     };
   }, [id]);
+
+  useEffect(() => {
+    setNotes(patientData?.notes ?? "");
+  }, [patientData]);
 
   const parseStoma = () => {
     if (patientData?.stoma === false) {
