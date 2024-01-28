@@ -1,5 +1,6 @@
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
+import { parseDate } from "../../utils/parseDate";
 
 interface PatientCardProps {
   id: number;
@@ -26,7 +27,7 @@ const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
     <>
       <div className="grid grid-cols-[25%_20%_auto_20%_10%] h-14 px-4 text-xl items-center">
         <p>{name}</p>
-        <p>{dob.split("-").reverse().join("/")}</p>
+        <p>{parseDate(dob)}</p>
         <p>{diagnosis}</p>
         <p>Stoma: {stoma}</p>
         <button
