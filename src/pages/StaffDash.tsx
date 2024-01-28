@@ -3,15 +3,15 @@ import { userStaffDetails } from "../api/getStaffUserDetails";
 import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
 
-export default function StaffDash() {
-  interface userData {
-    name: string;
-    practice: string;
-    role: string;
-    speciality: string;
-    staffId: number | null;
-  }
+interface userData {
+  name: string;
+  practice: string;
+  role: string;
+  speciality: string;
+  staffId: number | null;
+}
 
+const StaffDash = () => {
   const [userData, setUserData] = useState<userData>({
     name: "",
     practice: "",
@@ -95,4 +95,6 @@ export default function StaffDash() {
       </section>
     </>
   );
-}
+};
+
+export default StaffDash;
