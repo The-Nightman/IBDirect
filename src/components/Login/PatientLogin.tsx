@@ -2,12 +2,7 @@ import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
 import { DOBForm, SpinnerStatus, Toast } from "../index.js";
 import { patientLoginAPI } from "../../api/patientLogin.js";
 import { ErrorState } from "../../interfaces/ErrorState.js";
-
-export interface dobData {
-  day: string;
-  month: string;
-  year: string;
-}
+import { DobData } from "../../interfaces/DobData.js";
 
 interface LoginForm {
   Name: string;
@@ -18,7 +13,7 @@ const PatientLogin = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const [loading, setLoading] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(true);
-  const [dobData, setDobData] = useState<dobData>({
+  const [dobData, setDobData] = useState<DobData>({
     day: "",
     month: "",
     year: "",

@@ -1,18 +1,18 @@
 import React, { ChangeEvent, useState } from "react";
-import { dobData } from "../Login/PatientLogin";
+import { DobData } from "../../interfaces/DobData";
 
 interface SetProps {
-  dobData: dobData;
-  setDobData: React.Dispatch<React.SetStateAction<dobData>>;
+  dobData: DobData;
+  setDobData: React.Dispatch<React.SetStateAction<DobData>>;
+}
+
+interface dobValidData {
+  day: boolean;
+  month: boolean;
+  year: boolean;
 }
 
 const DOBForm = ({ dobData, setDobData }: SetProps) => {
-  interface dobValidData {
-    day: boolean;
-    month: boolean;
-    year: boolean;
-  }
-
   const [dobValid, setDobValid] = useState<dobValidData>({
     day: true,
     month: true,
