@@ -2,10 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { getPatientDetails } from "../../api/getPatientDetails";
 import { useNavigate, useParams } from "react-router-dom";
 import { PatientDetails } from "../../interfaces/PatientDetails";
-import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
-import PermContactCalendarOutlinedIcon from "@mui/icons-material/PermContactCalendarOutlined";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined";
+import { ArrowBackOutlined, PermContactCalendarOutlined, HomeOutlined, LocalHospitalOutlined } from "@mui/icons-material";
 import { parseDate } from "../../utils/parseDate";
 import { updatePatientNotes } from "../../api/updatePatientNotes";
 import { SpinnerStatus, Toast } from "..";
@@ -119,7 +116,7 @@ const PatientDetailsView = () => {
             aria-label="Back to Patients"
             onClick={() => navigate(-1)}
           >
-            <ArrowBackOutlinedIcon />
+            <ArrowBackOutlined />
             <p>Back to Patients</p>
           </button>
         </div>
@@ -137,7 +134,7 @@ const PatientDetailsView = () => {
             </h2>
             <div className="w-72 flex flex-col flex-wrap gap-6 md:flex-row">
               <div className="flex gap-2 mb-1">
-                <PermContactCalendarOutlinedIcon />
+                <PermContactCalendarOutlined />
                 <p className="text-lg">
                   {patientData && typeof patientData.dateOfBirth === "string"
                     ? parseDate(patientData.dateOfBirth)
@@ -146,7 +143,7 @@ const PatientDetailsView = () => {
               </div>
               <p className="mb-1 text-lg">Sex: {patientData?.sex}</p>
               <div className="w-60 flex gap-2 mb-1">
-                <HomeOutlinedIcon />
+                <HomeOutlined />
                 <p className="text-lg whitespace-pre-line">
                   {patientData?.address}
                 </p>
@@ -167,7 +164,7 @@ const PatientDetailsView = () => {
             </p>
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
-                <LocalHospitalOutlinedIcon />
+                <LocalHospitalOutlined />
                 <p>{patientData?.hospital}</p>
               </div>
               <div className=" md:flex-row md:columns-2 ">
