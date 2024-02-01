@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { getPatientDetails } from "../../api/getPatientDetails";
 import { useNavigate, useParams } from "react-router-dom";
 import { PatientDetails } from "../../interfaces/PatientDetails";
-import { ArrowBackOutlined, PermContactCalendarOutlined, HomeOutlined, LocalHospitalOutlined } from "@mui/icons-material";
+import {
+  ArrowBackOutlined,
+  PermContactCalendarOutlined,
+  HomeOutlined,
+  LocalHospitalOutlined,
+} from "@mui/icons-material";
 import { parseDate } from "../../utils/parseDate";
 import { updatePatientNotes } from "../../api/updatePatientNotes";
 import { SpinnerStatus, Toast } from "..";
@@ -38,7 +43,13 @@ const PatientDetailsView = () => {
         }
         setLoading(false);
       });
+  }, [id]);
 
+  useEffect(() => {
+    setNotes(patientData?.notes ?? "");
+  }, [patientData]);
+
+  useEffect(() => {
     const notesAreaResize = () => {
       if (notesAreaRef.current) {
         notesAreaRef.current.style.height = "auto";
@@ -53,11 +64,7 @@ const PatientDetailsView = () => {
     return () => {
       notesAreaRef.current?.removeEventListener("input", notesAreaResize);
     };
-  }, [id]);
-
-  useEffect(() => {
-    setNotes(patientData?.notes ?? "");
-  }, [patientData]);
+  }, [notes]);
 
   const parseStoma = () => {
     if (patientData?.stoma === false) {
@@ -78,13 +85,21 @@ const PatientDetailsView = () => {
     updatePatientNotes(id, notes)
       .then((_res) => {
         setEditNotes(false);
-        setNotesError({ state: true, message: "Notes updated successfully", color: "success" });
+        setNotesError({
+          state: true,
+          message: "Notes updated successfully",
+          color: "success",
+        });
       })
       .catch((err) => {
         if (err.response === undefined) {
           setNotesError({ ...error, state: true, color: "failure" });
         } else {
-          setNotesError({ state: true, message: err.response.data, color: "failure" });
+          setNotesError({
+            state: true,
+            message: err.response.data,
+            color: "failure",
+          });
         }
       });
   };
@@ -102,7 +117,7 @@ const PatientDetailsView = () => {
   };
 
   const closeNotesErrorState = () => {
-    setNotesError({ state: false, message: "", color: "failure"});
+    setNotesError({ state: false, message: "", color: "failure" });
   };
 
   return (
