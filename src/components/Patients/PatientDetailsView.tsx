@@ -12,6 +12,8 @@ import { parseDate } from "../../utils/parseDate";
 import { updatePatientNotes } from "../../api/updatePatientNotes";
 import { SpinnerStatus, Toast } from "..";
 import { ErrorState } from "../../interfaces/ErrorState";
+import { TabsComponent } from "flowbite-react";
+import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -165,68 +167,80 @@ const PatientDetailsView = () => {
               </div>
             </div>
           </div>
-          <div className="text-l">
-            <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
-            <div className="w-80 flex flex-col mb-2 md:justify-between md:flex-row">
-              <p className="text-xl">{parseDiagnosis()}</p>
-              <p className="text-xl">Stoma: {parseStoma()}</p>
-            </div>
-            <p className="mb-4">
-              Date of diagnosis:{" "}
-              {patientData && typeof patientData.diagnosisDate === "string"
-                ? parseDate(patientData.diagnosisDate)
-                : null}
-            </p>
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2">
-                <LocalHospitalOutlined />
-                <p>{patientData?.hospital}</p>
+          <TabsComponent
+            aria-aria-label={`${patientData?.name
+              .split(",")
+              .reverse()
+              .join(" ")} Details Tabs`}
+            style="underline"
+          >
+            <TabItem active title="Care Notes">
+              <div className="text-l">
+                <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
+                <div className="w-80 flex flex-col mb-2 md:justify-between md:flex-row">
+                  <p className="text-xl">{parseDiagnosis()}</p>
+                  <p className="text-xl">Stoma: {parseStoma()}</p>
+                </div>
+                <p className="mb-4">
+                  Date of diagnosis:{" "}
+                  {patientData && typeof patientData.diagnosisDate === "string"
+                    ? parseDate(patientData.diagnosisDate)
+                    : null}
+                </p>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <LocalHospitalOutlined />
+                    <p>{patientData?.hospital}</p>
+                  </div>
+                  <div className=" md:flex-row md:columns-2 ">
+                    <p>Consultant: {patientData?.consultantName}</p>
+                    <p>IBD Nurse: {patientData?.nurseName}</p>
+                    <p>Stoma Care Nurse: {patientData?.stomaNurseName}</p>
+                    <p>GP: {patientData?.genpractName}</p>
+                  </div>
+                </div>
+                <div className="my-4">
+                  {notesError.state && (
+                    <Toast
+                      color={notesError.color || "failure"}
+                      message={notesError.message}
+                      handleErrorState={closeNotesErrorState}
+                    />
+                  )}
+                  <div className="flex justify-between mb-1">
+                    <button
+                      className={`rounded-sm px-1 ${
+                        !editNotes
+                          ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
+                          : "bg-red-400 hover:bg-red-700 active:bg-red-500"
+                      } hover:text-white`}
+                      onClick={handleEditNotes}
+                    >
+                      {editNotes ? "Cancel Edit" : "Edit Notes"}
+                    </button>
+                    {editNotes && (
+                      <button
+                        className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
+                        onClick={handleSaveNotes}
+                      >
+                        Save Notes
+                      </button>
+                    )}
+                  </div>
+                  <textarea
+                    disabled={!editNotes}
+                    aria-label="Patient Notes"
+                    className="w-full resize-none overflow-hidden"
+                    value={notes}
+                    ref={notesAreaRef}
+                    onChange={(e) => setNotes(e.target.value)}
+                  />
+                </div>
               </div>
-              <div className=" md:flex-row md:columns-2 ">
-                <p>Consultant: {patientData?.consultantName}</p>
-                <p>IBD Nurse: {patientData?.nurseName}</p>
-                <p>Stoma Care Nurse: {patientData?.stomaNurseName}</p>
-                <p>GP: {patientData?.genpractName}</p>
-              </div>
-            </div>
-            <div className="my-4">
-              {notesError.state && (
-                <Toast
-                  color={notesError.color || "failure"}
-                  message={notesError.message}
-                  handleErrorState={closeNotesErrorState}
-                />
-              )}
-              <div className="flex justify-between mb-1">
-                <button
-                  className={`rounded-sm px-1 ${
-                    !editNotes
-                      ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
-                      : "bg-red-400 hover:bg-red-700 active:bg-red-500"
-                  } hover:text-white`}
-                  onClick={handleEditNotes}
-                >
-                  {editNotes ? "Cancel Edit" : "Edit Notes"}
-                </button>
-                {editNotes && (
-                  <button
-                    className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
-                    onClick={handleSaveNotes}
-                  >
-                    Save Notes
-                  </button>
-                )}
-              </div>
-              <textarea
-                disabled={!editNotes}
-                aria-label="Patient Notes"
-                className="w-full resize-none overflow-hidden"
-                value={notes}
-                ref={notesAreaRef}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </div>
-          </div>
+            </TabItem>
+            <TabItem title="Appointments"></TabItem>
+            <TabItem title="IBD Surveys"></TabItem>
+          </TabsComponent>
         </section>
       </section>
     </>
