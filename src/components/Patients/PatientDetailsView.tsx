@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import { parseDate } from "../../utils/parseDate";
 import { updatePatientNotes } from "../../api/updatePatientNotes";
-import { SpinnerStatus, Toast } from "..";
+import { SpinnerStatus, Toast, PatientAppointmentCard } from "..";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { TabsComponent } from "flowbite-react";
 import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
@@ -29,6 +29,10 @@ const PatientDetailsView = () => {
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+
+  if (id === undefined) {
+    return null;
+  }
 
   useEffect(() => {
     setError({ state: false, message: "" });
@@ -168,11 +172,12 @@ const PatientDetailsView = () => {
             </div>
           </div>
           <TabsComponent
-            aria-aria-label={`${patientData?.name
+            aria-label={`${patientData?.name
               .split(",")
               .reverse()
               .join(" ")} Details Tabs`}
             style="underline"
+            className="border-b border-slate-300"
           >
             <TabItem active title="Care Notes">
               <div className="text-l">
@@ -238,8 +243,24 @@ const PatientDetailsView = () => {
                 </div>
               </div>
             </TabItem>
-            <TabItem title="Appointments"></TabItem>
-            <TabItem title="IBD Surveys"></TabItem>
+            <TabItem title="Appointments">
+              <div className="text-l">
+                <h3 className="border-b border-slate-400 mb-4">Appointments</h3>
+                <ol className="border-x border-t border-slate-500">
+                  {patientData?.appointments.map((appointment, index) => {
+                    return (
+                      <li key={index}>
+                        <PatientAppointmentCard
+                          appointment={appointment}
+                          patientId={id}
+                        />
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            </TabItem>
+            <TabItem title="IBD Surveys">Surveys</TabItem>
           </TabsComponent>
         </section>
       </section>
