@@ -1,3 +1,5 @@
+import { Appointment } from "./Appointment";
+
 export interface PatientDetails {
   patientId: number;
   name: string;
@@ -16,17 +18,6 @@ export interface PatientDetails {
   appointments: Appointment[];
   surveys: Survey[];
   prescriptions: Prescription[];
-}
-
-interface Appointment {
-  id: number;
-  staffId: number;
-  dateTime: string;
-  location: string;
-  appType: string;
-  notes: string;
-  patientDetailsId: number;
-  patientDetails: string;
 }
 
 interface Prescription {
