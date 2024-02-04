@@ -2,7 +2,8 @@ import { CloseOutlined, PageviewOutlined } from "@mui/icons-material";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { Modal } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
-import { Appointment } from "../../interfaces/PatientDetails";
+import { Appointment } from "../../interfaces/Appointment";
+import { updateAppointment } from "../../api/updateAppointment";
 
 interface PatientAppointmentProps {
   appointment: Appointment;
@@ -13,6 +14,8 @@ const PatientAppointmentCard = ({
   appointment,
   patientId,
 }: PatientAppointmentProps) => {
+  const [appointmentData, setAppointmentData] =
+    useState<Appointment>(appointment);
   const [modalState, setModalState] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
   const [editNotes, setEditNotes] = useState<boolean>(false);
@@ -47,8 +50,19 @@ const PatientAppointmentCard = ({
   };
 
   const handleSaveNotes = () => {
-    // Save notes to the server
+    setAppointmentData({ ...appointmentData, notes: notes });
     setEditNotes(false);
+  };
+
+  const closeDialog = () => {
+    setAppointmentData(appointment);
+    setNotes(appointment.notes);
+    setModalState(false);
+  };
+
+  const saveAppointment = () => {
+    updateAppointment(appointment.id, appointmentData);
+    setModalState(false);
   };
 
   return (
@@ -75,7 +89,7 @@ const PatientAppointmentCard = ({
           </button>
         </div>
       </div>
-      <Modal dismissible show={modalState} onClose={() => setModalState(false)}>
+      <Modal show={modalState} onClose={() => setModalState(false)}>
         <button
           className="w-8 h-8 place-self-end"
           onClick={() => setModalState(false)}
@@ -120,6 +134,25 @@ const PatientAppointmentCard = ({
               ref={notesAreaRef}
               onChange={(e) => setNotes(e.target.value)}
             />
+          </div>
+          <div className="flex flex-col items-center">
+            <strong>
+              Please save appointment before closing to prevent loss of updates.
+            </strong>
+            <div className="flex gap-16 mt-2">
+              <button
+                className="rounded-sm py-2 px-4 bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500 hover:text-white"
+                onClick={closeDialog}
+              >
+                close
+              </button>
+              <button
+                className="rounded-sm py-2 px-4 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
+                onClick={saveAppointment}
+              >
+                Save Appointment
+              </button>
+            </div>
           </div>
         </div>
       </Modal>
