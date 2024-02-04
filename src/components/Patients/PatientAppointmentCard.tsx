@@ -1,4 +1,4 @@
-import { CloseOutlined, PageviewOutlined } from "@mui/icons-material";
+import { PageviewOutlined } from "@mui/icons-material";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { Modal } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
@@ -90,14 +90,6 @@ const PatientAppointmentCard = ({
         </div>
       </div>
       <Modal show={modalState} onClose={() => setModalState(false)}>
-        <button
-          className="w-8 h-8 place-self-end"
-          onClick={() => setModalState(false)}
-          aria-label="Close Appointment Details"
-          title="Close Appointment Details"
-        >
-          <CloseOutlined />
-        </button>
         <div className="m-4">
           <h3 className="flex flex-wrap justify-between mb-4">
             <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
