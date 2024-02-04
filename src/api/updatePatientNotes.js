@@ -1,4 +1,3 @@
-import jwtDecode from "jwt-decode";
 import { IBDirectAPI } from "./api";
 
 export const updatePatientNotes = (id, updatedNotes) => {
