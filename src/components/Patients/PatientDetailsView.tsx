@@ -149,7 +149,7 @@ const PatientDetailsView = () => {
           />
         )}
         <section className="m-4">
-          <div className="mb-10">
+          <section className="mb-10">
             <h2 className="text-3xl font-bold mb-4">
               {`${patientData?.name.split(",").reverse().join(" ")}`}
             </h2>
@@ -170,7 +170,7 @@ const PatientDetailsView = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </section>
           <TabsComponent
             aria-label={`${patientData?.name
               .split(",")
@@ -180,7 +180,7 @@ const PatientDetailsView = () => {
             className="border-b border-slate-300"
           >
             <TabItem active title="Care Notes">
-              <div className="text-l">
+              <section className="text-l">
                 <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
                 <div className="w-80 flex flex-col mb-2 md:justify-between md:flex-row">
                   <p className="text-xl">{parseDiagnosis()}</p>
@@ -241,24 +241,68 @@ const PatientDetailsView = () => {
                     onChange={(e) => setNotes(e.target.value)}
                   />
                 </div>
-              </div>
+              </section>
             </TabItem>
             <TabItem title="Appointments">
-              <div className="text-l">
+              <section className="text-l">
                 <h3 className="border-b border-slate-400 mb-4">Appointments</h3>
-                <ol className="border-x border-t border-slate-500">
-                  {patientData?.appointments.map((appointment, index) => {
-                    return (
-                      <li key={index}>
-                        <PatientAppointmentCard
-                          appointment={appointment}
-                          patientId={id}
-                        />
+                <section>
+                  <h4>Upcoming appointments</h4>
+                  <ol className="border-x border-t border-slate-500">
+                    {patientData?.appointments.some(
+                      (appointment) =>
+                        new Date(appointment.dateTime) > new Date()
+                    ) ? (
+                      patientData?.appointments.map((appointment, index) => {
+                        if (new Date(appointment.dateTime) > new Date()) {
+                          return (
+                            <li key={index}>
+                              <PatientAppointmentCard
+                                appointment={appointment}
+                                patientId={id}
+                              />
+                            </li>
+                          );
+                        }
+                      })
+                    ) : (
+                      <li>
+                        <div className="w-full p-1 border-b border-slate-600 bg-slate-200">
+                          <p>No upcoming appointments to display</p>
+                        </div>
                       </li>
-                    );
-                  })}
-                </ol>
-              </div>
+                    )}
+                  </ol>
+                </section>
+                <section>
+                  <h4>Previous appointments</h4>
+                  <ol className="border-x border-t border-slate-500">
+                    {patientData?.appointments.some(
+                      (appointment) =>
+                        new Date(appointment.dateTime) <= new Date()
+                    ) ? (
+                      patientData?.appointments.map((appointment, index) => {
+                        if (new Date(appointment.dateTime) <= new Date()) {
+                          return (
+                            <li key={index}>
+                              <PatientAppointmentCard
+                                appointment={appointment}
+                                patientId={id}
+                              />
+                            </li>
+                          );
+                        }
+                      })
+                    ) : (
+                      <li>
+                        <div className="w-full p-1 border-b border-slate-600 bg-slate-200">
+                          <p>No previous appointments to display</p>
+                        </div>
+                      </li>
+                    )}
+                  </ol>
+                </section>
+              </section>
             </TabItem>
             <TabItem title="IBD Surveys">Surveys</TabItem>
           </TabsComponent>
