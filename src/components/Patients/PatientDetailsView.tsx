@@ -14,6 +14,7 @@ import { SpinnerStatus, Toast, PatientAppointmentCard } from "..";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { TabsComponent } from "flowbite-react";
 import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
+import { parseStoma } from "../../utils/parseStoma";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -71,14 +72,6 @@ const PatientDetailsView = () => {
       notesAreaRef.current?.removeEventListener("input", notesAreaResize);
     };
   }, [notes]);
-
-  const parseStoma = () => {
-    if (patientData?.stoma === false) {
-      return "No";
-    } else if (patientData?.stoma === true) {
-      return "Yes";
-    }
-  };
 
   const handleEditNotes = () => {
     if (editNotes) {
@@ -184,7 +177,7 @@ const PatientDetailsView = () => {
                 <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
                 <div className="w-80 flex flex-col mb-2 md:justify-between md:flex-row">
                   <p className="text-xl">{parseDiagnosis()}</p>
-                  <p className="text-xl">Stoma: {parseStoma()}</p>
+                  <p className="text-xl">Stoma: {parseStoma(patientData?.stoma)}</p>
                 </div>
                 <p className="mb-4">
                   Date of diagnosis:{" "}
