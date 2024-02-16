@@ -1,4 +1,4 @@
-import { PageviewOutlined } from "@mui/icons-material";
+import { EditOutlined, PageviewOutlined } from "@mui/icons-material";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { Modal } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
@@ -86,6 +86,16 @@ const PatientAppointmentCard = ({
             onClick={() => setModalState(true)}
           >
             <PageviewOutlined fontSize="inherit" />
+          </button>
+          <button
+            className="w-9"
+            aria-label={`Edit Appointment ${parseIsoToDateTime(
+              appointment.dateTime
+            )}`}
+            title="Edit Appointment"
+            onClick={() => setModalState(true)}
+          >
+            <EditOutlined fontSize="large" />
           </button>
         </div>
       </div>
