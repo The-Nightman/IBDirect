@@ -1,8 +1,7 @@
 import { EditOutlined, PageviewOutlined } from "@mui/icons-material";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Appointment } from "../../interfaces/Appointment";
-import { updateAppointment } from "../../api/updateAppointment";
 import { PatientAppDetailsModal, PatientAppEditModal } from "..";
 
 interface PatientAppointmentProps {
@@ -10,57 +9,8 @@ interface PatientAppointmentProps {
 }
 
 const PatientAppointmentCard = ({ appointment }: PatientAppointmentProps) => {
-  const [appointmentData, setAppointmentData] =
-    useState<Appointment>(appointment);
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
-  const [notes, setNotes] = useState<string>("");
-  const [editNotes, setEditNotes] = useState<boolean>(false);
-  const notesAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    setNotes(appointment.notes);
-  }, [appointment.notes]);
-
-  useEffect(() => {
-    const notesAreaResize = () => {
-      if (notesAreaRef.current) {
-        notesAreaRef.current.style.height = "auto";
-        notesAreaRef.current.style.height =
-          notesAreaRef.current.scrollHeight + "px";
-      }
-    };
-
-    notesAreaResize();
-    notesAreaRef.current?.addEventListener("input", notesAreaResize);
-
-    return () => {
-      notesAreaRef.current?.removeEventListener("input", notesAreaResize);
-    };
-  }, [notes]);
-
-  const handleEditNotes = () => {
-    if (editNotes) {
-      setNotes(appointment.notes);
-    }
-    setEditNotes(!editNotes);
-  };
-
-  const handleSaveNotes = () => {
-    setAppointmentData({ ...appointmentData, notes: notes });
-    setEditNotes(false);
-  };
-
-  const closeDialog = () => {
-    setAppointmentData(appointment);
-    setNotes(appointment.notes);
-    setDetailsModalState(false);
-  };
-
-  const saveAppointment = () => {
-    updateAppointment(appointment.id, appointmentData);
-    setDetailsModalState(false);
-  };
 
   return (
     <>
