@@ -252,7 +252,6 @@ const PatientDetailsView = () => {
                             <li key={index}>
                               <PatientAppointmentCard
                                 appointment={appointment}
-                                patientId={id}
                               />
                             </li>
                           );
@@ -280,7 +279,6 @@ const PatientDetailsView = () => {
                             <li key={index}>
                               <PatientAppointmentCard
                                 appointment={appointment}
-                                patientId={id}
                               />
                             </li>
                           );
