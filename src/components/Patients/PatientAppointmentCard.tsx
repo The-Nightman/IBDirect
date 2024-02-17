@@ -1,9 +1,9 @@
 import { EditOutlined, PageviewOutlined } from "@mui/icons-material";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
-import { Modal } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { Appointment } from "../../interfaces/Appointment";
 import { updateAppointment } from "../../api/updateAppointment";
+import { PatientAppDetailsModal } from "..";
 
 interface PatientAppointmentProps {
   appointment: Appointment;
@@ -16,7 +16,7 @@ const PatientAppointmentCard = ({
 }: PatientAppointmentProps) => {
   const [appointmentData, setAppointmentData] =
     useState<Appointment>(appointment);
-  const [modalState, setModalState] = useState<boolean>(false);
+  const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
   const [editNotes, setEditNotes] = useState<boolean>(false);
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -57,12 +57,12 @@ const PatientAppointmentCard = ({
   const closeDialog = () => {
     setAppointmentData(appointment);
     setNotes(appointment.notes);
-    setModalState(false);
+    setDetailsModalState(false);
   };
 
   const saveAppointment = () => {
     updateAppointment(appointment.id, appointmentData);
-    setModalState(false);
+    setDetailsModalState(false);
   };
 
   return (
@@ -83,7 +83,7 @@ const PatientAppointmentCard = ({
               appointment.dateTime
             )}`}
             title="Open Appointment Details"
-            onClick={() => setModalState(true)}
+            onClick={() => setDetailsModalState(true)}
           >
             <PageviewOutlined fontSize="inherit" />
           </button>
@@ -93,13 +93,18 @@ const PatientAppointmentCard = ({
               appointment.dateTime
             )}`}
             title="Edit Appointment"
-            onClick={() => setModalState(true)}
+            onClick={() => setDetailsModalState(true)}
           >
             <EditOutlined fontSize="large" />
           </button>
         </div>
       </div>
-      <Modal show={modalState} onClose={() => setModalState(false)}>
+      <PatientAppDetailsModal
+        appointment={appointment}
+        detailsModalState={detailsModalState}
+        setDetailsModalState={setDetailsModalState}
+      />
+      {/* <Modal show={modalState} onClose={() => setModalState(false)}>
         <div className="m-4">
           <h3 className="flex flex-wrap justify-between mb-4">
             <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
@@ -157,7 +162,7 @@ const PatientAppointmentCard = ({
             </div>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
     </>
   );
 };
