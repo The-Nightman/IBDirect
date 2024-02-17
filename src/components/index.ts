@@ -12,6 +12,7 @@ import SpinnerStatus from "./UX/Spinner.tsx";
 import SkeletonPatientCard from "./UX/SkeletonPatientCard.tsx";
 import PatientAppointmentCard from "./Patients/PatientAppointmentCard.tsx";
 import PatientAppDetailsModal from "./Patients/PatientAppDetailsModal.tsx";
+import PatientAppEditModal from "./Patients/PatientAppEditModal.tsx";
 
 export {
   Header,
@@ -28,4 +29,5 @@ export {
   SkeletonPatientCard,
   PatientAppointmentCard,
   PatientAppDetailsModal,
+  PatientAppEditModal,
 };
