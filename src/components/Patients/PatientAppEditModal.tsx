@@ -8,12 +8,16 @@ interface PatientAppEditModalProps {
   appointment: Appointment;
   editModalState: boolean;
   setEditModalState: (state: boolean) => void;
+  updateAppointmentState: (appointment: Appointment, index: number) => void;
+  index: number;
 }
 
 const PatientAppEditModal = ({
   appointment,
   editModalState,
   setEditModalState,
+  updateAppointmentState,
+  index,
 }: PatientAppEditModalProps) => {
   const [appointmentData, setAppointmentData] =
     useState<Appointment>(appointment);
@@ -61,7 +65,13 @@ const PatientAppEditModal = ({
   };
 
   const saveAppointment = () => {
-    updateAppointment(appointment.id, appointmentData);
+    updateAppointment(appointment.id, appointmentData)
+      .then((_res) => {
+        updateAppointmentState(appointmentData, index);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     setEditModalState(false);
   };
 

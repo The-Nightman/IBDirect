@@ -15,6 +15,7 @@ import { ErrorState } from "../../interfaces/ErrorState";
 import { TabsComponent } from "flowbite-react";
 import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
 import { parseStoma } from "../../utils/parseStoma";
+import { Appointment } from "../../interfaces/Appointment";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -119,6 +120,18 @@ const PatientDetailsView = () => {
     setNotesError({ state: false, message: "", color: "failure" });
   };
 
+  const updateAppointments = (
+    updatedAppointment: Appointment,
+    index: number
+  ) => {
+    const newAppointmentState = patientData!.appointments.map(
+      (appointment, i) => (i === index ? updatedAppointment : appointment)
+    );
+    if (patientData) {
+      setPatientData({ ...patientData, appointments: newAppointmentState });
+    }
+  };
+
   return (
     <>
       {loading && <SpinnerStatus />}
@@ -177,7 +190,9 @@ const PatientDetailsView = () => {
                 <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
                 <div className="w-80 flex flex-col mb-2 md:justify-between md:flex-row">
                   <p className="text-xl">{parseDiagnosis()}</p>
-                  <p className="text-xl">Stoma: {parseStoma(patientData?.stoma)}</p>
+                  <p className="text-xl">
+                    Stoma: {parseStoma(patientData?.stoma)}
+                  </p>
                 </div>
                 <p className="mb-4">
                   Date of diagnosis:{" "}
@@ -252,6 +267,8 @@ const PatientDetailsView = () => {
                             <li key={index}>
                               <PatientAppointmentCard
                                 appointment={appointment}
+                                updateAppointmentState={updateAppointments}
+                                index={index}
                               />
                             </li>
                           );
@@ -279,6 +296,8 @@ const PatientDetailsView = () => {
                             <li key={index}>
                               <PatientAppointmentCard
                                 appointment={appointment}
+                                updateAppointmentState={updateAppointments}
+                                index={index}
                               />
                             </li>
                           );

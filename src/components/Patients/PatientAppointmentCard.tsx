@@ -6,9 +6,15 @@ import { PatientAppDetailsModal, PatientAppEditModal } from "..";
 
 interface PatientAppointmentProps {
   appointment: Appointment;
+  index: number;
+  updateAppointmentState: (appointment: Appointment, index: number) => void;
 }
 
-const PatientAppointmentCard = ({ appointment }: PatientAppointmentProps) => {
+const PatientAppointmentCard = ({
+  appointment,
+  index,
+  updateAppointmentState,
+}: PatientAppointmentProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
 
@@ -55,6 +61,8 @@ const PatientAppointmentCard = ({ appointment }: PatientAppointmentProps) => {
         appointment={appointment}
         editModalState={editModalState}
         setEditModalState={setEditModalState}
+        updateAppointmentState={updateAppointmentState}
+        index={index}
       />
     </>
   );
