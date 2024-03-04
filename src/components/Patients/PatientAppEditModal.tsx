@@ -21,6 +21,7 @@ const PatientAppEditModal = ({
 }: PatientAppEditModalProps) => {
   const [appointmentData, setAppointmentData] =
     useState<Appointment>(appointment);
+  const [editAppointment, setEditAppointment] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
   const [editNotes, setEditNotes] = useState<boolean>(false);
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -77,8 +78,18 @@ const PatientAppEditModal = ({
 
   return (
     <Modal show={editModalState} onClose={() => setEditModalState(false)}>
-      <div className="m-4">
-        <h3 className="flex flex-wrap justify-between mb-4">
+      <div className="relative m-4">
+        <button
+          className={`absolute right-0 rounded-sm px-1 ${
+            !editAppointment
+              ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
+              : "bg-red-400 hover:bg-red-700 active:bg-red-500"
+          } hover:text-white`}
+          onClick={() => setEditAppointment(!editAppointment)}
+        >
+          {editAppointment ? "Cancel Edit Appointment" : "Edit Appointment"}
+        </button>
+        <h3 className="flex flex-wrap justify-between mt-8 mb-4">
           <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
           <strong>{appointment.location}</strong>
         </h3>
