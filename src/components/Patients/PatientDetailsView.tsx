@@ -206,10 +206,10 @@ const PatientDetailsView = () => {
                     <p>{patientData?.hospital}</p>
                   </div>
                   <div className=" md:flex-row md:columns-2 ">
-                    <p>Consultant: {patientData?.consultantName}</p>
-                    <p>IBD Nurse: {patientData?.nurseName}</p>
-                    <p>Stoma Care Nurse: {patientData?.stomaNurseName}</p>
-                    <p>GP: {patientData?.genpractName}</p>
+                    <p>Consultant: {patientData?.consultant.name}</p>
+                    <p>IBD Nurse: {patientData?.nurse.name}</p>
+                    <p>Stoma Care Nurse: {patientData?.stomaNurse?.name != null ? patientData?.stomaNurse?.name : "N/A"}</p>
+                    <p>GP: {patientData?.genpract.name}</p>
                   </div>
                 </div>
                 <div className="my-4">
