@@ -268,6 +268,10 @@ const PatientDetailsView = () => {
                               <PatientAppointmentCard
                                 appointment={appointment}
                                 updateAppointmentState={updateAppointments}
+                                consultant={patientData?.consultant}
+                                nurse={patientData?.nurse}
+                                stomaNurse={patientData?.stomaNurse}
+                                genpract={patientData?.genpract}
                                 index={index}
                               />
                             </li>
@@ -297,6 +301,10 @@ const PatientDetailsView = () => {
                               <PatientAppointmentCard
                                 appointment={appointment}
                                 updateAppointmentState={updateAppointments}
+                                consultant={patientData?.consultant}
+                                nurse={patientData?.nurse}
+                                stomaNurse={patientData?.stomaNurse}
+                                genpract={patientData?.genpract}
                                 index={index}
                               />
                             </li>

@@ -3,15 +3,24 @@ import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { useState } from "react";
 import { Appointment } from "../../interfaces/Appointment";
 import { PatientAppDetailsModal, PatientAppEditModal } from "..";
+import { StaffDetails } from "../../interfaces/StaffDetails";
 
 interface PatientAppointmentProps {
   appointment: Appointment;
+  consultant: StaffDetails;
+  nurse: StaffDetails;
+  stomaNurse: StaffDetails | null;
+  genpract: StaffDetails;
   index: number;
   updateAppointmentState: (appointment: Appointment, index: number) => void;
 }
 
 const PatientAppointmentCard = ({
   appointment,
+  consultant,
+  nurse,
+  stomaNurse,
+  genpract,
   index,
   updateAppointmentState,
 }: PatientAppointmentProps) => {
@@ -62,6 +71,10 @@ const PatientAppointmentCard = ({
         editModalState={editModalState}
         setEditModalState={setEditModalState}
         updateAppointmentState={updateAppointmentState}
+        consultant={consultant}
+        nurse={nurse}
+        stomaNurse={stomaNurse}
+        genpract={genpract}
         index={index}
       />
     </>
