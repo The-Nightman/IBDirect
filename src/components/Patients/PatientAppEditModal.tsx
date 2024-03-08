@@ -102,8 +102,38 @@ const PatientAppEditModal = ({
           <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
           <strong>{appointment.location}</strong>
         </h3>
-        <p>{appointment.staffName}</p>
-        <p>{appointment.appType}</p>
+        {editAppointment ? (
+          <div className="flex flex-col w-min gap-4">
+            <select defaultValue={appointmentData.staffId}>
+              <option
+                value={consultant.staffId}
+              >{`${consultant.name} - ${consultant.role}`}</option>
+              <option
+                value={nurse.staffId}
+              >{`${nurse.name} - ${nurse.role}`}</option>
+              {stomaNurse != null ? (
+                <option
+                  value={stomaNurse.staffId}
+                >{`${stomaNurse.name} - ${stomaNurse.role}`}</option>
+              ) : null}
+              <option
+                value={genpract.staffId}
+              >{`${genpract.name} - ${genpract.role}`}</option>
+            </select>
+            <label>
+              Appointment Type:
+              <input type="text" aria-describedby="appTypeHint" defaultValue={appointmentData.appType} />
+              <span className="sr-only" id="appTypeHint">
+                Enter the appointment type e.g. Bloodwork or Checkup
+              </span>
+            </label>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            <p>{appointmentData.staffName}</p>
+            <p>{appointmentData.appType}</p>
+          </div>
+        )}
         <div className="my-4">
           <div className="flex justify-between mb-1">
             <button
