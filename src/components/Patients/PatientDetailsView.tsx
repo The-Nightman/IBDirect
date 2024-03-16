@@ -208,7 +208,12 @@ const PatientDetailsView = () => {
                   <div className=" md:flex-row md:columns-2 ">
                     <p>Consultant: {patientData?.consultant.name}</p>
                     <p>IBD Nurse: {patientData?.nurse.name}</p>
-                    <p>Stoma Care Nurse: {patientData?.stomaNurse?.name != null ? patientData?.stomaNurse?.name : "N/A"}</p>
+                    <p>
+                      Stoma Care Nurse:{" "}
+                      {patientData?.stomaNurse?.name != null
+                        ? patientData?.stomaNurse?.name
+                        : "N/A"}
+                    </p>
                     <p>GP: {patientData?.genpract.name}</p>
                   </div>
                 </div>
@@ -268,10 +273,12 @@ const PatientDetailsView = () => {
                               <PatientAppointmentCard
                                 appointment={appointment}
                                 updateAppointmentState={updateAppointments}
-                                consultant={patientData?.consultant}
-                                nurse={patientData?.nurse}
-                                stomaNurse={patientData?.stomaNurse}
-                                genpract={patientData?.genpract}
+                                staff={{
+                                  consultant: patientData?.consultant,
+                                  nurse: patientData?.nurse,
+                                  stomaNurse: patientData?.stomaNurse,
+                                  genpract: patientData?.genpract,
+                                }}
                                 index={index}
                               />
                             </li>
@@ -301,10 +308,12 @@ const PatientDetailsView = () => {
                               <PatientAppointmentCard
                                 appointment={appointment}
                                 updateAppointmentState={updateAppointments}
-                                consultant={patientData?.consultant}
-                                nurse={patientData?.nurse}
-                                stomaNurse={patientData?.stomaNurse}
-                                genpract={patientData?.genpract}
+                                staff={{
+                                  consultant: patientData?.consultant,
+                                  nurse: patientData?.nurse,
+                                  stomaNurse: patientData?.stomaNurse,
+                                  genpract: patientData?.genpract,
+                                }}
                                 index={index}
                               />
                             </li>

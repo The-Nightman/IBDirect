@@ -5,13 +5,16 @@ import { useEffect, useRef, useState } from "react";
 import { updateAppointment } from "../../api/updateAppointment";
 import { StaffDetails } from "../../interfaces/StaffDetails";
 
-interface PatientAppEditModalProps {
-  appointment: Appointment;
-  editModalState: boolean;
+interface Staff {
   consultant: StaffDetails;
   nurse: StaffDetails;
   stomaNurse: StaffDetails | null;
   genpract: StaffDetails;
+}
+interface PatientAppEditModalProps {
+  appointment: Appointment;
+  editModalState: boolean;
+  staff: Staff;
   setEditModalState: (state: boolean) => void;
   updateAppointmentState: (appointment: Appointment, index: number) => void;
   index: number;
@@ -20,10 +23,7 @@ interface PatientAppEditModalProps {
 const PatientAppEditModal = ({
   appointment,
   editModalState,
-  consultant,
-  nurse,
-  stomaNurse,
-  genpract,
+  staff,
   setEditModalState,
   updateAppointmentState,
   index,
@@ -62,6 +62,13 @@ const PatientAppEditModal = ({
     }
     setEditNotes(!editNotes);
   };
+
+  const handleEditAppointment = () => {
+    if (editAppointment) {
+      setAppointmentData(appointment);
+    }
+    setEditAppointment(!editAppointment);
+  }
 
   const handleSelectStaff = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const staffId = parseInt(e.target.value);
@@ -133,19 +140,19 @@ const PatientAppEditModal = ({
               onChange={handleSelectStaff}
             >
               <option
-                value={consultant.staffId}
-              >{`${consultant.name} - ${consultant.role}`}</option>
+                value={staff.consultant.staffId}
+              >{`${staff.consultant.name} - ${staff.consultant.role}`}</option>
               <option
-                value={nurse.staffId}
-              >{`${nurse.name} - ${nurse.role}`}</option>
-              {stomaNurse != null ? (
+                value={staff.nurse.staffId}
+              >{`${staff.nurse.name} - ${staff.nurse.role}`}</option>
+              {staff.stomaNurse != null ? (
                 <option
-                  value={stomaNurse.staffId}
-                >{`${stomaNurse.name} - ${stomaNurse.role}`}</option>
+                  value={staff.stomaNurse.staffId}
+                >{`${staff.stomaNurse.name} - ${staff.stomaNurse.role}`}</option>
               ) : null}
               <option
-                value={genpract.staffId}
-              >{`${genpract.name} - ${genpract.role}`}</option>
+                value={staff.genpract.staffId}
+              >{`${staff.genpract.name} - ${staff.genpract.role}`}</option>
             </select>
             <label>
               Appointment Type:

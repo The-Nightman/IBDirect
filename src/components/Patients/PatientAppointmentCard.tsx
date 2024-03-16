@@ -5,22 +5,23 @@ import { Appointment } from "../../interfaces/Appointment";
 import { PatientAppDetailsModal, PatientAppEditModal } from "..";
 import { StaffDetails } from "../../interfaces/StaffDetails";
 
-interface PatientAppointmentProps {
-  appointment: Appointment;
+interface Staff {
   consultant: StaffDetails;
   nurse: StaffDetails;
   stomaNurse: StaffDetails | null;
   genpract: StaffDetails;
+}
+
+interface PatientAppointmentProps {
+  appointment: Appointment;
+  staff: Staff;
   index: number;
   updateAppointmentState: (appointment: Appointment, index: number) => void;
 }
 
 const PatientAppointmentCard = ({
   appointment,
-  consultant,
-  nurse,
-  stomaNurse,
-  genpract,
+  staff,
   index,
   updateAppointmentState,
 }: PatientAppointmentProps) => {
@@ -71,10 +72,7 @@ const PatientAppointmentCard = ({
         editModalState={editModalState}
         setEditModalState={setEditModalState}
         updateAppointmentState={updateAppointmentState}
-        consultant={consultant}
-        nurse={nurse}
-        stomaNurse={stomaNurse}
-        genpract={genpract}
+        staff={staff}
         index={index}
       />
     </>
