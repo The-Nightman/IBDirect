@@ -63,6 +63,12 @@ const PatientAppEditModal = ({
     setEditNotes(!editNotes);
   };
 
+  const handleSelectStaff = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const staffId = parseInt(e.target.value);
+    const staffName = e.target.selectedOptions[0].text.split(" - ")[0];
+    setAppointmentData({ ...appointmentData, staffId, staffName });
+  };
+
   const handleSaveNotes = () => {
     setAppointmentData({ ...appointmentData, notes: notes });
     setEditNotes(false);
@@ -98,13 +104,34 @@ const PatientAppEditModal = ({
         >
           {editAppointment ? "Cancel Edit Appointment" : "Edit Appointment"}
         </button>
-        <h3 className="flex flex-wrap justify-between mt-8 mb-4">
-          <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
-          <strong>{appointment.location}</strong>
-        </h3>
+        {editAppointment ? (
+          <div className="flex flex-wrap justify-between mt-8 mb-4">
+            <p>datetime</p>
+            <label className="flex flex-col">
+              {" "}
+              Location:
+              <select defaultValue={appointmentData.location}>
+                <option value="Hospital">Hospital</option>
+                <option value="Telephone">Telephone</option>
+              </select>
+              <span className="sr-only" id="appTypeHint">
+                Enter the appointment location e.g. Hospital, GP Practice or
+                Telephone
+              </span>
+            </label>
+          </div>
+        ) : (
+          <h3 className="flex flex-wrap justify-between mt-8 mb-4">
+            <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
+            <strong>{appointment.location}</strong>
+          </h3>
+        )}
         {editAppointment ? (
           <div className="flex flex-col w-min gap-4">
-            <select defaultValue={appointmentData.staffId}>
+            <select
+              defaultValue={appointmentData.staffId}
+              onChange={handleSelectStaff}
+            >
               <option
                 value={consultant.staffId}
               >{`${consultant.name} - ${consultant.role}`}</option>
@@ -122,7 +149,11 @@ const PatientAppEditModal = ({
             </select>
             <label>
               Appointment Type:
-              <input type="text" aria-describedby="appTypeHint" defaultValue={appointmentData.appType} />
+              <input
+                type="text"
+                aria-describedby="appTypeHint"
+                defaultValue={appointmentData.appType}
+              />
               <span className="sr-only" id="appTypeHint">
                 Enter the appointment type e.g. Bloodwork or Checkup
               </span>
