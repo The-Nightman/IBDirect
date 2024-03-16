@@ -68,7 +68,7 @@ const PatientAppEditModal = ({
       setAppointmentData(appointment);
     }
     setEditAppointment(!editAppointment);
-  }
+  };
 
   const handleSelectStaff = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const staffId = parseInt(e.target.value);
@@ -107,7 +107,7 @@ const PatientAppEditModal = ({
               ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
               : "bg-red-400 hover:bg-red-700 active:bg-red-500"
           } hover:text-white`}
-          onClick={() => setEditAppointment(!editAppointment)}
+          onClick={handleEditAppointment}
         >
           {editAppointment ? "Cancel Edit Appointment" : "Edit Appointment"}
         </button>
@@ -196,13 +196,18 @@ const PatientAppEditModal = ({
           <textarea
             disabled={!editNotes}
             aria-label="Appointment Notes"
+            aria-describedby="textareaHelper"
             className="w-full resize-none overflow-hidden"
             value={notes}
             ref={notesAreaRef}
             onChange={(e) => setNotes(e.target.value)}
           />
+          <strong id="textareaHelper" className="font-normal">
+            Notes are edited independently to appointment data, cancel to revert
+            notes and save appointment to update saved notes.
+          </strong>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mt-8">
           <strong>
             Please save appointment before closing to prevent loss of updates.
           </strong>
