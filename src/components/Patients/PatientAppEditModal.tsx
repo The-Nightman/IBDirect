@@ -33,6 +33,9 @@ const PatientAppEditModal = ({
   const [editAppointment, setEditAppointment] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
   const [editNotes, setEditNotes] = useState<boolean>(false);
+  const [selectedStaffPractice, setSelectedStaffPractice] = useState<string>(
+    appointment.location
+  );
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -74,6 +77,10 @@ const PatientAppEditModal = ({
     const staffId = parseInt(e.target.value);
     const staffName = e.target.selectedOptions[0].text.split(" - ")[0];
     setAppointmentData({ ...appointmentData, staffId, staffName });
+    const { practice } = Object.values(staff).find(
+      (member) => member.staffId === staffId
+    ) as StaffDetails;
+    setSelectedStaffPractice(practice);
   };
 
   const handleSaveNotes = () => {
@@ -84,6 +91,9 @@ const PatientAppEditModal = ({
   const closeDialog = () => {
     setAppointmentData(appointment);
     setNotes(appointment.notes);
+    setSelectedStaffPractice(appointment.location);
+    setEditAppointment(false);
+    setEditNotes(false);
     setEditModalState(false);
   };
 
@@ -118,7 +128,9 @@ const PatientAppEditModal = ({
               {" "}
               Location:
               <select defaultValue={appointmentData.location}>
-                <option value="Hospital">Hospital</option>
+                <option value={selectedStaffPractice}>
+                  {selectedStaffPractice}
+                </option>
                 <option value="Telephone">Telephone</option>
               </select>
               <span className="sr-only" id="appTypeHint">
