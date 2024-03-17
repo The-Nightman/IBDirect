@@ -1,4 +1,4 @@
-import { Modal } from "flowbite-react";
+import { Datepicker, Modal } from "flowbite-react";
 import { Appointment } from "../../interfaces/Appointment";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { useEffect, useRef, useState } from "react";
@@ -83,6 +83,10 @@ const PatientAppEditModal = ({
     setSelectedStaffPractice(practice);
   };
 
+  const handleDateSelect = (date: Date) => {
+    
+  };
+
   const handleSaveNotes = () => {
     setAppointmentData({ ...appointmentData, notes: notes });
     setEditNotes(false);
@@ -123,7 +127,70 @@ const PatientAppEditModal = ({
         </button>
         {editAppointment ? (
           <div className="flex flex-wrap justify-between mt-8 mb-4">
-            <p>datetime</p>
+            <div>
+              <label>
+                Appointment Date:
+                <Datepicker
+                  onSelectedDateChanged={handleDateSelect}
+                  weekStart={2}
+                  defaultDate={new Date(appointment.dateTime)}
+                  aria-describedby="appDateHint"
+                />
+                <span className="sr-only" id="appDateHint">
+                  Enter the appointment date
+                </span>
+              </label>
+              <label className="flex flex-col">
+                Time:
+                <div>
+                  <select
+                    title="Hours"
+                    defaultValue={
+                      new Date(appointmentData.dateTime)
+                        .toLocaleTimeString("en", {
+                          timeStyle: "short",
+                          hour12: false,
+                          timeZone: "UTC",
+                        })
+                        .split(":")[0]
+                    }
+                    aria-labelledby="appTimeHint"
+                  >
+                    {[...Array(24)].map((_, i) => (
+                      <option key={i} value={i.toString().padStart(2, "0")}>
+                        {i.toString().padStart(2, "0")}
+                      </option>
+                    ))}
+                  </select>
+                  <span> : </span>
+                  <select
+                    title="Minutes"
+                    defaultValue={
+                      new Date(appointmentData.dateTime)
+                        .toLocaleTimeString("en", {
+                          timeStyle: "short",
+                          hour12: false,
+                          timeZone: "UTC",
+                        })
+                        .split(":")[1]
+                    }
+                    aria-labelledby="appTimeHint"
+                  >
+                    {[...Array(12)].map((_, i) => (
+                      <option
+                        key={i}
+                        value={(i * 5).toString().padStart(2, "0")}
+                      >
+                        {(i * 5).toString().padStart(2, "0")}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="sr-only" id="appTimeHint">
+                    Enter the appointment time in hours and minutes e.g. 14:30
+                  </span>
+                </div>
+              </label>
+            </div>
             <label className="flex flex-col">
               {" "}
               Location:
