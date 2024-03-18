@@ -188,7 +188,7 @@ const PatientAppEditModal = ({
                         .split(":")[0]
                     }
                     onChange={(e) => handleTimeSelect(e)}
-                    aria-labelledby="appTimeHint"
+                    aria-describedby="appTimeHint"
                   >
                     {[...Array(24)].map((_, i) => (
                       <option key={i} value={i.toString().padStart(2, "0")}>
@@ -210,7 +210,7 @@ const PatientAppEditModal = ({
                         .split(":")[1]
                     }
                     onChange={(e) => handleTimeSelect(e)}
-                    aria-labelledby="appTimeHint"
+                    aria-describedby="appTimeHint"
                   >
                     {[...Array(12)].map((_, i) => (
                       <option
@@ -230,13 +230,16 @@ const PatientAppEditModal = ({
             <label className="flex flex-col">
               {" "}
               Location:
-              <select defaultValue={appointmentData.location}>
+              <select
+                aria-describedby="appLocationHint"
+                defaultValue={appointmentData.location}
+              >
                 <option value={selectedStaffPractice}>
                   {selectedStaffPractice}
                 </option>
                 <option value="Telephone">Telephone</option>
               </select>
-              <span className="sr-only" id="appTypeHint">
+              <span className="sr-only" id="appLocationHint">
                 Enter the appointment location e.g. Hospital, GP Practice or
                 Telephone
               </span>
