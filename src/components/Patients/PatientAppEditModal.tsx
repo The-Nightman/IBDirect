@@ -278,6 +278,9 @@ const PatientAppEditModal = ({
                 type="text"
                 aria-describedby="appTypeHint"
                 defaultValue={appointmentData.appType}
+                onChange={(e) =>
+                  setAppointmentData({ ...appointmentData, appType: e.target.value })
+                }
               />
               <span className="sr-only" id="appTypeHint">
                 Enter the appointment type e.g. Bloodwork or Checkup
