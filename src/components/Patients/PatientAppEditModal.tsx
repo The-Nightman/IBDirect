@@ -84,7 +84,15 @@ const PatientAppEditModal = ({
   };
 
   const handleDateSelect = (date: Date) => {
-    
+    const newDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    )
+      .toISOString()
+      .split("T")[0];
+    setAppointmentData((prev) => ({
+      ...prev,
+      dateTime: `${newDate}T${appointmentData.dateTime.split("T")[1]}`,
+    }));
   };
 
   const handleSaveNotes = () => {
