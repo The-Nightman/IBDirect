@@ -95,6 +95,30 @@ const PatientAppEditModal = ({
     }));
   };
 
+  const handleTimeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value, name } = e.target;
+    const _oldDateTime = new Date(appointmentData.dateTime);
+    const appointmentDateTimeUTC = new Date(
+      Date.UTC(
+        _oldDateTime.getUTCFullYear(),
+        _oldDateTime.getUTCMonth(),
+        _oldDateTime.getUTCDate(),
+        _oldDateTime.getUTCHours(),
+        _oldDateTime.getUTCMinutes()
+      )
+    );
+    const newTime = new Date(
+      Date.UTC(
+        appointmentDateTimeUTC.getFullYear(),
+        appointmentDateTimeUTC.getMonth(),
+        appointmentDateTimeUTC.getDate(),
+        name === "hours" ? parseInt(value) : _oldDateTime.getUTCHours(),
+        name === "minutes" ? parseInt(value) : _oldDateTime.getUTCMinutes()
+      )
+    ).toISOString();
+    setAppointmentData((prev) => ({ ...prev, dateTime: newTime }));
+  };
+
   const handleSaveNotes = () => {
     setAppointmentData({ ...appointmentData, notes: notes });
     setEditNotes(false);
@@ -153,6 +177,7 @@ const PatientAppEditModal = ({
                 <div>
                   <select
                     title="Hours"
+                    name="hours"
                     defaultValue={
                       new Date(appointmentData.dateTime)
                         .toLocaleTimeString("en", {
@@ -162,6 +187,7 @@ const PatientAppEditModal = ({
                         })
                         .split(":")[0]
                     }
+                    onChange={(e) => handleTimeSelect(e)}
                     aria-labelledby="appTimeHint"
                   >
                     {[...Array(24)].map((_, i) => (
@@ -173,6 +199,7 @@ const PatientAppEditModal = ({
                   <span> : </span>
                   <select
                     title="Minutes"
+                    name="minutes"
                     defaultValue={
                       new Date(appointmentData.dateTime)
                         .toLocaleTimeString("en", {
@@ -182,6 +209,7 @@ const PatientAppEditModal = ({
                         })
                         .split(":")[1]
                     }
+                    onChange={(e) => handleTimeSelect(e)}
                     aria-labelledby="appTimeHint"
                   >
                     {[...Array(12)].map((_, i) => (
