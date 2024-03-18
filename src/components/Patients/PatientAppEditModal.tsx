@@ -145,7 +145,13 @@ const PatientAppEditModal = ({
   };
 
   return (
-    <Modal show={editModalState} onClose={() => setEditModalState(false)}>
+    <Modal
+      show={editModalState}
+      onClose={() => setEditModalState(false)}
+      aria-label={`Patient Appointment Edit Modal ${parseIsoToDateTime(
+        appointment.dateTime
+      )}`}
+    >
       <div className="relative m-4">
         <button
           className={`absolute right-0 rounded-sm px-1 ${
@@ -253,25 +259,28 @@ const PatientAppEditModal = ({
         )}
         {editAppointment ? (
           <div className="flex flex-col w-min gap-4">
-            <select
-              defaultValue={appointmentData.staffId}
-              onChange={handleSelectStaff}
-            >
-              <option
-                value={staff.consultant.staffId}
-              >{`${staff.consultant.name} - ${staff.consultant.role}`}</option>
-              <option
-                value={staff.nurse.staffId}
-              >{`${staff.nurse.name} - ${staff.nurse.role}`}</option>
-              {staff.stomaNurse != null ? (
+            <label>
+              Staff:
+              <select
+                defaultValue={appointmentData.staffId}
+                onChange={handleSelectStaff}
+              >
                 <option
-                  value={staff.stomaNurse.staffId}
-                >{`${staff.stomaNurse.name} - ${staff.stomaNurse.role}`}</option>
-              ) : null}
-              <option
-                value={staff.genpract.staffId}
-              >{`${staff.genpract.name} - ${staff.genpract.role}`}</option>
-            </select>
+                  value={staff.consultant.staffId}
+                >{`${staff.consultant.name} - ${staff.consultant.role}`}</option>
+                <option
+                  value={staff.nurse.staffId}
+                >{`${staff.nurse.name} - ${staff.nurse.role}`}</option>
+                {staff.stomaNurse != null ? (
+                  <option
+                    value={staff.stomaNurse.staffId}
+                  >{`${staff.stomaNurse.name} - ${staff.stomaNurse.role}`}</option>
+                ) : null}
+                <option
+                  value={staff.genpract.staffId}
+                >{`${staff.genpract.name} - ${staff.genpract.role}`}</option>
+              </select>
+            </label>
             <label>
               Appointment Type:
               <input
@@ -279,7 +288,10 @@ const PatientAppEditModal = ({
                 aria-describedby="appTypeHint"
                 defaultValue={appointmentData.appType}
                 onChange={(e) =>
-                  setAppointmentData({ ...appointmentData, appType: e.target.value })
+                  setAppointmentData({
+                    ...appointmentData,
+                    appType: e.target.value,
+                  })
                 }
               />
               <span className="sr-only" id="appTypeHint">

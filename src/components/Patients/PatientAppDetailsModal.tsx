@@ -39,7 +39,12 @@ const PatientAppDetailsModal = ({
   }, [notes]);
 
   return (
-    <Modal show={detailsModalState}>
+    <Modal
+      show={detailsModalState}
+      aria-label={`Patient Appointment Edit Modal ${parseIsoToDateTime(
+        appointment.dateTime
+      )}`}
+    >
       <div className="m-4">
         <h3 className="flex flex-wrap justify-between mb-4">
           <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
