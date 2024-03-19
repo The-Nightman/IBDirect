@@ -4,6 +4,8 @@ import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { useEffect, useRef, useState } from "react";
 import { updateAppointment } from "../../api/updateAppointment";
 import { StaffDetails } from "../../interfaces/StaffDetails";
+import { ErrorState } from "../../interfaces/ErrorState";
+import { Toast } from "..";
 
 interface Staff {
   consultant: StaffDetails;
@@ -36,6 +38,11 @@ const PatientAppEditModal = ({
   const [selectedStaffPractice, setSelectedStaffPractice] = useState<string>(
     appointment.location
   );
+  const [toastState, setToastState] = useState<ErrorState>({
+    state: false,
+    message: "",
+    color: "failure",
+  });
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -124,6 +131,10 @@ const PatientAppEditModal = ({
     setEditNotes(false);
   };
 
+  const closeToastState = () => {
+    setToastState({ state: false, message: "", color: "failure" });
+  };
+
   const closeDialog = () => {
     setAppointmentData(appointment);
     setNotes(appointment.notes);
@@ -137,11 +148,20 @@ const PatientAppEditModal = ({
     updateAppointment(appointment.id, appointmentData)
       .then((_res) => {
         updateAppointmentState(appointmentData, index);
+        setToastState({
+          state: true,
+          message: "Appointment successfully updated",
+          color: "success",
+        });
       })
       .catch((err) => {
         console.error(err);
+        setToastState({
+          state: true,
+          message: err.message,
+          color: "failure",
+        });
       });
-    setEditModalState(false);
   };
 
   return (
@@ -341,6 +361,13 @@ const PatientAppEditModal = ({
           </strong>
         </div>
         <div className="flex flex-col items-center mt-8">
+          {toastState.state && (
+            <Toast
+              color={toastState.color || "failure"}
+              message={toastState.message}
+              handleErrorState={closeToastState}
+            />
+          )}
           <strong>
             Please save appointment before closing to prevent loss of updates.
           </strong>
