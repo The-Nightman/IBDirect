@@ -10,12 +10,18 @@ import {
 } from "@mui/icons-material";
 import { parseDate } from "../../utils/parseDate";
 import { updatePatientNotes } from "../../api/updatePatientNotes";
-import { SpinnerStatus, Toast, PatientAppointmentCard } from "..";
+import {
+  SpinnerStatus,
+  Toast,
+  PatientAppointmentCard,
+  PatientAppEditModal,
+} from "..";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { TabsComponent } from "flowbite-react";
 import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
 import { parseStoma } from "../../utils/parseStoma";
 import { Appointment } from "../../interfaces/Appointment";
+import { postNewAppointment } from "../../api/postNewAppointment";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -28,6 +34,8 @@ const PatientDetailsView = () => {
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
   const [editNotes, setEditNotes] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
+  const [newAppointmentModalState, setNewAppointmentModalState] =
+    useState<boolean>(false);
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -129,6 +137,12 @@ const PatientDetailsView = () => {
     );
     if (patientData) {
       setPatientData({ ...patientData, appointments: newAppointmentState });
+    }
+  };
+
+  const createNewAppointment = () => {
+    if (patientData) {
+      setNewAppointmentModalState(true);
     }
   };
 
@@ -260,6 +274,34 @@ const PatientDetailsView = () => {
               <section className="text-l">
                 <h3 className="border-b border-slate-400 mb-4">Appointments</h3>
                 <section>
+                  <button
+                    className="rounded-sm py-1 px-2 mb-8 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
+                    onClick={createNewAppointment}
+                  >
+                    Create New Appointment
+                  </button>
+                  {patientData && (
+                    <PatientAppEditModal
+                      appointment={{
+                        staffId: patientData.consultant.staffId,
+                        staffName: patientData.consultant.name,
+                        dateTime: new Date().toISOString(),
+                        location: patientData.consultant.practice,
+                        appType: "placeholder",
+                        notes: "",
+                      }}
+                      editModalState={newAppointmentModalState}
+                      setEditModalState={setNewAppointmentModalState}
+                      updateAppointmentState={updateAppointments}
+                      staff={{
+                        consultant: patientData.consultant,
+                        nurse: patientData.nurse,
+                        stomaNurse: patientData.stomaNurse,
+                        genpract: patientData.genpract,
+                      }}
+                      index={patientData.appointments.length}
+                    />
+                  )}
                   <h4>Upcoming appointments</h4>
                   <ol className="border-x border-t border-slate-500">
                     {patientData?.appointments.some(
