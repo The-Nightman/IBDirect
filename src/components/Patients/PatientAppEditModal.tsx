@@ -155,7 +155,6 @@ const PatientAppEditModal = ({
         });
       })
       .catch((err) => {
-        console.error(err);
         setToastState({
           state: true,
           message: err.message,
