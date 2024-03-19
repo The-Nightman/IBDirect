@@ -74,7 +74,7 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/appointments"}
+                  to={"/dashboard/my-appointments"}
                 >
                   My Appointments
                 </Link>

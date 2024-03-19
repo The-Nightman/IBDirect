@@ -19,8 +19,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Root />}>
             <Route path="" element={<LoginSwitchBoard />} />
-            <Route path="Portal/Patient/Login" element={<PatientLogin />} />
-            <Route path="Portal/Staff/Login" element={<StaffLogin />} />
+            <Route path="portal/patient/Login" element={<PatientLogin />} />
+            <Route path="portal/staff/Login" element={<StaffLogin />} />
           </Route>
           <Route element={<PrivateRoutes />}>
             <Route path="/dashboard" element={<StaffDash />}>
@@ -31,6 +31,10 @@ function App() {
               <Route
                 path="/dashboard/patients/details/:id"
                 element={<PatientDetailsView />}
+              />
+              <Route
+                path="/dashboard/my-appointments"
+                element={null}
               />
             </Route>
           </Route>
