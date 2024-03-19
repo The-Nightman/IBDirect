@@ -133,12 +133,12 @@ const PatientDetailsView = () => {
     newAppointment: boolean = false
   ) => {
     if (patientData) {
-      if (newAppointment) {
+      if (!newAppointment) {
         const newAppointmentState = patientData.appointments.map(
           (appointment, i) => (i === index ? updatedAppointment : appointment)
         );
         setPatientData({ ...patientData, appointments: newAppointmentState });
-      } else if (!newAppointment) {
+      } else if (newAppointment) {
         const updatedAppointmentState = [
           ...patientData.appointments,
           updatedAppointment,
