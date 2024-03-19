@@ -6,6 +6,7 @@ import { updateAppointment } from "../../api/updateAppointment";
 import { StaffDetails } from "../../interfaces/StaffDetails";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { Toast } from "..";
+import { postNewAppointment } from "../../api/postNewAppointment";
 
 interface Staff {
   consultant: StaffDetails;
@@ -20,6 +21,8 @@ interface PatientAppEditModalProps {
   setEditModalState: (state: boolean) => void;
   updateAppointmentState: (appointment: Appointment, index: number) => void;
   index: number;
+  newAppointment?: boolean;
+  patientId?: number;
 }
 
 const PatientAppEditModal = ({
@@ -29,6 +32,8 @@ const PatientAppEditModal = ({
   setEditModalState,
   updateAppointmentState,
   index,
+  newAppointment,
+  patientId,
 }: PatientAppEditModalProps) => {
   const [appointmentData, setAppointmentData] =
     useState<Appointment>(appointment);
@@ -145,22 +150,41 @@ const PatientAppEditModal = ({
   };
 
   const saveAppointment = () => {
-    updateAppointment(appointment.id, appointmentData)
-      .then((_res) => {
-        updateAppointmentState(appointmentData, index);
-        setToastState({
-          state: true,
-          message: "Appointment successfully updated",
-          color: "success",
+    if (!newAppointment) {
+      updateAppointment(appointment.id, appointmentData)
+        .then((_res) => {
+          updateAppointmentState(appointmentData, index);
+          setToastState({
+            state: true,
+            message: "Appointment successfully updated",
+            color: "success",
+          });
+        })
+        .catch((err) => {
+          setToastState({
+            state: true,
+            message: err.message,
+            color: "failure",
+          });
         });
-      })
-      .catch((err) => {
-        setToastState({
-          state: true,
-          message: err.message,
-          color: "failure",
+    } else if (newAppointment) {
+      postNewAppointment(patientId, appointmentData)
+        .then((res) => {
+          setAppointmentData((prev) => {
+            const updatedAppointmentData = { ...prev, id: res.data };
+            updateAppointmentState(updatedAppointmentData, index);
+            return updatedAppointmentData;
+          });
+          setEditModalState(false);
+        })
+        .catch((err) => {
+          setToastState({
+            state: true,
+            message: err.message,
+            color: "failure",
+          });
         });
-      });
+    }
   };
 
   return (

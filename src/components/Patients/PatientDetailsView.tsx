@@ -21,7 +21,6 @@ import { TabsComponent } from "flowbite-react";
 import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
 import { parseStoma } from "../../utils/parseStoma";
 import { Appointment } from "../../interfaces/Appointment";
-import { postNewAppointment } from "../../api/postNewAppointment";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -130,13 +129,25 @@ const PatientDetailsView = () => {
 
   const updateAppointments = (
     updatedAppointment: Appointment,
-    index: number
+    index: number,
+    newAppointment: boolean = false
   ) => {
-    const newAppointmentState = patientData!.appointments.map(
-      (appointment, i) => (i === index ? updatedAppointment : appointment)
-    );
     if (patientData) {
-      setPatientData({ ...patientData, appointments: newAppointmentState });
+      if (newAppointment) {
+        const newAppointmentState = patientData.appointments.map(
+          (appointment, i) => (i === index ? updatedAppointment : appointment)
+        );
+        setPatientData({ ...patientData, appointments: newAppointmentState });
+      } else if (!newAppointment) {
+        const updatedAppointmentState = [
+          ...patientData.appointments,
+          updatedAppointment,
+        ];
+        setPatientData({
+          ...patientData,
+          appointments: updatedAppointmentState,
+        });
+      }
     }
   };
 
@@ -280,7 +291,7 @@ const PatientDetailsView = () => {
                   >
                     Create New Appointment
                   </button>
-                  {patientData && (
+                  {patientData && newAppointmentModalState ? (
                     <PatientAppEditModal
                       appointment={{
                         staffId: patientData.consultant.staffId,
@@ -300,8 +311,10 @@ const PatientDetailsView = () => {
                         genpract: patientData.genpract,
                       }}
                       index={patientData.appointments.length}
+                      newAppointment={true}
+                      patientId={patientData.patientId}
                     />
-                  )}
+                  ) : null}
                   <h4>Upcoming appointments</h4>
                   <ol className="border-x border-t border-slate-500">
                     {patientData?.appointments.some(
