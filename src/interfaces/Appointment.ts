@@ -6,4 +6,6 @@ export interface Appointment {
   location: string;
   appType: string;
   notes: string;
+  patientName?: string;
+  patientId?: number;
 }
