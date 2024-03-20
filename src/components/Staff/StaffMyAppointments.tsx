@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getStaffAppointments } from "../../api/getStaffAppointments";
 import { Appointment } from "../../interfaces/Appointment";
+import { StaffMyAppointmentCard } from "..";
 
 const StaffMyAppointments = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -11,7 +12,6 @@ const StaffMyAppointments = () => {
     getStaffAppointments(user.userID)
       .then((res) => {
         setAppointments(res.data);
-        console.log(res.data);
       })
       .catch((res) => {
         console.log(res);
@@ -24,13 +24,17 @@ const StaffMyAppointments = () => {
       <div className="flex flex-col xl:flex-row">
         <section>
           <h3>Upcoming Appointments</h3>
-          <ol>
+          <ol className="border-x border-t border-slate-500">
             {appointments.some(
               (appointment) => new Date(appointment.dateTime) <= new Date()
             ) ? (
               appointments.map((appointment, index) => {
                 if (new Date(appointment.dateTime) <= new Date()) {
-                  return <li key={index}>appointment</li>;
+                  return (
+                    <li key={index}>
+                      <StaffMyAppointmentCard appointment={appointment} />
+                    </li>
+                  );
                 }
               })
             ) : (
@@ -44,13 +48,17 @@ const StaffMyAppointments = () => {
         </section>
         <section>
           <h3>Previous Appointments</h3>
-          <ol>
+          <ol className="border-x border-t border-slate-500">
             {appointments.some(
               (appointment) => new Date(appointment.dateTime) <= new Date()
             ) ? (
               appointments.map((appointment, index) => {
                 if (new Date(appointment.dateTime) <= new Date()) {
-                  return <li key={index}>appointment</li>;
+                  return (
+                    <li key={index}>
+                      <StaffMyAppointmentCard appointment={appointment} />
+                    </li>
+                  );
                 }
               })
             ) : (
