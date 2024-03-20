@@ -13,6 +13,7 @@ import SkeletonPatientCard from "./UX/SkeletonPatientCard.tsx";
 import PatientAppointmentCard from "./Patients/PatientAppointmentCard.tsx";
 import PatientAppDetailsModal from "./Patients/PatientAppDetailsModal.tsx";
 import PatientAppEditModal from "./Patients/PatientAppEditModal.tsx";
+import StaffMyAppointments from "./Staff/StaffMyAppointments.tsx";
 
 export {
   Header,
@@ -30,4 +31,5 @@ export {
   PatientAppointmentCard,
   PatientAppDetailsModal,
   PatientAppEditModal,
+  StaffMyAppointments,
 };

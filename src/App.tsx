@@ -6,6 +6,7 @@ import {
   PatientDetailsView,
   PrivateRoutes,
   StaffDashboardPatients,
+  StaffMyAppointments,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
@@ -34,7 +35,7 @@ function App() {
               />
               <Route
                 path="/dashboard/my-appointments"
-                element={null}
+                element={<StaffMyAppointments />}
               />
             </Route>
           </Route>
