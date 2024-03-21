@@ -1,3 +1,6 @@
+import { Appointment } from "./Appointment";
+import { StaffDetails } from "./StaffDetails";
+
 export interface PatientDetails {
   patientId: number;
   name: string;
@@ -7,26 +10,15 @@ export interface PatientDetails {
   diagnosisDate: string;
   stoma: boolean;
   notes: string;
-  consultantName: string;
-  nurseName: string;
-  stomaNurseName: string;
-  genpractName: string;
+  consultant: StaffDetails;
+  nurse: StaffDetails;
+  stomaNurse: StaffDetails | null;
+  genpract: StaffDetails;
   dateOfBirth: string;
   address: string;
   appointments: Appointment[];
   surveys: Survey[];
   prescriptions: Prescription[];
-}
-
-interface Appointment {
-  id: number;
-  staffId: number;
-  dateTime: string;
-  location: string;
-  appType: string;
-  notes: string;
-  patientDetailsId: number;
-  patientDetails: string;
 }
 
 interface Prescription {

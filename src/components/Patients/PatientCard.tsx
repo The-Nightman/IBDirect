@@ -1,6 +1,7 @@
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
 import { parseDate } from "../../utils/parseDate";
+import { parseStoma } from "../../utils/parseStoma";
 
 interface PatientCardProps {
   id: number;
@@ -11,12 +12,6 @@ interface PatientCardProps {
 }
 
 const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
-  if (stoma === false) {
-    stoma = "N";
-  } else if (stoma === true) {
-    stoma = "Y";
-  }
-
   const navigate = useNavigate();
 
   const openPatientDetails = () => {
@@ -29,7 +24,7 @@ const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
         <p>{name}</p>
         <p>{parseDate(dob)}</p>
         <p>{diagnosis}</p>
-        <p>Stoma: {stoma}</p>
+        <p>Stoma: {parseStoma(stoma)}</p>
         <button
           className="rounded-full w-10 place-self-center leading-none hover:bg-slate-300 hover:text-blue-600 active:bg-slate-400 active:text-blue-200"
           type="button"

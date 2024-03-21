@@ -10,6 +10,11 @@ import PatientDetailsView from "./Patients/PatientDetailsView.tsx";
 import Toast from "./UX/Toast.tsx";
 import SpinnerStatus from "./UX/Spinner.tsx";
 import SkeletonPatientCard from "./UX/SkeletonPatientCard.tsx";
+import PatientAppointmentCard from "./Patients/PatientAppointmentCard.tsx";
+import PatientAppDetailsModal from "./Patients/PatientAppDetailsModal.tsx";
+import PatientAppEditModal from "./Patients/PatientAppEditModal.tsx";
+import StaffMyAppointments from "./Staff/StaffMyAppointments.tsx";
+import StaffMyAppointmentCard from "./Staff/StaffMyAppointmentCard.tsx";
 
 export {
   Header,
@@ -24,4 +29,9 @@ export {
   Toast,
   SpinnerStatus,
   SkeletonPatientCard,
+  PatientAppointmentCard,
+  PatientAppDetailsModal,
+  PatientAppEditModal,
+  StaffMyAppointments,
+  StaffMyAppointmentCard,
 };

@@ -1,8 +1,8 @@
 import { IBDirectAPI } from "./api";
 
-export const updatePatientNotes = (id, updatedNotes) => {
+export const getStaffAppointments = (id) => {
   const jwt = sessionStorage.getItem("jwt");
-  return IBDirectAPI.put(`/Patients/${id}/updateNotes`, { notes: updatedNotes }, {
+  return IBDirectAPI.get(`/Staff/${id}/myAppointments`, {
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
