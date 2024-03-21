@@ -157,6 +157,17 @@ const PatientDetailsView = () => {
     }
   };
 
+  const removeAppointment = (id: number) => {
+    if (patientData) {
+      setPatientData({
+        ...patientData,
+        appointments: patientData.appointments.filter(
+          (appointment) => appointment.id !== id
+        ),
+      });
+    }
+  };
+
   return (
     <>
       {loading && <SpinnerStatus />}
@@ -328,6 +339,7 @@ const PatientDetailsView = () => {
                               <PatientAppointmentCard
                                 appointment={appointment}
                                 updateAppointmentState={updateAppointments}
+                                removeAppointment={removeAppointment}
                                 staff={{
                                   consultant: patientData?.consultant,
                                   nurse: patientData?.nurse,
@@ -363,6 +375,7 @@ const PatientDetailsView = () => {
                               <PatientAppointmentCard
                                 appointment={appointment}
                                 updateAppointmentState={updateAppointments}
+                                removeAppointment={removeAppointment}
                                 staff={{
                                   consultant: patientData?.consultant,
                                   nurse: patientData?.nurse,
