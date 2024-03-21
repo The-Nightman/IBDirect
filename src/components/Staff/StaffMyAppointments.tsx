@@ -21,15 +21,15 @@ const StaffMyAppointments = () => {
   return (
     <section className="flex flex-col p-6">
       <h2 className="text-3xl mb-4">My Appointments</h2>
-      <div className="flex flex-col xl:flex-row">
-        <section>
+      <div className="flex flex-col xl:flex-row xl:justify-evenly xl:gap-24">
+        <section className="w-full">
           <h3>Upcoming Appointments</h3>
           <ol className="border-x border-t border-slate-500">
             {appointments.some(
-              (appointment) => new Date(appointment.dateTime) <= new Date()
+              (appointment) => new Date(appointment.dateTime) > new Date()
             ) ? (
               appointments.map((appointment, index) => {
-                if (new Date(appointment.dateTime) <= new Date()) {
+                if (new Date(appointment.dateTime) > new Date()) {
                   return (
                     <li key={index}>
                       <StaffMyAppointmentCard appointment={appointment} />
@@ -46,7 +46,7 @@ const StaffMyAppointments = () => {
             )}
           </ol>
         </section>
-        <section>
+        <section className="w-full">
           <h3>Previous Appointments</h3>
           <ol className="border-x border-t border-slate-500">
             {appointments.some(
