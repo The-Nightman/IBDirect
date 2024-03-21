@@ -18,6 +18,7 @@ interface PatientAppointmentProps {
   staff: Staff;
   index: number;
   updateAppointmentState: (appointment: Appointment, index: number) => void;
+  removeAppointment?: (index: number) => void;
 }
 
 const PatientAppointmentCard = ({
@@ -25,6 +26,7 @@ const PatientAppointmentCard = ({
   staff,
   index,
   updateAppointmentState,
+  removeAppointment,
 }: PatientAppointmentProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
@@ -84,6 +86,7 @@ const PatientAppointmentCard = ({
         editModalState={editModalState}
         setEditModalState={setEditModalState}
         updateAppointmentState={updateAppointmentState}
+        removeAppointment={removeAppointment}
         staff={staff}
         index={index}
       />
