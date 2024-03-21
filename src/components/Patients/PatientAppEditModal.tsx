@@ -168,11 +168,15 @@ const PatientAppEditModal = ({
           });
         })
         .catch((err) => {
-          setToastState({
-            state: true,
-            message: err.respone.data,
-            color: "failure",
-          });
+          if (err.response === undefined) {
+            setToastState({ ...toastState, state: true });
+          } else {
+            setToastState({
+              state: true,
+              message: err.response.data,
+              color: "failure",
+            });
+          }
         });
     } else if (newAppointment) {
       postNewAppointment(patientId, appointmentData)
@@ -185,11 +189,15 @@ const PatientAppEditModal = ({
           setEditModalState(false);
         })
         .catch((err) => {
-          setToastState({
-            state: true,
-            message: err.response.data,
-            color: "failure",
-          });
+          if (err.response === undefined) {
+            setToastState({ ...toastState, state: true });
+          } else {
+            setToastState({
+              state: true,
+              message: err.response.data,
+              color: "failure",
+            });
+          }
         });
     }
   };
@@ -202,11 +210,15 @@ const PatientAppEditModal = ({
           setEditModalState(false);
         })
         .catch((err) => {
-          setToastState({
-            state: true,
-            message: err.response.data,
-            color: "failure",
-          });
+          if (err.response === undefined) {
+            setToastState({ ...toastState, state: true });
+          } else {
+            setToastState({
+              state: true,
+              message: err.response.data,
+              color: "failure",
+            });
+          }
         });
     }
   };
