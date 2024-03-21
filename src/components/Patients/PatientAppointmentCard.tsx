@@ -1,9 +1,10 @@
 import { EditOutlined, PageviewOutlined } from "@mui/icons-material";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Appointment } from "../../interfaces/Appointment";
 import { PatientAppDetailsModal, PatientAppEditModal } from "..";
 import { StaffDetails } from "../../interfaces/StaffDetails";
+import { useSearchParams } from "react-router-dom";
 
 interface Staff {
   consultant: StaffDetails;
@@ -27,6 +28,17 @@ const PatientAppointmentCard = ({
 }: PatientAppointmentProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.has("edit-appointment")) {
+      if (
+        parseInt(searchParams.get("edit-appointment") ?? "") === appointment.id
+      ) {
+        setEditModalState(true);
+      }
+    }
+  }, [searchParams, appointment.id]);
 
   return (
     <>
