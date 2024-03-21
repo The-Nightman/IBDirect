@@ -163,7 +163,7 @@ const PatientAppEditModal = ({
         .catch((err) => {
           setToastState({
             state: true,
-            message: err.message,
+            message: err.respone.data,
             color: "failure",
           });
         });
@@ -180,7 +180,7 @@ const PatientAppEditModal = ({
         .catch((err) => {
           setToastState({
             state: true,
-            message: err.message,
+            message: err.response.data,
             color: "failure",
           });
         });
