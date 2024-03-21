@@ -7,6 +7,7 @@ import { StaffDetails } from "../../interfaces/StaffDetails";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { Toast } from "..";
 import { postNewAppointment } from "../../api/postNewAppointment";
+import { deleteAppointment } from "../../api/deleteAppointment";
 
 interface Staff {
   consultant: StaffDetails;
@@ -19,7 +20,12 @@ interface PatientAppEditModalProps {
   editModalState: boolean;
   staff: Staff;
   setEditModalState: (state: boolean) => void;
-  updateAppointmentState: (appointment: Appointment, index: number) => void;
+  updateAppointmentState: (
+    appointment: Appointment,
+    index: number,
+    newAppointment?: boolean
+  ) => void;
+  removeAppointment?: (index: number) => void;
   index: number;
   newAppointment?: boolean;
   patientId?: number;
@@ -34,6 +40,7 @@ const PatientAppEditModal = ({
   index,
   newAppointment,
   patientId,
+  removeAppointment,
 }: PatientAppEditModalProps) => {
   const [appointmentData, setAppointmentData] =
     useState<Appointment>(appointment);
@@ -172,9 +179,26 @@ const PatientAppEditModal = ({
         .then((res) => {
           setAppointmentData((prev) => {
             const updatedAppointmentData = { ...prev, id: res.data };
-            updateAppointmentState(updatedAppointmentData, index);
+            updateAppointmentState(updatedAppointmentData, index, true);
             return updatedAppointmentData;
           });
+          setEditModalState(false);
+        })
+        .catch((err) => {
+          setToastState({
+            state: true,
+            message: err.response.data,
+            color: "failure",
+          });
+        });
+    }
+  };
+
+  const removeFromState = () => {
+    if (removeAppointment) {
+      deleteAppointment(appointment.id)
+        .then((_res) => {
+          removeAppointment(appointment.id!);
           setEditModalState(false);
         })
         .catch((err) => {
@@ -196,6 +220,14 @@ const PatientAppEditModal = ({
       )}`}
     >
       <div className="relative m-4">
+        {removeAppointment ? (
+          <button
+            className="rounded-sm px-1 bg-red-400 hover:bg-red-700 active:bg-red-500 hover:text-white"
+            onClick={removeFromState}
+          >
+            DELETE APPOINTMENT
+          </button>
+        ) : null}
         <button
           className={`absolute right-0 rounded-sm px-1 ${
             !editAppointment
