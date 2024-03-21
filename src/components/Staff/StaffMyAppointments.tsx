@@ -22,7 +22,11 @@ const StaffMyAppointments = () => {
       })
       .catch((err) => {
         setLoading(false);
-        setToastState({ state: true, message: err.response.data });
+        if (err.response === undefined) {
+          setToastState({ ...toastState, state: true });
+        } else {
+          setToastState({ state: true, message: err.response.data });
+        }
       });
   }, [user.userID]);
 
