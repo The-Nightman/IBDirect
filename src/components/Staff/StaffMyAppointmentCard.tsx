@@ -1,4 +1,4 @@
-import { SwitchAccountOutlined } from "@mui/icons-material";
+import { OpenInNewOutlined } from "@mui/icons-material";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { Appointment } from "../../interfaces/Appointment";
 import { useNavigate } from "react-router-dom";
@@ -26,15 +26,17 @@ const StaffMyAppointmentCard = ({
         <div>
           <button
             className="leading-3 text-4xl"
-            aria-label={`Go To Patient Details ${
+            aria-label={`Open Appointment Details ${
               appointment.patientName
             } ${parseIsoToDateTime(appointment.dateTime)}`}
-            title={`Go To Patient Details ${appointment.patientName}`}
+            title={`Open Appointment Details ${appointment.patientName}`}
             onClick={() =>
-              navigate(`/dashboard/patients/details/${appointment.patientId}`)
+              navigate(
+                `/dashboard/patients/details/${appointment.patientId}?edit-appointment=${appointment.id}`
+              )
             }
           >
-            <SwitchAccountOutlined fontSize="inherit" />
+            <OpenInNewOutlined fontSize="inherit" />
           </button>
         </div>
       </div>
