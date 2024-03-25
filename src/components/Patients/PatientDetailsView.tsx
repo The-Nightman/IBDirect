@@ -168,6 +168,8 @@ const PatientDetailsView = () => {
     }
   };
 
+  console.log(patientData)
+
   return (
     <>
       {loading && <SpinnerStatus />}
@@ -222,7 +224,7 @@ const PatientDetailsView = () => {
             className="border-b border-slate-300"
           >
             <TabItem active title="Care Notes">
-              <section className="text-l">
+              <section>
                 <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
                 <div className="w-80 flex flex-col mb-2 md:justify-between md:flex-row">
                   <p className="text-xl">{parseDiagnosis()}</p>
@@ -293,7 +295,7 @@ const PatientDetailsView = () => {
               </section>
             </TabItem>
             <TabItem title="Appointments">
-              <section className="text-l">
+              <section>
                 <h3 className="border-b border-slate-400 mb-4">Appointments</h3>
                 <section>
                   <button
@@ -395,6 +397,26 @@ const PatientDetailsView = () => {
                         </div>
                       </li>
                     )}
+                  </ol>
+                </section>
+              </section>
+            </TabItem>
+            <TabItem title="Prescriptions">
+              <section>
+                <h3>Prescriptions</h3>
+                <section>
+                  <ol>
+                    {patientData?.prescriptions.map((prescription, index) => (
+                      <li key={index}>
+                        <div className="flex flex-col gap-2">
+                          <div className="flex gap-2">
+                            <p>{prescription.scriptName}</p>
+                            <p>{prescription.scriptDose}</p>
+                          </div>
+                          <p>{prescription.prescribingStaff?.name}</p>
+                        </div>
+                      </li>
+                    ))}
                   </ol>
                 </section>
               </section>
