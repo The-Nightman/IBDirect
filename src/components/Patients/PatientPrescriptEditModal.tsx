@@ -1,4 +1,4 @@
-import { Modal } from "flowbite-react";
+import { Datepicker, Modal } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { Prescription } from "../../interfaces/Prescription";
 import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
@@ -61,6 +61,16 @@ const PatientPrescriptEditModal = ({
     setEditNotes(false);
   };
 
+  const handleDateSelect = (date: Date) => {
+    const formattedDate = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()}`;
+    setPrescriptionData((prev) => ({
+      ...prev,
+      scriptStartDate: formattedDate,
+    }));
+  };
+
   const closeDialog = () => {
     setPrescriptionData(prescription);
     setNotes(prescription.scriptNotes);
@@ -90,16 +100,109 @@ const PatientPrescriptEditModal = ({
         >
           {editPrescription ? "Cancel Edit Prescription" : "Edit Prescription"}
         </button>
-        <h3 className="flex flex-wrap justify-between mb-4">
-          <strong>{prescriptionData.scriptName}</strong>
-          <strong>{prescriptionData.scriptStartDate}</strong>
-        </h3>
-        <div className="flex max-md:flex-col justify-between">
-          <div>
-            <p>Dosage: {prescriptionData.scriptDose}</p>
-            <p>Interval: {prescriptionData.scriptInterval}</p>
+        {editPrescription ? (
+          <div className="flex flex-wrap justify-between mt-8 mb-4">
+            <label className="flex flex-col">
+              Prescription Name:
+              <input
+                type="text"
+                defaultValue={prescriptionData.scriptName}
+                onChange={(e) =>
+                  setPrescriptionData({
+                    ...prescriptionData,
+                    scriptName: e.target.value,
+                  })
+                }
+                aria-labelledby="prescNameHint"
+              />
+              <span className="sr-only" id="prescNameHint">
+                Enter the prescription name e.g. Adalimumab or Infliximab
+              </span>
+            </label>
+            <label className="flex flex-col w-56">
+              Prescription Start Date:
+              <Datepicker
+                weekStart={2}
+                defaultDate={new Date(prescriptionData.scriptStartDate)}
+                onSelectedDateChanged={handleDateSelect}
+                aria-labelledby="prescDateHint"
+              />
+              <span className="text-xs" id="prescDateHint">
+                Only modify if writing for a prescription in advance, otherwise
+                the current date will suffice.
+              </span>
+            </label>
           </div>
-          <p>Repeat: {prescriptionData.scriptRepeat ? "Yes" : "No"}</p>
+        ) : (
+          <h3 className="flex flex-wrap justify-between mt-8 mb-4">
+            <strong>{prescriptionData.scriptName}</strong>
+            <strong>{prescriptionData.scriptStartDate}</strong>
+          </h3>
+        )}
+        <div className="flex max-md:flex-col justify-between">
+          {editPrescription ? (
+            <>
+              <div>
+                <label className="flex flex-col">
+                  Dosage:
+                  <input
+                    type="text"
+                    defaultValue={prescriptionData.scriptDose}
+                    aria-labelledby="prescDoseHint"
+                  />
+                  <span className="text-xs w-56" id="prescDoseHint">
+                    Enter the prescribed dosage and any special conditions such
+                    as tapers e.g. Reduce by 5mg every 7 days
+                  </span>
+                </label>
+                <label className="flex flex-col">
+                  Interval:
+                  <input
+                    type="text"
+                    defaultValue={prescriptionData.scriptInterval}
+                    onChange={(e) =>
+                      setPrescriptionData({
+                        ...prescriptionData,
+                        scriptInterval: e.target.value,
+                      })
+                    }
+                    aria-labelledby="prescIntervalHint"
+                  />
+                  <span className="sr-only" id="prescIntervalHint">
+                    Enter the prescribed interval for the dosage provided e.g. 3
+                    tablets per day spaced evenly or 2 Weeks
+                  </span>
+                </label>
+              </div>
+              <label className="flex flex-col">
+                Repeat:
+                <select
+                  defaultValue={prescriptionData.scriptRepeat.toString()}
+                  onChange={(e) =>
+                    setPrescriptionData({
+                      ...prescriptionData,
+                      scriptRepeat: e.target.value === "true",
+                    })
+                  }
+                  aria-labelledby="prescRepeatHint"
+                >
+                  <option value={"true"}>Yes</option>
+                  <option value={"false"}>No</option>
+                </select>
+                <span className="sr-only" id="prescRepeatHint">
+                  Select if the prescription is to be repeated or not.
+                </span>
+              </label>
+            </>
+          ) : (
+            <>
+              <div>
+                <p>Dosage: {prescriptionData.scriptDose}</p>
+                <p>Interval: {prescriptionData.scriptInterval}</p>
+              </div>
+              <p>Repeat: {prescriptionData.scriptRepeat ? "Yes" : "No"}</p>
+            </>
+          )}
         </div>
         <div className="mt-4">
           <p>Prescribing Physician:</p>
