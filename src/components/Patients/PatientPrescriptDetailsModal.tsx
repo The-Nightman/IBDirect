@@ -48,7 +48,7 @@ const PatientPrescriptDetailsModal = ({
       <div className="m-4">
         <h3 className="flex flex-wrap justify-between mb-4">
           <strong>{prescription.scriptName}</strong>
-          <strong>{prescription.scriptStartDate}</strong>
+          <strong>{parseIsoToDateOnly(prescription.scriptStartDate)}</strong>
         </h3>
         <div className="flex max-md:flex-col justify-between">
           <div>
