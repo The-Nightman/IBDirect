@@ -16,6 +16,7 @@ import {
   PatientAppointmentCard,
   PatientAppEditModal,
   PatientPrescriptionCard,
+  PatientPrescriptEditModal,
 } from "..";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { TabsComponent } from "flowbite-react";
@@ -23,6 +24,7 @@ import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
 import { parseStoma } from "../../utils/parseStoma";
 import { Appointment } from "../../interfaces/Appointment";
 import { Prescription } from "../../interfaces/Prescription";
+import { useUserDetails } from "../../context/userDetailsContext";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -37,8 +39,11 @@ const PatientDetailsView = () => {
   const [notes, setNotes] = useState<string>("");
   const [newAppointmentModalState, setNewAppointmentModalState] =
     useState<boolean>(false);
+  const [newPrescriptionModalState, setNewPrescriptionModalState] =
+    useState<boolean>(false);
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
+  const { userDetails } = useUserDetails();
   const navigate = useNavigate();
 
   if (id === undefined) {
@@ -155,20 +160,38 @@ const PatientDetailsView = () => {
 
   const updatePrescriptions = (
     updatedPrescriptionObj: Prescription,
-    index: number
+    index: number,
+    newPrescription: boolean = false
   ) => {
     if (patientData) {
-      const newPrescriptionState = patientData.prescriptions.map(
-        (prescription, i) =>
-          i === index ? updatedPrescriptionObj : prescription
-      );
-      setPatientData({ ...patientData, prescriptions: newPrescriptionState });
+      if (!newPrescription) {
+        const newPrescriptionState = patientData.prescriptions.map(
+          (prescription, i) =>
+            i === index ? updatedPrescriptionObj : prescription
+        );
+        setPatientData({ ...patientData, prescriptions: newPrescriptionState });
+      } else if (newPrescription) {
+        const updatedPrescriptionState = [
+          ...patientData.prescriptions,
+          updatedPrescriptionObj,
+        ];
+        setPatientData({
+          ...patientData,
+          prescriptions: updatedPrescriptionState,
+        });
+      }
     }
   };
 
   const createNewAppointment = () => {
     if (patientData) {
       setNewAppointmentModalState(true);
+    }
+  };
+
+  const createNewPrescription = () => {
+    if (patientData) {
+      setNewPrescriptionModalState(true);
     }
   };
 
@@ -420,6 +443,35 @@ const PatientDetailsView = () => {
                   Prescriptions
                 </h3>
                 <section>
+                  <button
+                    className="rounded-sm py-1 px-2 mb-8 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
+                    onClick={createNewPrescription}
+                  >
+                    Create New Prescription
+                  </button>
+                  {patientData && newPrescriptionModalState ? (
+                    <PatientPrescriptEditModal
+                      prescription={{
+                        scriptName: "Prescription Name",
+                        scriptStartDate: new Date()
+                          .toISOString()
+                          .split("T")[0]
+                          .toString(),
+                        scriptDose: "Prescription Dosage",
+                        scriptInterval: "Dosing Interval",
+                        scriptNotes: "Notes",
+                        scriptRepeat: false,
+                        prescribingStaff: userDetails!,
+                        prescribingStaffId: userDetails!.staffId,
+                      }}
+                      editModalState={newPrescriptionModalState}
+                      setEditModalState={setNewPrescriptionModalState}
+                      updatePrescriptionsState={updatePrescriptions}
+                      index={patientData.prescriptions.length}
+                      newPrescription={true}
+                      patientId={patientData.patientId}
+                    />
+                  ) : null}
                   <h4>Repeat Prescriptions</h4>
                   <ol className="border-x border-t border-slate-500">
                     {patientData?.prescriptions.some(

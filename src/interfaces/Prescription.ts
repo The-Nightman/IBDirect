@@ -1,7 +1,7 @@
 import { StaffDetails } from "./StaffDetails";
 
 export interface Prescription {
-  id: number;
+  id?: number;
   scriptName: string;
   scriptStartDate: string;
   scriptDose: string;

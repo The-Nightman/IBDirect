@@ -5,13 +5,20 @@ import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
 import { updatePrescription } from "../../api/updatePrescription";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { Toast } from "..";
+import { postNewPrescription } from "../../api/postNewPrescription";
 
 interface PatientPrescriptEditModalProps {
   prescription: Prescription;
   editModalState: boolean;
   setEditModalState: (state: boolean) => void;
-  updatePrescriptionsState: (prescription: Prescription, index: number) => void;
+  updatePrescriptionsState: (
+    prescription: Prescription,
+    index: number,
+    newPrescription?: boolean
+  ) => void;
   index: number;
+  newPrescription?: boolean;
+  patientId?: number;
 }
 
 const PatientPrescriptEditModal = ({
@@ -20,6 +27,8 @@ const PatientPrescriptEditModal = ({
   setEditModalState,
   updatePrescriptionsState,
   index,
+  newPrescription,
+  patientId,
 }: PatientPrescriptEditModalProps) => {
   const [prescriptionData, setPrescriptionData] =
     useState<Prescription>(prescription);
@@ -96,37 +105,58 @@ const PatientPrescriptEditModal = ({
   };
 
   const savePrescription = () => {
-    const updatedPrescriptionObj: Prescription = {
-      id: prescription.id,
-      scriptName: prescriptionData.scriptName,
-      scriptStartDate: prescriptionData.scriptStartDate,
-      scriptDose: prescriptionData.scriptDose,
-      scriptInterval: prescriptionData.scriptInterval,
-      scriptNotes: prescriptionData.scriptNotes,
-      scriptRepeat: prescriptionData.scriptRepeat,
-      prescribingStaffId: prescription.prescribingStaff!.staffId,
-    };
+    if (!newPrescription) {
+      const updatedPrescriptionObj: Prescription = {
+        id: prescription.id,
+        scriptName: prescriptionData.scriptName,
+        scriptStartDate: prescriptionData.scriptStartDate,
+        scriptDose: prescriptionData.scriptDose,
+        scriptInterval: prescriptionData.scriptInterval,
+        scriptNotes: prescriptionData.scriptNotes,
+        scriptRepeat: prescriptionData.scriptRepeat,
+        prescribingStaffId: prescription.prescribingStaff!.staffId,
+      };
 
-    updatePrescription(prescription.id, updatedPrescriptionObj)
-      .then((_res) => {
-        updatePrescriptionsState(prescriptionData, index);
-        setToastState({
-          state: true,
-          message: "Prescription successfully updated",
-          color: "success",
-        });
-      })
-      .catch((err) => {
-        if (err.response === undefined) {
-          setToastState({ ...toastState, state: true });
-        } else {
+      updatePrescription(prescription.id, updatedPrescriptionObj)
+        .then((_res) => {
+          updatePrescriptionsState(prescriptionData, index);
           setToastState({
             state: true,
-            message: err.response.data,
-            color: "failure",
+            message: "Prescription successfully updated",
+            color: "success",
           });
-        }
-      });
+        })
+        .catch((err) => {
+          if (err.response === undefined) {
+            setToastState({ ...toastState, state: true });
+          } else {
+            setToastState({
+              state: true,
+              message: err.response.data,
+              color: "failure",
+            });
+          }
+        });
+    } else if (newPrescription) {
+      postNewPrescription(patientId, prescriptionData)
+        .then((res) => {
+          const newPrescriptionData = { ...prescriptionData, id: res.data };
+          setPrescriptionData(newPrescriptionData);
+          updatePrescriptionsState(newPrescriptionData, index, true);
+          setEditModalState(false);
+        })
+        .catch((err) => {
+          if (err.response === undefined) {
+            setToastState({ ...toastState, state: true });
+          } else {
+            setToastState({
+              state: true,
+              message: err.response.data,
+              color: "failure",
+            });
+          }
+        });
+    }
   };
 
   return (
@@ -184,7 +214,9 @@ const PatientPrescriptEditModal = ({
         ) : (
           <h3 className="flex flex-wrap justify-between mt-8 mb-4">
             <strong>{prescriptionData.scriptName}</strong>
-            <strong>{prescriptionData.scriptStartDate}</strong>
+            <strong>
+              {parseIsoToDateOnly(prescriptionData.scriptStartDate)}
+            </strong>
           </h3>
         )}
         <div className="flex max-md:flex-col justify-between">
