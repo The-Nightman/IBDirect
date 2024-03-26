@@ -1,16 +1,16 @@
 import { Modal } from "flowbite-react";
-import { Appointment } from "../../interfaces/Appointment";
-import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
+import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
 import { useEffect, useRef, useState } from "react";
+import { Prescription } from "../../interfaces/Prescription";
 
 interface PatientAppDetailsModalProps {
-  appointment: Appointment;
+  prescription: Prescription;
   detailsModalState: boolean;
   setDetailsModalState: (state: boolean) => void;
 }
 
-const PatientAppDetailsModal = ({
-  appointment,
+const PatientPrescriptDetailsModal = ({
+  prescription,
   detailsModalState,
   setDetailsModalState,
 }: PatientAppDetailsModalProps) => {
@@ -18,8 +18,8 @@ const PatientAppDetailsModal = ({
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setNotes(appointment.notes);
-  }, [appointment.notes]);
+    setNotes(prescription.scriptNotes);
+  }, [prescription.scriptNotes]);
 
   useEffect(() => {
     const notesAreaResize = () => {
@@ -41,21 +41,33 @@ const PatientAppDetailsModal = ({
   return (
     <Modal
       show={detailsModalState}
-      aria-label={`Patient Appointment Details Modal ${parseIsoToDateTime(
-        appointment.dateTime
-      )}`}
+      aria-label={`Patient Prescription Details Modal ${
+        prescription.scriptName
+      } - ${parseIsoToDateOnly(prescription.scriptStartDate)}`}
     >
       <div className="m-4">
         <h3 className="flex flex-wrap justify-between mb-4">
-          <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
-          <strong>{appointment.location}</strong>
+          <strong>{prescription.scriptName}</strong>
+          <strong>{parseIsoToDateOnly(prescription.scriptStartDate)}</strong>
         </h3>
-        <p>{appointment.staffName}</p>
-        <p>{appointment.appType}</p>
+        <div className="flex max-md:flex-col justify-between">
+          <div>
+            <p>Dosage: {prescription.scriptDose}</p>
+            <p>Interval: {prescription.scriptInterval}</p>
+          </div>
+          <p>Repeat: {prescription.scriptRepeat ? "Yes" : "No"}</p>
+        </div>
+        <div className="mt-4">
+          <p>Prescribing Physician:</p>
+          <p>{`${prescription.prescribingStaff!.name} - ${
+            prescription.prescribingStaff!.speciality
+          } ${prescription.prescribingStaff!.role}`}</p>
+          <p>{prescription.prescribingStaff!.practice}</p>
+        </div>
         <div className="my-4">
           <textarea
             disabled={true}
-            aria-label="Appointment Notes"
+            aria-label="Prescription Notes"
             className="w-full resize-none overflow-hidden"
             value={notes}
             ref={notesAreaRef}
@@ -74,4 +86,4 @@ const PatientAppDetailsModal = ({
   );
 };
 
-export default PatientAppDetailsModal;
+export default PatientPrescriptDetailsModal;

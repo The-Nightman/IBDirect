@@ -1,4 +1,5 @@
 import { Appointment } from "./Appointment";
+import { Prescription } from "./Prescription";
 import { StaffDetails } from "./StaffDetails";
 
 export interface PatientDetails {
@@ -19,17 +20,6 @@ export interface PatientDetails {
   appointments: Appointment[];
   surveys: Survey[];
   prescriptions: Prescription[];
-}
-
-interface Prescription {
-  id: number;
-  scriptName: string;
-  scriptStartDate: string;
-  scriptDose: string;
-  scriptInterval: string;
-  scriptNotes: string;
-  patientDetailsId: number;
-  patientDetails: string;
 }
 
 interface Survey {

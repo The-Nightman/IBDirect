@@ -15,6 +15,9 @@ import PatientAppDetailsModal from "./Patients/PatientAppDetailsModal.tsx";
 import PatientAppEditModal from "./Patients/PatientAppEditModal.tsx";
 import StaffMyAppointments from "./Staff/StaffMyAppointments.tsx";
 import StaffMyAppointmentCard from "./Staff/StaffMyAppointmentCard.tsx";
+import PatientPrescriptionCard from "./Patients/PatientPrescriptionCard.tsx";
+import PatientPrescriptDetailsModal from "./Patients/PatientPrescriptDetailsModal.tsx";
+import PatientPrescriptEditModal from "./Patients/PatientPrescriptEditModal.tsx";
 
 export {
   Header,
@@ -34,4 +37,7 @@ export {
   PatientAppEditModal,
   StaffMyAppointments,
   StaffMyAppointmentCard,
+  PatientPrescriptionCard,
+  PatientPrescriptDetailsModal,
+  PatientPrescriptEditModal,
 };
