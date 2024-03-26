@@ -179,7 +179,6 @@ const PatientPrescriptEditModal = ({
         });
       })
       .catch((err) => {
-        console.log(err);
         if (err.response === undefined) {
           setToastState({ ...toastState, state: true });
         } else {
