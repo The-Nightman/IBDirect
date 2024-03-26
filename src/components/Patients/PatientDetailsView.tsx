@@ -15,6 +15,7 @@ import {
   Toast,
   PatientAppointmentCard,
   PatientAppEditModal,
+  PatientPrescriptionCard,
 } from "..";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { TabsComponent } from "flowbite-react";
@@ -168,7 +169,7 @@ const PatientDetailsView = () => {
     }
   };
 
-  console.log(patientData)
+  console.log(patientData);
 
   return (
     <>
@@ -403,20 +404,59 @@ const PatientDetailsView = () => {
             </TabItem>
             <TabItem title="Prescriptions">
               <section>
-                <h3>Prescriptions</h3>
+                <h3 className="border-b border-slate-400 mb-4">
+                  Prescriptions
+                </h3>
                 <section>
-                  <ol>
-                    {patientData?.prescriptions.map((prescription, index) => (
-                      <li key={index}>
-                        <div className="flex flex-col gap-2">
-                          <div className="flex gap-2">
-                            <p>{prescription.scriptName}</p>
-                            <p>{prescription.scriptDose}</p>
-                          </div>
-                          <p>{prescription.prescribingStaff?.name}</p>
+                  <h4>Repeat Prescriptions</h4>
+                  <ol className="border-x border-t border-slate-500">
+                    {patientData?.prescriptions.some(
+                      (prescription) => prescription.scriptRepeat === true
+                    ) ? (
+                      patientData?.prescriptions.map((prescription, index) => {
+                        if (prescription.scriptRepeat === true) {
+                          return (
+                            <li key={index}>
+                              <PatientPrescriptionCard
+                                prescription={prescription}
+                              />
+                            </li>
+                          );
+                        }
+                      })
+                    ) : (
+                      <li>
+                        <div className="w-full p-1 border-b border-slate-600 bg-slate-200">
+                          <p>No prescriptions to display</p>
                         </div>
                       </li>
-                    ))}
+                    )}
+                  </ol>
+                </section>
+                <section>
+                  <h4>Other Prescriptions</h4>
+                  <ol className="border-x border-t border-slate-500">
+                    {patientData?.prescriptions.some(
+                      (prescription) => prescription.scriptRepeat === false
+                    ) ? (
+                      patientData?.prescriptions.map((prescription, index) => {
+                        if (prescription.scriptRepeat === false) {
+                          return (
+                            <li key={index}>
+                              <PatientPrescriptionCard
+                                prescription={prescription}
+                              />
+                            </li>
+                          );
+                        }
+                      })
+                    ) : (
+                      <li>
+                        <div className="w-full p-1 border-b border-slate-600 bg-slate-200">
+                          <p>No prescriptions to display</p>
+                        </div>
+                      </li>
+                    )}
                   </ol>
                 </section>
               </section>
