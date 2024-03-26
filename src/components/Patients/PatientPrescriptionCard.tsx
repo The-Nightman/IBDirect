@@ -2,7 +2,7 @@ import { EditOutlined, PageviewOutlined } from "@mui/icons-material";
 import { Prescription } from "../../interfaces/Prescription";
 import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
 import { useState } from "react";
-import { PatientPrescriptDetailsModal } from "..";
+import { PatientPrescriptDetailsModal, PatientPrescriptEditModal } from "..";
 
 interface PatientPrescriptionCardProps {
   prescription: Prescription;
@@ -62,6 +62,11 @@ const PatientPrescriptionCard = ({
         prescription={prescription}
         detailsModalState={detailsModalState}
         setDetailsModalState={setDetailsModalState}
+      />
+      <PatientPrescriptEditModal
+        prescription={prescription}
+        editModalState={editModalState}
+        setEditModalState={setEditModalState}
       />
     </>
   );
