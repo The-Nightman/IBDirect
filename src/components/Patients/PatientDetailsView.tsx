@@ -169,8 +169,6 @@ const PatientDetailsView = () => {
     }
   };
 
-  console.log(patientData);
-
   return (
     <>
       {loading && <SpinnerStatus />}
