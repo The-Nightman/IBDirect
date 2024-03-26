@@ -41,7 +41,7 @@ const PatientAppDetailsModal = ({
   return (
     <Modal
       show={detailsModalState}
-      aria-label={`Patient Appointment Edit Modal ${parseIsoToDateTime(
+      aria-label={`Patient Appointment Details Modal ${parseIsoToDateTime(
         appointment.dateTime
       )}`}
     >
