@@ -2,6 +2,9 @@ import { Datepicker, Modal } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { Prescription } from "../../interfaces/Prescription";
 import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
+import { updatePrescription } from "../../api/updatePrescription";
+import { ErrorState } from "../../interfaces/ErrorState";
+import { Toast } from "..";
 
 interface PatientPrescriptEditModalProps {
   prescription: Prescription;
@@ -19,6 +22,11 @@ const PatientPrescriptEditModal = ({
   const [editPrescription, setEditPrescription] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
   const [editNotes, setEditNotes] = useState<boolean>(false);
+  const [toastState, setToastState] = useState<ErrorState>({
+    state: false,
+    message: "",
+    color: "failure",
+  });
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -62,13 +70,17 @@ const PatientPrescriptEditModal = ({
   };
 
   const handleDateSelect = (date: Date) => {
-    const formattedDate = `${date.getFullYear()}-${
+    const formattedDate = `${date.getFullYear()}-${String(
       date.getMonth() + 1
-    }-${date.getDate()}`;
+    ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
     setPrescriptionData((prev) => ({
       ...prev,
-      scriptStartDate: formattedDate,
+      scriptStartDate: formattedDate.toString(),
     }));
+  };
+
+  const closeToastState = () => {
+    setToastState({ state: false, message: "", color: "failure" });
   };
 
   const closeDialog = () => {
@@ -79,7 +91,38 @@ const PatientPrescriptEditModal = ({
     setEditModalState(false);
   };
 
-  const savePrescription = () => {};
+  const savePrescription = () => {
+    const updatedPrescriptionObj: Prescription = {
+      id: prescription.id,
+      scriptName: prescriptionData.scriptName,
+      scriptStartDate: prescriptionData.scriptStartDate,
+      scriptDose: prescriptionData.scriptDose,
+      scriptInterval: prescriptionData.scriptInterval,
+      scriptNotes: prescriptionData.scriptNotes,
+      scriptRepeat: prescriptionData.scriptRepeat,
+      prescribingStaffId: prescription.prescribingStaff!.staffId,
+    };
+
+    updatePrescription(prescription.id, updatedPrescriptionObj)
+      .then((_res) => {
+        setToastState({
+          state: true,
+          message: "Prescription successfully updated",
+          color: "success",
+        });
+      })
+      .catch((err) => {
+        if (err.response === undefined) {
+          setToastState({ ...toastState, state: true });
+        } else {
+          setToastState({
+            state: true,
+            message: err.response.data,
+            color: "failure",
+          });
+        }
+      });
+  };
 
   return (
     <Modal
@@ -233,14 +276,27 @@ const PatientPrescriptEditModal = ({
             )}
           </div>
           <textarea
-            disabled={true}
+            disabled={!editNotes}
             aria-label="Prescription Notes"
+            aria-describedby="textareaHelper"
             className="w-full resize-none overflow-hidden"
             value={notes}
             ref={notesAreaRef}
+            onChange={(e) => setNotes(e.target.value)}
           />
+          <strong id="textareaHelper" className="font-normal">
+            Notes are edited independently to prescription data, cancel to
+            revert notes and save prescription to update saved notes.
+          </strong>
         </div>
         <div className="flex flex-col items-center mt-8">
+          {toastState.state && (
+            <Toast
+              color={toastState.color || "failure"}
+              message={toastState.message}
+              handleErrorState={closeToastState}
+            />
+          )}
           <strong>
             Please save prescription before closing to prevent loss of updates.
           </strong>
