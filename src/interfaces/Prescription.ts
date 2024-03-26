@@ -10,4 +10,5 @@ export interface Prescription {
   scriptRepeat: boolean;
   prescribingStaffId?: number;
   prescribingStaff?: StaffDetails;
+  cancelled?: boolean;
 }
