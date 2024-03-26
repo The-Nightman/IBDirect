@@ -6,6 +6,7 @@ import { updatePrescription } from "../../api/updatePrescription";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { Toast } from "..";
 import { postNewPrescription } from "../../api/postNewPrescription";
+import { cancelPrescription } from "../../api/cancelPrescription";
 
 interface PatientPrescriptEditModalProps {
   prescription: Prescription;
@@ -140,7 +141,10 @@ const PatientPrescriptEditModal = ({
     } else if (newPrescription) {
       postNewPrescription(patientId, prescriptionData)
         .then((res) => {
-          const newPrescriptionData = { ...prescriptionData, id: res.data };
+          const newPrescriptionData: Prescription = {
+            ...prescriptionData,
+            id: res.data,
+          };
           setPrescriptionData(newPrescriptionData);
           updatePrescriptionsState(newPrescriptionData, index, true);
           setEditModalState(false);
@@ -157,6 +161,35 @@ const PatientPrescriptEditModal = ({
           }
         });
     }
+  };
+
+  const handleCancelPrescription = () => {
+    cancelPrescription(prescription.id)
+      .then((_res) => {
+        const newPrescriptionData: Prescription = {
+          ...prescriptionData,
+          cancelled: true,
+        };
+        setPrescriptionData(newPrescriptionData);
+        updatePrescriptionsState(newPrescriptionData, index);
+        setToastState({
+          state: true,
+          message: "Prescription successfully cancelled",
+          color: "success",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response === undefined) {
+          setToastState({ ...toastState, state: true });
+        } else {
+          setToastState({
+            state: true,
+            message: err.response.data,
+            color: "failure",
+          });
+        }
+      });
   };
 
   return (
@@ -178,6 +211,14 @@ const PatientPrescriptEditModal = ({
         >
           {editPrescription ? "Cancel Edit Prescription" : "Edit Prescription"}
         </button>
+        {!newPrescription ? (
+          <button
+            className="rounded-sm px-1 bg-red-400 hover:bg-red-700 active:bg-red-500 hover:text-white"
+            onClick={handleCancelPrescription}
+          >
+            CANCEL PRESCRIPTION
+          </button>
+        ) : null}
         {editPrescription ? (
           <div className="flex flex-wrap justify-between mt-8 mb-4">
             <label className="flex flex-col">
@@ -286,7 +327,10 @@ const PatientPrescriptEditModal = ({
                 <p>Dosage: {prescriptionData.scriptDose}</p>
                 <p>Interval: {prescriptionData.scriptInterval}</p>
               </div>
-              <p>Repeat: {prescriptionData.scriptRepeat ? "Yes" : "No"}</p>
+              <div>
+                <p>Repeat: {prescriptionData.scriptRepeat ? "Yes" : "No"}</p>
+                {prescriptionData.cancelled ? <strong>CANCELLED</strong> : null}
+              </div>
             </>
           )}
         </div>
