@@ -10,12 +10,16 @@ interface PatientPrescriptEditModalProps {
   prescription: Prescription;
   editModalState: boolean;
   setEditModalState: (state: boolean) => void;
+  updatePrescriptionsState: (prescription: Prescription, index: number) => void;
+  index: number;
 }
 
 const PatientPrescriptEditModal = ({
   prescription,
   editModalState,
   setEditModalState,
+  updatePrescriptionsState,
+  index,
 }: PatientPrescriptEditModalProps) => {
   const [prescriptionData, setPrescriptionData] =
     useState<Prescription>(prescription);
@@ -105,6 +109,7 @@ const PatientPrescriptEditModal = ({
 
     updatePrescription(prescription.id, updatedPrescriptionObj)
       .then((_res) => {
+        updatePrescriptionsState(prescriptionData, index);
         setToastState({
           state: true,
           message: "Prescription successfully updated",
@@ -192,6 +197,12 @@ const PatientPrescriptEditModal = ({
                     type="text"
                     defaultValue={prescriptionData.scriptDose}
                     aria-labelledby="prescDoseHint"
+                    onChange={(e) =>
+                      setPrescriptionData({
+                        ...prescriptionData,
+                        scriptDose: e.target.value,
+                      })
+                    }
                   />
                   <span className="text-xs w-56" id="prescDoseHint">
                     Enter the prescribed dosage and any special conditions such

@@ -22,6 +22,7 @@ import { TabsComponent } from "flowbite-react";
 import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
 import { parseStoma } from "../../utils/parseStoma";
 import { Appointment } from "../../interfaces/Appointment";
+import { Prescription } from "../../interfaces/Prescription";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -149,6 +150,19 @@ const PatientDetailsView = () => {
           appointments: updatedAppointmentState,
         });
       }
+    }
+  };
+
+  const updatePrescriptions = (
+    updatedPrescriptionObj: Prescription,
+    index: number
+  ) => {
+    if (patientData) {
+      const newPrescriptionState = patientData.prescriptions.map(
+        (prescription, i) =>
+          i === index ? updatedPrescriptionObj : prescription
+      );
+      setPatientData({ ...patientData, prescriptions: newPrescriptionState });
     }
   };
 
@@ -417,6 +431,8 @@ const PatientDetailsView = () => {
                             <li key={index}>
                               <PatientPrescriptionCard
                                 prescription={prescription}
+                                updatePrescriptionsState={updatePrescriptions}
+                                index={index}
                               />
                             </li>
                           );
@@ -443,6 +459,8 @@ const PatientDetailsView = () => {
                             <li key={index}>
                               <PatientPrescriptionCard
                                 prescription={prescription}
+                                updatePrescriptionsState={updatePrescriptions}
+                                index={index}
                               />
                             </li>
                           );
