@@ -231,7 +231,7 @@ const PatientPrescriptEditModal = ({
                     scriptName: e.target.value,
                   })
                 }
-                aria-labelledby="prescNameHint"
+                aria-describedby="prescNameHint"
               />
               <span className="sr-only" id="prescNameHint">
                 Enter the prescription name e.g. Adalimumab or Infliximab
@@ -243,7 +243,7 @@ const PatientPrescriptEditModal = ({
                 weekStart={2}
                 defaultDate={new Date(prescriptionData.scriptStartDate)}
                 onSelectedDateChanged={handleDateSelect}
-                aria-labelledby="prescDateHint"
+                aria-describedby="prescDateHint"
               />
               <span className="text-xs" id="prescDateHint">
                 Only modify if writing for a prescription in advance, otherwise
@@ -268,7 +268,7 @@ const PatientPrescriptEditModal = ({
                   <input
                     type="text"
                     defaultValue={prescriptionData.scriptDose}
-                    aria-labelledby="prescDoseHint"
+                    aria-describedby="prescDoseHint"
                     onChange={(e) =>
                       setPrescriptionData({
                         ...prescriptionData,
@@ -292,7 +292,7 @@ const PatientPrescriptEditModal = ({
                         scriptInterval: e.target.value,
                       })
                     }
-                    aria-labelledby="prescIntervalHint"
+                    aria-describedby="prescIntervalHint"
                   />
                   <span className="sr-only" id="prescIntervalHint">
                     Enter the prescribed interval for the dosage provided e.g. 3
@@ -310,7 +310,7 @@ const PatientPrescriptEditModal = ({
                       scriptRepeat: e.target.value === "true",
                     })
                   }
-                  aria-labelledby="prescRepeatHint"
+                  aria-describedby="prescRepeatHint"
                 >
                   <option value={"true"}>Yes</option>
                   <option value={"false"}>No</option>
