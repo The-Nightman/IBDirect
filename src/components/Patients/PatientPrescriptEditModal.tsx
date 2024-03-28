@@ -199,25 +199,29 @@ const PatientPrescriptEditModal = ({
         prescription.scriptName
       } - ${parseIsoToDateOnly(prescription.scriptStartDate)}`}
     >
-      <div className="relative m-4">
-        <button
-          className={`absolute right-0 rounded-sm px-1 ${
-            !editPrescription
-              ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
-              : "bg-red-400 hover:bg-red-700 active:bg-red-500"
-          } hover:text-white`}
-          onClick={handleEditPrescription}
-        >
-          {editPrescription ? "Cancel Edit Prescription" : "Edit Prescription"}
-        </button>
-        {!newPrescription ? (
+      <div className="m-4">
+        <div className="flex w-full">
+          {!newPrescription ? (
+            <button
+              className="max-md:w-32 rounded-sm px-1 bg-red-400 hover:bg-red-700 active:bg-red-500 hover:text-white"
+              onClick={handleCancelPrescription}
+            >
+              CANCEL PRESCRIPTION
+            </button>
+          ) : null}
           <button
-            className="rounded-sm px-1 bg-red-400 hover:bg-red-700 active:bg-red-500 hover:text-white"
-            onClick={handleCancelPrescription}
+            className={`ms-auto max-md:w-32 rounded-sm px-1 ${
+              !editPrescription
+                ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
+                : "bg-red-400 hover:bg-red-700 active:bg-red-500"
+            } hover:text-white`}
+            onClick={handleEditPrescription}
           >
-            CANCEL PRESCRIPTION
+            {editPrescription
+              ? "Cancel Edit Prescription"
+              : "Edit Prescription"}
           </button>
-        ) : null}
+        </div>
         {editPrescription ? (
           <div className="flex flex-wrap justify-between mt-8 mb-4">
             <label className="flex flex-col">

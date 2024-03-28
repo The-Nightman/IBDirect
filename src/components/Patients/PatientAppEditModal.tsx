@@ -231,25 +231,27 @@ const PatientAppEditModal = ({
         appointment.dateTime
       )}`}
     >
-      <div className="relative m-4">
-        {removeAppointment ? (
+      <div className="m-4">
+        <div className="flex w-full">
+          {removeAppointment ? (
+            <button
+              className="max-md:w-32 rounded-sm px-1 bg-red-400 hover:bg-red-700 active:bg-red-500 hover:text-white"
+              onClick={removeFromState}
+            >
+              DELETE APPOINTMENT
+            </button>
+          ) : null}
           <button
-            className="rounded-sm px-1 bg-red-400 hover:bg-red-700 active:bg-red-500 hover:text-white"
-            onClick={removeFromState}
+            className={`ms-auto max-md:w-32 rounded-sm px-1 ${
+              !editAppointment
+                ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
+                : "bg-red-400 hover:bg-red-700 active:bg-red-500"
+            } hover:text-white`}
+            onClick={handleEditAppointment}
           >
-            DELETE APPOINTMENT
+            {editAppointment ? "Cancel Edit Appointment" : "Edit Appointment"}
           </button>
-        ) : null}
-        <button
-          className={`absolute right-0 rounded-sm px-1 ${
-            !editAppointment
-              ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
-              : "bg-red-400 hover:bg-red-700 active:bg-red-500"
-          } hover:text-white`}
-          onClick={handleEditAppointment}
-        >
-          {editAppointment ? "Cancel Edit Appointment" : "Edit Appointment"}
-        </button>
+        </div>
         {editAppointment ? (
           <div className="flex flex-wrap justify-between mt-8 mb-4">
             <div>
