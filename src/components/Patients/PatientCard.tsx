@@ -20,9 +20,9 @@ const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-[25%_20%_auto_20%_10%] h-14 px-4 text-xl items-center">
+      <div className="grid grid-cols-[25%_20%_auto_20%_10%] h-14 px-4 text-xl items-center" tabIndex={0}>
         <p>{name}</p>
-        <p>{parseDate(dob)}</p>
+        <time>{parseDate(dob)}</time>
         <p>{diagnosis}</p>
         <p>Stoma: {parseStoma(stoma)}</p>
         <button
