@@ -44,10 +44,14 @@ const PatientAppointmentCard = ({
 
   return (
     <>
-      <div className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm">
+      <section
+        className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm"
+        aria-label="Patient Appointment Card"
+        tabIndex={0}
+      >
         <div>
           <div className="flex flex-wrap max-md:flex-col justify-between gap-x-8 text-lg font-semibold">
-            <p>{parseIsoToDateTime(appointment.dateTime)}</p>
+            <time>{parseIsoToDateTime(appointment.dateTime)}</time>
             <p>{appointment.location}</p>
           </div>
           <p>{appointment.staffName}</p>
@@ -75,7 +79,7 @@ const PatientAppointmentCard = ({
             <EditOutlined fontSize="large" />
           </button>
         </div>
-      </div>
+      </section>
       <PatientAppDetailsModal
         appointment={appointment}
         detailsModalState={detailsModalState}
