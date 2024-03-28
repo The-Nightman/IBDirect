@@ -47,8 +47,8 @@ const PatientAppDetailsModal = ({
     >
       <div className="m-4">
         <h3 className="flex flex-wrap justify-between mb-4">
-          <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
-          <strong>{appointment.location}</strong>
+          <time>{parseIsoToDateTime(appointment.dateTime)}</time>
+          <span>{appointment.location}</span>
         </h3>
         <p>{appointment.staffName}</p>
         <p>{appointment.appType}</p>
