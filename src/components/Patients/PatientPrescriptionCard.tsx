@@ -20,15 +20,17 @@ const PatientPrescriptionCard = ({
 
   return (
     <>
-      <div
-        className={`w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 ${
-          prescription.cancelled ? "bg-red-200" : "bg-slate-200"
+      <section
+        className={`w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 ${
+          prescription.cancelled! ? "bg-red-200" : "bg-slate-200"
         } text-sm`}
+        tabIndex={0}
+        aria-label="Patient Prescription Card"
       >
         <div>
           <div className="flex flex-wrap max-md:flex-col justify-between gap-x-8 text-lg font-semibold">
             <p>{prescription.scriptName}</p>
-            <p>{parseIsoToDateOnly(prescription.scriptStartDate)}</p>
+            <time>{parseIsoToDateOnly(prescription.scriptStartDate)}</time>
           </div>
           <div className="flex max-md:flex-col justify-between">
             <div>
@@ -68,7 +70,7 @@ const PatientPrescriptionCard = ({
             <EditOutlined fontSize="large" />
           </button>
         </div>
-      </div>
+      </section>
       <PatientPrescriptDetailsModal
         prescription={prescription}
         detailsModalState={detailsModalState}
