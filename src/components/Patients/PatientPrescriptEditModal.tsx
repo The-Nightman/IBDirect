@@ -252,11 +252,9 @@ const PatientPrescriptEditModal = ({
             </label>
           </div>
         ) : (
-          <h3 className="flex flex-wrap justify-between mt-8 mb-4">
-            <strong>{prescriptionData.scriptName}</strong>
-            <strong>
-              {parseIsoToDateOnly(prescriptionData.scriptStartDate)}
-            </strong>
+          <h3 className="flex flex-wrap justify-between mt-8 mb-4 font-bold">
+            <span>{prescriptionData.scriptName}</span>
+            <time>{parseIsoToDateOnly(prescriptionData.scriptStartDate)}</time>
           </h3>
         )}
         <div className="flex max-md:flex-col justify-between">
@@ -364,13 +362,14 @@ const PatientPrescriptEditModal = ({
           <textarea
             disabled={!editNotes}
             aria-label="Prescription Notes"
-            aria-describedby="textareaHelper"
+            aria-description="Notes are edited independently to prescription data, cancel to
+            revert notes and save prescription to update saved notes."
             className="w-full resize-none overflow-hidden"
             value={notes}
             ref={notesAreaRef}
             onChange={(e) => setNotes(e.target.value)}
           />
-          <strong id="textareaHelper" className="font-normal">
+          <strong className="font-normal">
             Notes are edited independently to prescription data, cancel to
             revert notes and save prescription to update saved notes.
           </strong>
