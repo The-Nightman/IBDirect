@@ -340,8 +340,8 @@ const PatientAppEditModal = ({
           </div>
         ) : (
           <h3 className="flex flex-wrap justify-between mt-8 mb-4">
-            <strong>{parseIsoToDateTime(appointment.dateTime)}</strong>
-            <strong>{appointment.location}</strong>
+            <time>{parseIsoToDateTime(appointment.dateTime)}</time>
+            <span>{appointment.location}</span>
           </h3>
         )}
         {editAppointment ? (
@@ -416,13 +416,14 @@ const PatientAppEditModal = ({
           <textarea
             disabled={!editNotes}
             aria-label="Appointment Notes"
-            aria-describedby="textareaHelper"
+            aria-description="Notes are edited independently to appointment data, cancel to revert
+            notes and save appointment to update saved notes."
             className="w-full resize-none overflow-hidden"
             value={notes}
             ref={notesAreaRef}
             onChange={(e) => setNotes(e.target.value)}
           />
-          <strong id="textareaHelper" className="font-normal">
+          <strong className="font-normal">
             Notes are edited independently to appointment data, cancel to revert
             notes and save appointment to update saved notes.
           </strong>
