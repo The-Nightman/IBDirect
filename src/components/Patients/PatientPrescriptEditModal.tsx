@@ -44,8 +44,8 @@ const PatientPrescriptEditModal = ({
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setNotes(prescription.scriptNotes);
-  }, [prescription.scriptNotes]);
+    setNotes(prescription.notes);
+  }, [prescription.notes]);
 
   useEffect(() => {
     const notesAreaResize = () => {
@@ -66,7 +66,7 @@ const PatientPrescriptEditModal = ({
 
   const handleEditNotes = () => {
     if (editNotes) {
-      setNotes(prescription.scriptNotes);
+      setNotes(prescription.notes);
     }
     setEditNotes(!editNotes);
   };
@@ -79,7 +79,7 @@ const PatientPrescriptEditModal = ({
   };
 
   const handleSaveNotes = () => {
-    setPrescriptionData({ ...prescriptionData, scriptNotes: notes });
+    setPrescriptionData({ ...prescriptionData, notes: notes });
     setEditNotes(false);
   };
 
@@ -99,7 +99,7 @@ const PatientPrescriptEditModal = ({
 
   const closeDialog = () => {
     setPrescriptionData(prescription);
-    setNotes(prescription.scriptNotes);
+    setNotes(prescription.notes);
     setEditPrescription(false);
     setEditNotes(false);
     setEditModalState(false);
@@ -113,7 +113,7 @@ const PatientPrescriptEditModal = ({
         scriptStartDate: prescriptionData.scriptStartDate,
         scriptDose: prescriptionData.scriptDose,
         scriptInterval: prescriptionData.scriptInterval,
-        scriptNotes: prescriptionData.scriptNotes,
+        notes: prescriptionData.notes,
         scriptRepeat: prescriptionData.scriptRepeat,
         prescribingStaffId: prescription.prescribingStaff!.staffId,
       };

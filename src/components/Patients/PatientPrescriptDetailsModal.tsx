@@ -18,8 +18,8 @@ const PatientPrescriptDetailsModal = ({
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setNotes(prescription.scriptNotes);
-  }, [prescription.scriptNotes]);
+    setNotes(prescription.notes);
+  }, [prescription.notes]);
 
   useEffect(() => {
     const notesAreaResize = () => {

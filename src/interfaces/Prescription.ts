@@ -6,7 +6,7 @@ export interface Prescription {
   scriptStartDate: string;
   scriptDose: string;
   scriptInterval: string;
-  scriptNotes: string;
+  notes: string;
   scriptRepeat: boolean;
   prescribingStaffId?: number;
   prescribingStaff?: StaffDetails;
