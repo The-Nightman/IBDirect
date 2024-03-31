@@ -1,11 +1,11 @@
 import { Datepicker, Modal } from "flowbite-react";
 import { Appointment } from "../../interfaces/Appointment";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { updateAppointment } from "../../api/updateAppointment";
 import { StaffDetails } from "../../interfaces/StaffDetails";
 import { ErrorState } from "../../interfaces/ErrorState";
-import { Toast } from "..";
+import { Toast, Notes } from "..";
 import { postNewAppointment } from "../../api/postNewAppointment";
 import { deleteAppointment } from "../../api/deleteAppointment";
 
@@ -45,8 +45,6 @@ const PatientAppEditModal = ({
   const [appointmentData, setAppointmentData] =
     useState<Appointment>(appointment);
   const [editAppointment, setEditAppointment] = useState<boolean>(false);
-  const [notes, setNotes] = useState<string>("");
-  const [editNotes, setEditNotes] = useState<boolean>(false);
   const [selectedStaffPractice, setSelectedStaffPractice] = useState<string>(
     appointment.location
   );
@@ -55,35 +53,6 @@ const PatientAppEditModal = ({
     message: "",
     color: "failure",
   });
-  const notesAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    setNotes(appointment.notes);
-  }, [appointment.notes]);
-
-  useEffect(() => {
-    const notesAreaResize = () => {
-      if (notesAreaRef.current) {
-        notesAreaRef.current.style.height = "auto";
-        notesAreaRef.current.style.height =
-          notesAreaRef.current.scrollHeight + "px";
-      }
-    };
-
-    notesAreaResize();
-    notesAreaRef.current?.addEventListener("input", notesAreaResize);
-
-    return () => {
-      notesAreaRef.current?.removeEventListener("input", notesAreaResize);
-    };
-  }, [notes]);
-
-  const handleEditNotes = () => {
-    if (editNotes) {
-      setNotes(appointment.notes);
-    }
-    setEditNotes(!editNotes);
-  };
 
   const handleEditAppointment = () => {
     if (editAppointment) {
@@ -138,21 +107,14 @@ const PatientAppEditModal = ({
     setAppointmentData((prev) => ({ ...prev, dateTime: newTime }));
   };
 
-  const handleSaveNotes = () => {
-    setAppointmentData({ ...appointmentData, notes: notes });
-    setEditNotes(false);
-  };
-
   const closeToastState = () => {
     setToastState({ state: false, message: "", color: "failure" });
   };
 
   const closeDialog = () => {
     setAppointmentData(appointment);
-    setNotes(appointment.notes);
     setSelectedStaffPractice(appointment.location);
     setEditAppointment(false);
-    setEditNotes(false);
     setEditModalState(false);
   };
 
@@ -395,35 +357,13 @@ const PatientAppEditModal = ({
           </div>
         )}
         <div className="my-4">
-          <div className="flex justify-between mb-1">
-            <button
-              className={`rounded-sm px-1 ${
-                !editNotes
-                  ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
-                  : "bg-red-400 hover:bg-red-700 active:bg-red-500"
-              } hover:text-white`}
-              onClick={handleEditNotes}
-            >
-              {editNotes ? "Cancel Edit" : "Edit Notes"}
-            </button>
-            {editNotes && (
-              <button
-                className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
-                onClick={handleSaveNotes}
-              >
-                Save Notes
-              </button>
-            )}
-          </div>
-          <textarea
-            disabled={!editNotes}
-            aria-label="Appointment Notes"
-            aria-description="Notes are edited independently to appointment data, cancel to revert
+          <Notes
+            parentData={appointmentData}
+            setParentData={setAppointmentData}
+            ariaLabel="Appointment Notes"
+            ariaDescription="Notes are edited independently to appointment data, cancel to revert
             notes and save appointment to update saved notes."
-            className="w-full resize-none overflow-hidden"
-            value={notes}
-            ref={notesAreaRef}
-            onChange={(e) => setNotes(e.target.value)}
+            editControls={true}
           />
           <strong className="font-normal">
             Notes are edited independently to appointment data, cancel to revert

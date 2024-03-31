@@ -1,10 +1,10 @@
 import { Datepicker, Modal } from "flowbite-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Prescription } from "../../interfaces/Prescription";
 import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
 import { updatePrescription } from "../../api/updatePrescription";
 import { ErrorState } from "../../interfaces/ErrorState";
-import { Toast } from "..";
+import { Toast, Notes } from "..";
 import { postNewPrescription } from "../../api/postNewPrescription";
 import { cancelPrescription } from "../../api/cancelPrescription";
 
@@ -34,53 +34,17 @@ const PatientPrescriptEditModal = ({
   const [prescriptionData, setPrescriptionData] =
     useState<Prescription>(prescription);
   const [editPrescription, setEditPrescription] = useState<boolean>(false);
-  const [notes, setNotes] = useState<string>("");
-  const [editNotes, setEditNotes] = useState<boolean>(false);
   const [toastState, setToastState] = useState<ErrorState>({
     state: false,
     message: "",
     color: "failure",
   });
-  const notesAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    setNotes(prescription.notes);
-  }, [prescription.notes]);
-
-  useEffect(() => {
-    const notesAreaResize = () => {
-      if (notesAreaRef.current) {
-        notesAreaRef.current.style.height = "auto";
-        notesAreaRef.current.style.height =
-          notesAreaRef.current.scrollHeight + "px";
-      }
-    };
-
-    notesAreaResize();
-    notesAreaRef.current?.addEventListener("input", notesAreaResize);
-
-    return () => {
-      notesAreaRef.current?.removeEventListener("input", notesAreaResize);
-    };
-  }, [notes]);
-
-  const handleEditNotes = () => {
-    if (editNotes) {
-      setNotes(prescription.notes);
-    }
-    setEditNotes(!editNotes);
-  };
 
   const handleEditPrescription = () => {
     if (editPrescription) {
       setPrescriptionData(prescription);
     }
     setEditPrescription(!editPrescription);
-  };
-
-  const handleSaveNotes = () => {
-    setPrescriptionData({ ...prescriptionData, notes: notes });
-    setEditNotes(false);
   };
 
   const handleDateSelect = (date: Date) => {
@@ -99,9 +63,7 @@ const PatientPrescriptEditModal = ({
 
   const closeDialog = () => {
     setPrescriptionData(prescription);
-    setNotes(prescription.notes);
     setEditPrescription(false);
-    setEditNotes(false);
     setEditModalState(false);
   };
 
@@ -343,35 +305,13 @@ const PatientPrescriptEditModal = ({
           <p>{prescription.prescribingStaff!.practice}</p>
         </div>
         <div className="my-4">
-          <div className="flex justify-between mb-1">
-            <button
-              className={`rounded-sm px-1 ${
-                !editNotes
-                  ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
-                  : "bg-red-400 hover:bg-red-700 active:bg-red-500"
-              } hover:text-white`}
-              onClick={handleEditNotes}
-            >
-              {editNotes ? "Cancel Edit" : "Edit Notes"}
-            </button>
-            {editNotes && (
-              <button
-                className="rounded-sm px-1 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
-                onClick={handleSaveNotes}
-              >
-                Save Notes
-              </button>
-            )}
-          </div>
-          <textarea
-            disabled={!editNotes}
-            aria-label="Prescription Notes"
-            aria-description="Notes are edited independently to prescription data, cancel to
+          <Notes
+            parentData={prescriptionData}
+            setParentData={setPrescriptionData}
+            ariaLabel="Prescription Notes"
+            ariaDescription="Notes are edited independently to prescription data, cancel to
             revert notes and save prescription to update saved notes."
-            className="w-full resize-none overflow-hidden"
-            value={notes}
-            ref={notesAreaRef}
-            onChange={(e) => setNotes(e.target.value)}
+            editControls={true}
           />
           <strong className="font-normal">
             Notes are edited independently to prescription data, cancel to
