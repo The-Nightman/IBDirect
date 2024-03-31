@@ -44,7 +44,7 @@ const StaffDashboardPatients = () => {
     <>
       {loading && <SpinnerStatus />}
       <section className="flex flex-col">
-        <div className="grid grid-cols-[25%_20%_auto_20%_10%] h-10 px-4 text-lg border-b border-slate-700 items-center">
+        <div className="grid grid-cols-[25%_20%_auto_20%_10%] min-h-10 px-4 lg:text-lg border-b border-slate-700 items-center">
           <p>Name</p>
           <p>Date Of Birth</p>
           <p>Diagnosis</p>
@@ -66,7 +66,7 @@ const StaffDashboardPatients = () => {
           )}
           {patients.length === 0 && !loading && !error.state && (
             <li className="border-b border-slate-400">
-              <p className="text-lg text-center py-4">No patients found</p>
+              <p className="lg:text-lg text-center py-4">No patients found</p>
             </li>
           )}
           {patients.map((p) => {

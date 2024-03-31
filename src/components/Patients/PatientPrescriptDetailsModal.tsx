@@ -18,8 +18,8 @@ const PatientPrescriptDetailsModal = ({
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setNotes(prescription.scriptNotes);
-  }, [prescription.scriptNotes]);
+    setNotes(prescription.notes);
+  }, [prescription.notes]);
 
   useEffect(() => {
     const notesAreaResize = () => {
@@ -47,8 +47,8 @@ const PatientPrescriptDetailsModal = ({
     >
       <div className="m-4">
         <h3 className="flex flex-wrap justify-between mb-4">
-          <strong>{prescription.scriptName}</strong>
-          <strong>{parseIsoToDateOnly(prescription.scriptStartDate)}</strong>
+          <span>{prescription.scriptName}</span>
+          <time>{parseIsoToDateOnly(prescription.scriptStartDate)}</time>
         </h3>
         <div className="flex max-md:flex-col justify-between">
           <div>

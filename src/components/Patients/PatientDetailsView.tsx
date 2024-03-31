@@ -209,8 +209,8 @@ const PatientDetailsView = () => {
   return (
     <>
       {loading && <SpinnerStatus />}
-      <section className="flex flex-col">
-        <div className="border-b border-slate-300">
+      <article className="flex flex-col">
+        <section className="border-b border-slate-300">
           <button
             className="flex flex-row items-center gap-2 text-lg p-1 hover:bg-zinc-300 hover:text-blue-600 active:bg-slate-300 active:text-blue-700"
             type="button"
@@ -218,9 +218,9 @@ const PatientDetailsView = () => {
             onClick={() => navigate("/dashboard/patients")}
           >
             <ArrowBackOutlined />
-            <p>Back to Patients</p>
+            Back to Patients
           </button>
-        </div>
+        </section>
         {error.state && (
           <Toast
             color={"failure"}
@@ -236,17 +236,17 @@ const PatientDetailsView = () => {
             <div className="w-72 flex flex-col flex-wrap gap-6 md:flex-row">
               <div className="flex gap-2 mb-1">
                 <PermContactCalendarOutlined />
-                <p className="text-lg">
+                <time className="text-lg" aria-label="Date Of Birth">
                   {patientData && typeof patientData.dateOfBirth === "string"
                     ? parseDate(patientData.dateOfBirth)
                     : null}
-                </p>
+                </time>
               </div>
               <p className="mb-1 text-lg">Sex: {patientData?.sex}</p>
               <div className="w-60 flex gap-2 mb-1">
                 <HomeOutlined />
                 <p className="text-lg whitespace-pre-line">
-                  {patientData?.address}
+                  Address: {patientData?.address}
                 </p>
               </div>
             </div>
@@ -262,24 +262,27 @@ const PatientDetailsView = () => {
             <TabItem active title="Care Notes">
               <section>
                 <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
-                <div className="w-80 flex flex-col mb-2 md:justify-between md:flex-row">
-                  <p className="text-xl">{parseDiagnosis()}</p>
+                <div className="max-w-[30rem] flex flex-col mb-2 md:justify-between md:flex-row">
+                  <p className="text-xl">Diagnosis: {parseDiagnosis()}</p>
                   <p className="text-xl">
                     Stoma: {parseStoma(patientData?.stoma)}
                   </p>
                 </div>
                 <p className="mb-4">
-                  Date of diagnosis:{" "}
-                  {patientData && typeof patientData.diagnosisDate === "string"
-                    ? parseDate(patientData.diagnosisDate)
-                    : null}
+                  Date of diagnosis:
+                  <time>
+                    {patientData &&
+                    typeof patientData.diagnosisDate === "string"
+                      ? parseDate(patientData.diagnosisDate)
+                      : null}
+                  </time>
                 </p>
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2">
                     <LocalHospitalOutlined />
                     <p>{patientData?.hospital}</p>
                   </div>
-                  <div className=" md:flex-row md:columns-2 ">
+                  <section className="md:flex-row md:columns-2 ">
                     <p>Consultant: {patientData?.consultant.name}</p>
                     <p>IBD Nurse: {patientData?.nurse.name}</p>
                     <p>
@@ -289,9 +292,9 @@ const PatientDetailsView = () => {
                         : "N/A"}
                     </p>
                     <p>GP: {patientData?.genpract.name}</p>
-                  </div>
+                  </section>
                 </div>
-                <div className="my-4">
+                <section className="my-4">
                   {notesError.state && (
                     <Toast
                       color={notesError.color || "failure"}
@@ -327,7 +330,7 @@ const PatientDetailsView = () => {
                     ref={notesAreaRef}
                     onChange={(e) => setNotes(e.target.value)}
                   />
-                </div>
+                </section>
               </section>
             </TabItem>
             <TabItem title="Appointments">
@@ -532,7 +535,7 @@ const PatientDetailsView = () => {
             <TabItem title="IBD Surveys">Surveys</TabItem>
           </TabsComponent>
         </section>
-      </section>
+      </article>
     </>
   );
 };
