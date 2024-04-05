@@ -462,7 +462,7 @@ const PatientDetailsView = () => {
                           .toString(),
                         scriptDose: "Prescription Dosage",
                         scriptInterval: "Dosing Interval",
-                        scriptNotes: "Notes",
+                        notes: "Notes",
                         scriptRepeat: false,
                         prescribingStaff: userDetails!,
                         prescribingStaffId: userDetails!.staffId,
