@@ -19,6 +19,7 @@ import PatientPrescriptionCard from "./Patients/PatientPrescriptionCard.tsx";
 import PatientPrescriptDetailsModal from "./Patients/PatientPrescriptDetailsModal.tsx";
 import PatientPrescriptEditModal from "./Patients/PatientPrescriptEditModal.tsx";
 import Notes from "./Misc/Notes.tsx";
+import PatientSurveyCard from "./Patients/PatientSurveyCard.tsx";
 
 export {
   Header,
@@ -42,4 +43,5 @@ export {
   PatientPrescriptDetailsModal,
   PatientPrescriptEditModal,
   Notes,
+  PatientSurveyCard,
 };
