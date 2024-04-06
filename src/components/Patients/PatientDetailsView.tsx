@@ -17,6 +17,7 @@ import {
   PatientAppEditModal,
   PatientPrescriptionCard,
   PatientPrescriptEditModal,
+  PatientSurveyCard,
 } from "..";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { TabsComponent } from "flowbite-react";
@@ -532,7 +533,67 @@ const PatientDetailsView = () => {
                 </section>
               </section>
             </TabItem>
-            <TabItem title="IBD Surveys">Surveys</TabItem>
+            <TabItem title="IBD Surveys">
+              <section>
+                <h3 className="border-b border-slate-400 mb-4">Surveys</h3>
+                <section>
+                  <span className="sr-only">
+                    IBD Disease Activity Index score is calculated from the sum
+                    of responses to 1a, 1b and 3a to 3f. Each option is 
+                    allocated a score of 0, 1 or 2. The Activity Index Score
+                    ranges from 0 (worst control and most activity) to 16 (best
+                    control and least activity).
+                  </span>
+                  <button className="rounded-sm py-1 px-2 mb-8 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white">
+                    Create New Survey
+                  </button>
+                  <h4>Upcoming surveys</h4>
+                  <ol className="border-x border-t border-slate-500">
+                    {patientData?.surveys.some(
+                      (survey) => !survey.completed
+                    ) ? (
+                      patientData?.surveys.map((survey, index) => {
+                        if (!survey.completed) {
+                          return (
+                            <li key={index}>
+                              <PatientSurveyCard survey={survey} />
+                            </li>
+                          );
+                        }
+                      })
+                    ) : (
+                      <li>
+                        <div className="w-full p-1 border-b border-slate-600 bg-slate-200">
+                          <p>No upcoming surveys to display</p>
+                        </div>
+                      </li>
+                    )}
+                  </ol>
+                </section>
+                <section>
+                  <h4>Completed surveys</h4>
+                  <ol className="border-x border-t border-slate-500">
+                    {patientData?.surveys.some((survey) => survey.completed) ? (
+                      patientData?.surveys.map((survey, index) => {
+                        if (survey.completed) {
+                          return (
+                            <li key={index}>
+                              <PatientSurveyCard survey={survey} />
+                            </li>
+                          );
+                        }
+                      })
+                    ) : (
+                      <li>
+                        <div className="w-full p-1 border-b border-slate-600 bg-slate-200">
+                          <p>No Completed surveys to display</p>
+                        </div>
+                      </li>
+                    )}
+                  </ol>
+                </section>
+              </section>
+            </TabItem>
           </TabsComponent>
         </section>
       </article>
