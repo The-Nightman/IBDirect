@@ -40,7 +40,7 @@ const PatientSurveyCard = ({ survey }: PatientSurveyCardProps) => {
           </div>
           <div className="flex max-md:flex-col justify-between mt-5">
             <Tooltip
-              className="max-w-72"
+              className="max-w-[18rem]"
               aria-hidden="true"
               content="IBD Disease Activity Index score is calculated from the sum of responses to 1a, 1b and 3a to 3f. 
               Each option is allocated a score of 0, 1 or 2. The Activity Index Score ranges from 0 
