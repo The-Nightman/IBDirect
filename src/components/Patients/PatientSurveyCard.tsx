@@ -20,12 +20,21 @@ interface PatientSurveyCardProps {
   removeSurvey?: (index: number) => void;
 }
 
-const PatientSurveyCard = ({ survey, updateSurveyState, index, removeSurvey }: PatientSurveyCardProps) => {
+const PatientSurveyCard = ({
+  survey,
+  updateSurveyState,
+  index,
+  removeSurvey,
+}: PatientSurveyCardProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
 
   const calculateActivityScore = () => {
-    const keys = ["q3", "q4", ...Array.from({ length: 6 }, (_, i) => `q${i + 6}`)];
+    const keys = [
+      "q3",
+      "q4",
+      ...Array.from({ length: 6 }, (_, i) => `q${i + 6}`),
+    ];
     return keys.reduce(
       (sum, key) => sum + Number(survey[key as keyof Survey] || 0),
       0
@@ -71,14 +80,16 @@ const PatientSurveyCard = ({ survey, updateSurveyState, index, removeSurvey }: P
           >
             <PageviewOutlined fontSize="inherit" />
           </button>
-          <button
-            className="w-9"
-            aria-label={`Edit Survey`}
-            title="Edit Survey"
-            onClick={() => setEditModalState(true)}
-          >
-            <EditOutlined fontSize="large" />
-          </button>
+          {!survey.completed && (
+            <button
+              className="w-9"
+              aria-label={`Edit Survey`}
+              title="Edit Survey"
+              onClick={() => setEditModalState(true)}
+            >
+              <EditOutlined fontSize="large" />
+            </button>
+          )}
         </div>
       </section>
       <PatientSurveyDetailsModal
