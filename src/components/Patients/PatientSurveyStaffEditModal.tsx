@@ -10,12 +10,20 @@ interface PatientSurveyStaffEditModalProps {
   survey: Survey;
   editModalState: boolean;
   setEditModalState: (state: boolean) => void;
+  updateSurveyState: (
+    updatedSurvey: Survey,
+    index: number,
+    newSurvey?: boolean
+  ) => void;
+  index: number;
 }
 
 const PatientSurveyStaffEditModal = ({
   survey,
   editModalState,
   setEditModalState,
+  updateSurveyState,
+  index
 }: PatientSurveyStaffEditModalProps) => {
   const [editSurvey, setEditSurvey] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<Survey>(survey);
@@ -44,6 +52,7 @@ const PatientSurveyStaffEditModal = ({
   const saveSurvey = () => {
     rescheduleSurvey(surveyData.id, surveyData.date)
       .then((_res) => {
+        updateSurveyState(surveyData, index);
         setToastState({
           state: true,
           message: "Survey successfully updated",

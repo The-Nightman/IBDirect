@@ -11,9 +11,15 @@ import { PatientSurveyDetailsModal, PatientSurveyStaffEditModal } from "..";
 
 interface PatientSurveyCardProps {
   survey: Survey;
+  updateSurveyState?: (
+    updatedSurvey: Survey,
+    index: number,
+    newSurvey?: boolean
+  ) => void;
+  index?: number;
 }
 
-const PatientSurveyCard = ({ survey }: PatientSurveyCardProps) => {
+const PatientSurveyCard = ({ survey, updateSurveyState, index }: PatientSurveyCardProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
 
@@ -83,6 +89,8 @@ const PatientSurveyCard = ({ survey }: PatientSurveyCardProps) => {
         survey={survey}
         editModalState={editModalState}
         setEditModalState={setEditModalState}
+        updateSurveyState={updateSurveyState!}
+        index={index!}
       />
     </>
   );

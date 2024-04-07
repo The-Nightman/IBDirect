@@ -26,6 +26,7 @@ import { parseStoma } from "../../utils/parseStoma";
 import { Appointment } from "../../interfaces/Appointment";
 import { Prescription } from "../../interfaces/Prescription";
 import { useUserDetails } from "../../context/userDetailsContext";
+import { Survey } from "../../interfaces/Survey";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -179,6 +180,30 @@ const PatientDetailsView = () => {
         setPatientData({
           ...patientData,
           prescriptions: updatedPrescriptionState,
+        });
+      }
+    }
+  };
+
+  const updateSurveys = (
+    updatedSurvey: Survey,
+    index: number,
+    newSurvey: boolean = false
+  ) => {
+    if (patientData) {
+      if (!newSurvey) {
+        const newSurveyState = patientData.surveys.map(
+          (survey, i) => (i === index ? updatedSurvey : survey)
+        );
+        setPatientData({ ...patientData, surveys: newSurveyState });
+      } else if (newSurvey) {
+        const updatedSurveyState = [
+          ...patientData.surveys,
+          updatedSurvey,
+        ];
+        setPatientData({
+          ...patientData,
+          surveys: updatedSurveyState,
         });
       }
     }
@@ -556,7 +581,10 @@ const PatientDetailsView = () => {
                         if (!survey.completed) {
                           return (
                             <li key={index}>
-                              <PatientSurveyCard survey={survey} />
+                              <PatientSurveyCard survey={survey} 
+                              updateSurveyState={updateSurveys}
+                              index={index}
+                              />
                             </li>
                           );
                         }
