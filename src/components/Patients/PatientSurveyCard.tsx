@@ -24,7 +24,7 @@ const PatientSurveyCard = ({ survey, updateSurveyState, index }: PatientSurveyCa
   const [editModalState, setEditModalState] = useState<boolean>(false);
 
   const calculateActivityScore = () => {
-    const keys = Array.from({ length: 12 }, (_, i) => `q${i + 1}`);
+    const keys = ["q3", "q4", ...Array.from({ length: 6 }, (_, i) => `q${i + 6}`)];
     return keys.reduce(
       (sum, key) => sum + Number(survey[key as keyof Survey] || 0),
       0
