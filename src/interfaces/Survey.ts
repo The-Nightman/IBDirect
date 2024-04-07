@@ -16,13 +16,5 @@ export interface Survey {
   q12: number | null;
   contScore: number | null;
   q13: number | null;
-  q14: number | null;
-  q15: number | null;
-  q16: number | null;
-  q16a: string;
-  q17: number | null;
-  q17a: string;
-  q18: number | null;
-  q19: number | null;
   completed: boolean;
 }
