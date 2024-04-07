@@ -7,7 +7,7 @@ import { Survey } from "../../interfaces/Survey";
 import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
 import { useState } from "react";
 import { Tooltip } from "flowbite-react";
-import { PatientSurveyDetailsModal } from "..";
+import { PatientSurveyDetailsModal, PatientSurveyStaffEditModal } from "..";
 
 interface PatientSurveyCardProps {
   survey: Survey;
@@ -78,6 +78,11 @@ const PatientSurveyCard = ({ survey }: PatientSurveyCardProps) => {
         survey={survey}
         detailsModalState={detailsModalState}
         setDetailsModalState={setDetailsModalState}
+      />
+      <PatientSurveyStaffEditModal
+        survey={survey}
+        editModalState={editModalState}
+        setEditModalState={setEditModalState}
       />
     </>
   );

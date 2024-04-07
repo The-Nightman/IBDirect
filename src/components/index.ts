@@ -21,6 +21,7 @@ import PatientPrescriptEditModal from "./Patients/PatientPrescriptEditModal.tsx"
 import Notes from "./Misc/Notes.tsx";
 import PatientSurveyCard from "./Patients/PatientSurveyCard.tsx";
 import PatientSurveyDetailsModal from "./Patients/PatientSurveyDetailsModal.tsx";
+import PatientSurveyStaffEditModal from "./Patients/PatientSurveyStaffEditModal.tsx";
 
 export {
   Header,
@@ -46,4 +47,5 @@ export {
   Notes,
   PatientSurveyCard,
   PatientSurveyDetailsModal,
+  PatientSurveyStaffEditModal,
 };
