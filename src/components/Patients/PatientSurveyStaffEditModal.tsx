@@ -5,6 +5,7 @@ import { useState } from "react";
 import { rescheduleSurvey } from "../../api/rescheduleSurvey";
 import { ErrorState } from "../../interfaces/ErrorState";
 import Toast from "../UX/Toast";
+import { postNewSurvey } from "../../api/postNewSurvey";
 
 interface PatientSurveyStaffEditModalProps {
   survey: Survey;
@@ -16,6 +17,8 @@ interface PatientSurveyStaffEditModalProps {
     newSurvey?: boolean
   ) => void;
   index: number;
+  newSurvey?: boolean;
+  patientId?: number;
 }
 
 const PatientSurveyStaffEditModal = ({
@@ -23,7 +26,9 @@ const PatientSurveyStaffEditModal = ({
   editModalState,
   setEditModalState,
   updateSurveyState,
-  index
+  index,
+  newSurvey,
+  patientId,
 }: PatientSurveyStaffEditModalProps) => {
   const [editSurvey, setEditSurvey] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<Survey>(survey);
@@ -50,6 +55,7 @@ const PatientSurveyStaffEditModal = ({
   };
 
   const saveSurvey = () => {
+    if (!newSurvey) {
     rescheduleSurvey(surveyData.id, surveyData.date)
       .then((_res) => {
         updateSurveyState(surveyData, index);
@@ -70,6 +76,28 @@ const PatientSurveyStaffEditModal = ({
           });
         }
       });
+    } else if (newSurvey) {
+      postNewSurvey(patientId, surveyData.date)
+      .then((res) => {
+        setSurveyData((prev) => {
+          const updatedSurveyData = { ...prev, id: res.data };
+          updateSurveyState(surveyData, index, true);
+          return updatedSurveyData;
+        });
+        setEditModalState(false);
+      })
+      .catch((err) => {
+        if (err.response === undefined) {
+          setToastState({ ...toastState, state: true });
+        } else {
+          setToastState({
+            state: true,
+            message: err.response.data,
+            color: "failure",
+          });
+        }
+      });
+    }
   };
 
   const closeDialog = () => {
