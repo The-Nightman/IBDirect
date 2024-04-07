@@ -6,6 +6,7 @@ import { rescheduleSurvey } from "../../api/rescheduleSurvey";
 import { ErrorState } from "../../interfaces/ErrorState";
 import Toast from "../UX/Toast";
 import { postNewSurvey } from "../../api/postNewSurvey";
+import { deleteSurvey } from "../../api/deleteSurvey";
 
 interface PatientSurveyStaffEditModalProps {
   survey: Survey;
@@ -19,6 +20,7 @@ interface PatientSurveyStaffEditModalProps {
   index: number;
   newSurvey?: boolean;
   patientId?: number;
+  removeSurvey?: (index: number) => void;
 }
 
 const PatientSurveyStaffEditModal = ({
@@ -29,6 +31,7 @@ const PatientSurveyStaffEditModal = ({
   index,
   newSurvey,
   patientId,
+  removeSurvey,
 }: PatientSurveyStaffEditModalProps) => {
   const [editSurvey, setEditSurvey] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<Survey>(survey);
@@ -56,47 +59,47 @@ const PatientSurveyStaffEditModal = ({
 
   const saveSurvey = () => {
     if (!newSurvey) {
-    rescheduleSurvey(surveyData.id, surveyData.date)
-      .then((_res) => {
-        updateSurveyState(surveyData, index);
-        setToastState({
-          state: true,
-          message: "Survey successfully updated",
-          color: "success",
-        });
-      })
-      .catch((err) => {
-        if (err.response === undefined) {
-          setToastState({ ...toastState, state: true });
-        } else {
+      rescheduleSurvey(surveyData.id, surveyData.date)
+        .then((_res) => {
+          updateSurveyState(surveyData, index);
           setToastState({
             state: true,
-            message: err.response.data,
-            color: "failure",
+            message: "Survey successfully updated",
+            color: "success",
           });
-        }
-      });
+        })
+        .catch((err) => {
+          if (err.response === undefined) {
+            setToastState({ ...toastState, state: true });
+          } else {
+            setToastState({
+              state: true,
+              message: err.response.data,
+              color: "failure",
+            });
+          }
+        });
     } else if (newSurvey) {
       postNewSurvey(patientId, surveyData.date)
-      .then((res) => {
-        setSurveyData((prev) => {
-          const updatedSurveyData = { ...prev, id: res.data };
-          updateSurveyState(surveyData, index, true);
-          return updatedSurveyData;
-        });
-        setEditModalState(false);
-      })
-      .catch((err) => {
-        if (err.response === undefined) {
-          setToastState({ ...toastState, state: true });
-        } else {
-          setToastState({
-            state: true,
-            message: err.response.data,
-            color: "failure",
+        .then((res) => {
+          setSurveyData((prev) => {
+            const updatedSurveyData = { ...prev, id: res.data };
+            updateSurveyState(surveyData, index, true);
+            return updatedSurveyData;
           });
-        }
-      });
+          setEditModalState(false);
+        })
+        .catch((err) => {
+          if (err.response === undefined) {
+            setToastState({ ...toastState, state: true });
+          } else {
+            setToastState({
+              state: true,
+              message: err.response.data,
+              color: "failure",
+            });
+          }
+        });
     }
   };
 
@@ -104,6 +107,27 @@ const PatientSurveyStaffEditModal = ({
     setSurveyData(survey);
     setEditSurvey(false);
     setEditModalState(false);
+  };
+
+  const removeFromState = () => {
+    if (removeSurvey) {
+      deleteSurvey(survey.id)
+        .then((_res) => {
+          removeSurvey(survey.id!);
+          setEditModalState(false);
+        })
+        .catch((err) => {
+          if (err.response === undefined) {
+            setToastState({ ...toastState, state: true });
+          } else {
+            setToastState({
+              state: true,
+              message: err.response.data,
+              color: "failure",
+            });
+          }
+        });
+    }
   };
 
   return (
@@ -115,6 +139,14 @@ const PatientSurveyStaffEditModal = ({
     >
       <div className="m-4">
         <div className="flex w-full">
+          {removeSurvey ? (
+            <button
+              className="max-md:w-32 rounded-sm px-1 bg-red-400 hover:bg-red-700 active:bg-red-500 hover:text-white"
+              onClick={removeFromState}
+            >
+              DELETE SURVEY
+            </button>
+          ) : null}
           <button
             className={`ms-auto max-md:w-32 rounded-sm px-1 ${
               !editSurvey

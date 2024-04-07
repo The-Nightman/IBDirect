@@ -238,6 +238,15 @@ const PatientDetailsView = () => {
     }
   };
 
+  const removeSurvey = (id: number) => {
+    if (patientData) {
+      setPatientData({
+        ...patientData,
+        surveys: patientData.surveys.filter((survey) => survey.id !== id),
+      });
+    }
+  };
+
   return (
     <>
       {loading && <SpinnerStatus />}
@@ -623,6 +632,7 @@ const PatientDetailsView = () => {
                                 survey={survey}
                                 updateSurveyState={updateSurveys}
                                 index={index}
+                                removeSurvey={removeSurvey}
                               />
                             </li>
                           );
