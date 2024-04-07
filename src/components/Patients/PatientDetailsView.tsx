@@ -17,6 +17,8 @@ import {
   PatientAppEditModal,
   PatientPrescriptionCard,
   PatientPrescriptEditModal,
+  PatientSurveyCard,
+  PatientSurveyStaffEditModal,
 } from "..";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { TabsComponent } from "flowbite-react";
@@ -25,6 +27,7 @@ import { parseStoma } from "../../utils/parseStoma";
 import { Appointment } from "../../interfaces/Appointment";
 import { Prescription } from "../../interfaces/Prescription";
 import { useUserDetails } from "../../context/userDetailsContext";
+import { Survey } from "../../interfaces/Survey";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -40,6 +43,8 @@ const PatientDetailsView = () => {
   const [newAppointmentModalState, setNewAppointmentModalState] =
     useState<boolean>(false);
   const [newPrescriptionModalState, setNewPrescriptionModalState] =
+    useState<boolean>(false);
+  const [newSurveyModalState, setNewSurveyModalState] =
     useState<boolean>(false);
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
@@ -183,6 +188,27 @@ const PatientDetailsView = () => {
     }
   };
 
+  const updateSurveys = (
+    updatedSurvey: Survey,
+    index: number,
+    newSurvey: boolean = false
+  ) => {
+    if (patientData) {
+      if (!newSurvey) {
+        const newSurveyState = patientData.surveys.map((survey, i) =>
+          i === index ? updatedSurvey : survey
+        );
+        setPatientData({ ...patientData, surveys: newSurveyState });
+      } else if (newSurvey) {
+        const updatedSurveyState = [...patientData.surveys, updatedSurvey];
+        setPatientData({
+          ...patientData,
+          surveys: updatedSurveyState,
+        });
+      }
+    }
+  };
+
   const createNewAppointment = () => {
     if (patientData) {
       setNewAppointmentModalState(true);
@@ -195,6 +221,12 @@ const PatientDetailsView = () => {
     }
   };
 
+  const createNewSurvey = () => {
+    if (patientData) {
+      setNewSurveyModalState(true);
+    }
+  };
+
   const removeAppointment = (id: number) => {
     if (patientData) {
       setPatientData({
@@ -202,6 +234,15 @@ const PatientDetailsView = () => {
         appointments: patientData.appointments.filter(
           (appointment) => appointment.id !== id
         ),
+      });
+    }
+  };
+
+  const removeSurvey = (id: number) => {
+    if (patientData) {
+      setPatientData({
+        ...patientData,
+        surveys: patientData.surveys.filter((survey) => survey.id !== id),
       });
     }
   };
@@ -462,7 +503,7 @@ const PatientDetailsView = () => {
                           .toString(),
                         scriptDose: "Prescription Dosage",
                         scriptInterval: "Dosing Interval",
-                        scriptNotes: "Notes",
+                        notes: "Notes",
                         scriptRepeat: false,
                         prescribingStaff: userDetails!,
                         prescribingStaffId: userDetails!.staffId,
@@ -532,7 +573,104 @@ const PatientDetailsView = () => {
                 </section>
               </section>
             </TabItem>
-            <TabItem title="IBD Surveys">Surveys</TabItem>
+            <TabItem title="IBD Surveys">
+              <section>
+                <h3 className="border-b border-slate-400 mb-4">Surveys</h3>
+                <section>
+                  <span className="sr-only">
+                    IBD Disease Activity Index score is calculated from the sum
+                    of responses to 1a, 1b and 3a to 3f. Each option is
+                    allocated a score of 0, 1 or 2. The Activity Index Score
+                    ranges from 0 (worst control and most activity) to 16 (best
+                    control and least activity).
+                  </span>
+                  <button
+                    className="rounded-sm py-1 px-2 mb-8 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
+                    onClick={createNewSurvey}
+                  >
+                    Create New Survey
+                  </button>
+                  {patientData && newSurveyModalState ? (
+                    <PatientSurveyStaffEditModal
+                      survey={{
+                        date: new Date().toISOString().split("T")[0].toString(),
+                        q1: null,
+                        q2: null,
+                        q3: null,
+                        q4: null,
+                        q4a: false,
+                        q5: null,
+                        q6: null,
+                        q7: null,
+                        q8: null,
+                        q9: null,
+                        q10: null,
+                        q11: null,
+                        q12: null,
+                        contScore: null,
+                        q13: null,
+                        completed: false,
+                      }}
+                      editModalState={newSurveyModalState}
+                      setEditModalState={setNewSurveyModalState}
+                      updateSurveyState={updateSurveys}
+                      index={patientData.surveys.length}
+                      newSurvey={true}
+                      patientId={patientData.patientId}
+                    />
+                  ) : null}
+                  <h4>Upcoming surveys</h4>
+                  <ol className="border-x border-t border-slate-500">
+                    {patientData?.surveys.some(
+                      (survey) => !survey.completed
+                    ) ? (
+                      patientData?.surveys.map((survey, index) => {
+                        if (!survey.completed) {
+                          return (
+                            <li key={index}>
+                              <PatientSurveyCard
+                                survey={survey}
+                                updateSurveyState={updateSurveys}
+                                index={index}
+                                removeSurvey={removeSurvey}
+                              />
+                            </li>
+                          );
+                        }
+                      })
+                    ) : (
+                      <li>
+                        <div className="w-full p-1 border-b border-slate-600 bg-slate-200">
+                          <p>No upcoming surveys to display</p>
+                        </div>
+                      </li>
+                    )}
+                  </ol>
+                </section>
+                <section>
+                  <h4>Completed surveys</h4>
+                  <ol className="border-x border-t border-slate-500">
+                    {patientData?.surveys.some((survey) => survey.completed) ? (
+                      patientData?.surveys.map((survey, index) => {
+                        if (survey.completed) {
+                          return (
+                            <li key={index}>
+                              <PatientSurveyCard survey={survey} />
+                            </li>
+                          );
+                        }
+                      })
+                    ) : (
+                      <li>
+                        <div className="w-full p-1 border-b border-slate-600 bg-slate-200">
+                          <p>No Completed surveys to display</p>
+                        </div>
+                      </li>
+                    )}
+                  </ol>
+                </section>
+              </section>
+            </TabItem>
           </TabsComponent>
         </section>
       </article>
