@@ -7,7 +7,11 @@ import { Survey } from "../../interfaces/Survey";
 import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
 import { useState } from "react";
 import { Tooltip } from "flowbite-react";
-import { PatientSurveyDetailsModal, PatientSurveyStaffEditModal } from "..";
+import {
+  PatientSurveyDetailsModal,
+  PatientSurveyPatientEditModal,
+  PatientSurveyStaffEditModal,
+} from "..";
 
 interface PatientSurveyCardProps {
   survey: Survey;
@@ -30,18 +34,6 @@ const PatientSurveyCard = ({
 }: PatientSurveyCardProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
-
-  const calculateActivityScore = () => {
-    const keys = [
-      "q3",
-      "q4",
-      ...Array.from({ length: 6 }, (_, i) => `q${i + 6}`),
-    ];
-    return keys.reduce(
-      (sum, key) => sum + Number(survey[key as keyof Survey] || 0),
-      0
-    );
-  };
 
   const controlPatientsDetailsModalAccess = () => {
     const detailsButton = (
@@ -102,7 +94,8 @@ const PatientSurveyCard = ({
               (worst control and most activity) to 16 (best control and least activity)."
             >
               <p>
-                Activity Index Score: {calculateActivityScore()}{" "}
+                Activity Index Score:{" "}
+                {typeof survey.contScore === "number" ? survey.contScore : 0}{" "}
                 <InfoOutlined fontSize="small" aria-hidden="true" />
               </p>
             </Tooltip>
@@ -135,7 +128,13 @@ const PatientSurveyCard = ({
         detailsModalState={detailsModalState}
         setDetailsModalState={setDetailsModalState}
       />
-      {patientUserEdit ? null : (
+      {patientUserEdit ? (
+        <PatientSurveyPatientEditModal
+          survey={survey}
+          editModalState={editModalState}
+          setEditModalState={setEditModalState}
+        />
+      ) : (
         <PatientSurveyStaffEditModal
           survey={survey}
           editModalState={editModalState}
