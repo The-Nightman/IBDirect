@@ -43,6 +43,26 @@ const PatientSurveyCard = ({
     );
   };
 
+  const controlPatientsDetailsModalAccess = () => {
+    const detailsButton = (
+      <button
+        className="leading-3 text-4xl"
+        aria-label={`Open Survey Details`}
+        title="Open Survey Details"
+        onClick={() => setDetailsModalState(true)}
+      >
+        <PageviewOutlined fontSize="inherit" />
+      </button>
+    );
+    if (patientUserEdit && survey.completed) {
+      return detailsButton;
+    } else if (!patientUserEdit) {
+      return detailsButton;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <>
       <section
@@ -74,14 +94,7 @@ const PatientSurveyCard = ({
           </div>
         </div>
         <div>
-          <button
-            className="leading-3 text-4xl"
-            aria-label={`Open Survey Details`}
-            title="Open Survey Details"
-            onClick={() => setDetailsModalState(true)}
-          >
-            <PageviewOutlined fontSize="inherit" />
-          </button>
+          {controlPatientsDetailsModalAccess()}
           {!survey.completed && (
             <button
               className="w-9"
