@@ -18,6 +18,7 @@ interface PatientSurveyCardProps {
   ) => void;
   index?: number;
   removeSurvey?: (index: number) => void;
+  patientUserEdit?: boolean;
 }
 
 const PatientSurveyCard = ({
@@ -25,6 +26,7 @@ const PatientSurveyCard = ({
   updateSurveyState,
   index,
   removeSurvey,
+  patientUserEdit,
 }: PatientSurveyCardProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
@@ -97,14 +99,16 @@ const PatientSurveyCard = ({
         detailsModalState={detailsModalState}
         setDetailsModalState={setDetailsModalState}
       />
-      <PatientSurveyStaffEditModal
-        survey={survey}
-        editModalState={editModalState}
-        setEditModalState={setEditModalState}
-        updateSurveyState={updateSurveyState!}
-        index={index!}
-        removeSurvey={removeSurvey}
-      />
+      {patientUserEdit ? null : (
+        <PatientSurveyStaffEditModal
+          survey={survey}
+          editModalState={editModalState}
+          setEditModalState={setEditModalState}
+          updateSurveyState={updateSurveyState!}
+          index={index!}
+          removeSurvey={removeSurvey}
+        />
+      )}
     </>
   );
 };
