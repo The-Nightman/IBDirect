@@ -1,12 +1,38 @@
 import { Tooltip } from "flowbite-react";
 import { Survey } from "../../interfaces/Survey";
+import { useState } from "react";
 
 interface IBDSurveyFormProps {
-    survey: Survey;
-    patientUserEdit?: boolean;
+  survey: Survey;
+  patientUserEdit?: boolean;
 }
 
-const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
+const IBDSurveyForm = ({ survey, patientUserEdit }: IBDSurveyFormProps) => {
+  const [formData, setFormData] = useState<Survey>(survey);
+
+  const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => {
+      const updatedFormData = {
+        ...prev,
+        [e.target.id]: parseInt(e.target.value),
+      };
+      updatedFormData.contScore = calculateActivityScore(updatedFormData);
+      return updatedFormData;
+    });
+  };
+
+  const calculateActivityScore = (updatedFormData: Survey) => {
+    const keys = [
+      "q3",
+      "q4",
+      ...Array.from({ length: 6 }, (_, i) => `q${i + 6}`),
+    ];
+    return keys.reduce(
+      (sum, key) => sum + Number(updatedFormData[key as keyof Survey] || 0),
+      0
+    );
+  };
+
   return (
     <form>
       <div>
@@ -23,49 +49,78 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q1"
                   className="mr-2"
                   type="radio"
                   name="Stool Frequency"
                   value="0"
-                  checked={survey.q1 === 0}
-                  readOnly
-                  disabled={survey.q1 !== 0 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q1 === 0,
+                        readOnly: true,
+                        disabled: survey.q1 !== 0,
+                      })}
                 />
                 Normal number of stools
               </label>
               <label>
                 <input
+                  id="q1"
                   className="mr-2"
                   type="radio"
                   name="Stool Frequency"
                   value="1"
-                  checked={survey.q1 === 1}
-                  readOnly
-                  disabled={survey.q1 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q1 === 1,
+                        readOnly: true,
+                        disabled: survey.q1 !== 1,
+                      })}
                 />
                 1-2 stools more than normal
               </label>
               <label>
                 <input
+                  id="q1"
                   className="mr-2"
                   type="radio"
                   name="Stool Frequency"
                   value="2"
-                  checked={survey.q1 === 2}
-                  readOnly
-                  disabled={survey.q1 !== 2 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q1 === 2,
+                        readOnly: true,
+                        disabled: survey.q1 !== 2,
+                      })}
                 />
                 3-4 stools more than normal
               </label>
               <label>
                 <input
+                  id="q1"
                   className="mr-2"
                   type="radio"
                   name="Stool Frequency"
                   value="3"
-                  checked={survey.q1 === 3}
-                  readOnly
-                  disabled={survey.q1 !== 3 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q1 === 3,
+                        readOnly: true,
+                        disabled: survey.q1 !== 3,
+                      })}
                 />
                 5 or more stools more than normal
               </label>
@@ -81,49 +136,78 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q2"
                   className="mr-2"
                   type="radio"
                   name="Abdominal Pain"
                   value="0"
-                  checked={survey.q2 === 0}
-                  readOnly
-                  disabled={survey.q2 !== 0 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q2 === 0,
+                        readOnly: true,
+                        disabled: survey.q2 !== 0,
+                      })}
                 />
                 None
               </label>
               <label>
                 <input
+                  id="q2"
                   className="mr-2"
                   type="radio"
                   name="Abdominal Pain"
                   value="1"
-                  checked={survey.q2 === 1}
-                  readOnly
-                  disabled={survey.q2 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q2 === 1,
+                        readOnly: true,
+                        disabled: survey.q2 !== 1,
+                      })}
                 />
                 Mild
               </label>
               <label>
                 <input
+                  id="q2"
                   className="mr-2"
                   type="radio"
                   name="Abdominal Pain"
                   value="2"
-                  checked={survey.q2 === 2}
-                  readOnly
-                  disabled={survey.q2 !== 2 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q2 === 2,
+                        readOnly: true,
+                        disabled: survey.q2 !== 2,
+                      })}
                 />
                 Moderate
               </label>
               <label>
                 <input
+                  id="q2"
                   className="mr-2"
                   type="radio"
                   name="Abdominal Pain"
                   value="3"
-                  checked={survey.q2 === 3}
-                  readOnly
-                  disabled={survey.q2 !== 3 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q2 === 3,
+                        readOnly: true,
+                        disabled: survey.q2 !== 3,
+                      })}
                 />
                 Severe
               </label>
@@ -143,37 +227,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q3"
                   className="mr-2"
                   type="radio"
                   name="IBD Control"
                   value="2"
-                  checked={survey.q3 === 2}
-                  readOnly
-                  disabled={survey.q3 !== 2 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q3 === 2,
+                        readOnly: true,
+                        disabled: survey.q3 !== 2,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q3"
                   className="mr-2"
                   type="radio"
                   name="IBD Control"
                   value="0"
-                  checked={survey.q3 === 0}
-                  readOnly
-                  disabled={survey.q3 !== 0 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q3 === 0,
+                        readOnly: true,
+                        disabled: survey.q3 !== 0,
+                      })}
                 />
                 No
               </label>
               <label>
                 <input
+                  id="q3"
                   className="mr-2"
                   type="radio"
                   name="IBD Control"
                   value="1"
-                  checked={survey.q3 === 1}
-                  readOnly
-                  disabled={survey.q3 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q3 === 1,
+                        readOnly: true,
+                        disabled: survey.q3 !== 1,
+                      })}
                 />
                 Not sure
               </label>
@@ -189,37 +295,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q4"
                   className="mr-2"
                   type="radio"
                   name="Treatment Efficacy"
                   value="2"
-                  checked={survey.q4 === 2}
-                  readOnly
-                  disabled={survey.q4 !== 2 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q4 === 2,
+                        readOnly: true,
+                        disabled: survey.q4 !== 2,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q4"
                   className="mr-2"
                   type="radio"
                   name="Treatment Efficacy"
                   value="0"
-                  checked={survey.q4 === 0}
-                  readOnly
-                  disabled={survey.q4 !== 0 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q4 === 0,
+                        readOnly: true,
+                        disabled: survey.q4 !== 0,
+                      })}
                 />
                 No
               </label>
               <label>
                 <input
+                  id="q4"
                   className="mr-2"
                   type="radio"
                   name="Treatment Efficacy"
                   value="1"
-                  checked={survey.q4 === 1}
-                  readOnly
-                  disabled={survey.q4 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q4 === 1,
+                        readOnly: true,
+                        disabled: survey.q4 !== 1,
+                      })}
                 />
                 Not sure
               </label>
@@ -233,12 +361,20 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             </legend>
             <label>
               <input
+                id="q4a"
                 className="mr-2"
                 type="checkbox"
                 name="No Treatment"
-                checked={survey.q4a!}
-                readOnly
-                disabled={survey.q4a !== true && true}
+                {...(patientUserEdit
+                  ? {
+                      onChange: (e) =>
+                        setFormData({ ...formData, q4a: e.target.checked }),
+                    }
+                  : {
+                      checked: survey.q4a ?? false,
+                      readOnly: true,
+                      disabled: survey.q4a !== true,
+                    })}
               />
               I am not taking any treatment
             </label>
@@ -257,37 +393,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q5"
                   className="mr-2"
                   type="radio"
                   name="Symptom Improvement"
-                  value="0"
-                  checked={survey.q5 === 0}
-                  readOnly
-                  disabled={survey.q5 !== 0 && true}
+                  value="2"
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q5 === 2,
+                        readOnly: true,
+                        disabled: survey.q5 !== 2,
+                      })}
                 />
                 Better
               </label>
               <label>
                 <input
+                  id="q5"
                   className="mr-2"
                   type="radio"
                   name="Symptom Improvement"
                   value="1"
-                  checked={survey.q5 === 1}
-                  readOnly
-                  disabled={survey.q5 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q5 === 1,
+                        readOnly: true,
+                        disabled: survey.q5 !== 1,
+                      })}
                 />
                 No changes
               </label>
               <label>
                 <input
+                  id="q5"
                   className="mr-2"
                   type="radio"
                   name="Symptom Improvement"
-                  value="2"
-                  checked={survey.q5 === 2}
-                  readOnly
-                  disabled={survey.q5 !== 2 && true}
+                  value="0"
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q5 === 0,
+                        readOnly: true,
+                        disabled: survey.q5 !== 0,
+                      })}
                 />
                 Worse
               </label>
@@ -312,37 +470,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q6"
                   className="mr-2"
                   type="radio"
                   name="Missed Plans"
                   value="0"
-                  checked={survey.q6 === 0}
-                  readOnly
-                  disabled={survey.q6 !== 0 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q6 === 0,
+                        readOnly: true,
+                        disabled: survey.q6 !== 0,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q6"
                   className="mr-2"
                   type="radio"
                   name="Missed Plans"
                   value="2"
-                  checked={survey.q6 === 2}
-                  readOnly
-                  disabled={survey.q6 !== 2 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q6 === 2,
+                        readOnly: true,
+                        disabled: survey.q6 !== 2,
+                      })}
                 />
                 No
               </label>
               <label>
                 <input
+                  id="q6"
                   className="mr-2"
                   type="radio"
                   name="Missed Plans"
                   value="1"
-                  checked={survey.q6 === 1}
-                  readOnly
-                  disabled={survey.q6 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q6 === 1,
+                        readOnly: true,
+                        disabled: survey.q6 !== 1,
+                      })}
                 />
                 Not sure
               </label>
@@ -357,37 +537,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q7"
                   className="mr-2"
                   type="radio"
                   name="Night Symptoms"
                   value="0"
-                  checked={survey.q7 === 0}
-                  readOnly
-                  disabled={survey.q7 !== 0 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q7 === 0,
+                        readOnly: true,
+                        disabled: survey.q7 !== 0,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q7"
                   className="mr-2"
                   type="radio"
                   name="Night Symptoms"
                   value="2"
-                  checked={survey.q7 === 2}
-                  readOnly
-                  disabled={survey.q7 !== 2 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q7 === 2,
+                        readOnly: true,
+                        disabled: survey.q7 !== 2,
+                      })}
                 />
                 No
               </label>
               <label>
                 <input
+                  id="q7"
                   className="mr-2"
                   type="radio"
                   name="Night Symptoms"
                   value="1"
-                  checked={survey.q7 === 1}
-                  readOnly
-                  disabled={survey.q7 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q7 === 1,
+                        readOnly: true,
+                        disabled: survey.q7 !== 1,
+                      })}
                 />
                 Not sure
               </label>
@@ -402,37 +604,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q8"
                   className="mr-2"
                   type="radio"
                   name="Pain Discomfort"
                   value="0"
-                  checked={survey.q8 === 0}
-                  readOnly
-                  disabled={survey.q8 !== 0 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q8 === 0,
+                        readOnly: true,
+                        disabled: survey.q8 !== 0,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q8"
                   className="mr-2"
                   type="radio"
                   name="Pain Discomfort"
                   value="2"
-                  checked={survey.q8 === 2}
-                  readOnly
-                  disabled={survey.q8 !== 2 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q8 === 2,
+                        readOnly: true,
+                        disabled: survey.q8 !== 2,
+                      })}
                 />
                 No
               </label>
               <label>
                 <input
+                  id="q8"
                   className="mr-2"
                   type="radio"
                   name="Pain Discomfort"
                   value="1"
-                  checked={survey.q8 === 1}
-                  readOnly
-                  disabled={survey.q8 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q8 === 1,
+                        readOnly: true,
+                        disabled: survey.q8 !== 1,
+                      })}
                 />
                 Not sure
               </label>
@@ -448,37 +672,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q9"
                   className="mr-2"
                   type="radio"
                   name="Fatigue"
                   value="0"
-                  checked={survey.q9 === 0}
-                  readOnly
-                  disabled={survey.q9 !== 0 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q9 === 0,
+                        readOnly: true,
+                        disabled: survey.q9 !== 0,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q9"
                   className="mr-2"
                   type="radio"
                   name="Fatigue"
                   value="2"
-                  checked={survey.q9 === 2}
-                  readOnly
-                  disabled={survey.q9 !== 2 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q9 === 2,
+                        readOnly: true,
+                        disabled: survey.q9 !== 2,
+                      })}
                 />
                 No
               </label>
               <label>
                 <input
+                  id="q9"
                   className="mr-2"
                   type="radio"
                   name="Fatigue"
                   value="1"
-                  checked={survey.q9 === 1}
-                  readOnly
-                  disabled={survey.q9 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q9 === 1,
+                        readOnly: true,
+                        disabled: survey.q9 !== 1,
+                      })}
                 />
                 Not sure
               </label>
@@ -493,37 +739,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q10"
                   className="mr-2"
                   type="radio"
                   name="Mood"
                   value="0"
-                  checked={survey.q10 === 0}
-                  readOnly
-                  disabled={survey.q10 !== 0 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q10 === 0,
+                        readOnly: true,
+                        disabled: survey.q10 !== 0,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q10"
                   className="mr-2"
                   type="radio"
                   name="Mood"
                   value="2"
-                  checked={survey.q10 === 2}
-                  readOnly
-                  disabled={survey.q10 !== 2 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q10 === 2,
+                        readOnly: true,
+                        disabled: survey.q10 !== 2,
+                      })}
                 />
                 No
               </label>
               <label>
                 <input
+                  id="q10"
                   className="mr-2"
                   type="radio"
                   name="Mood"
                   value="1"
-                  checked={survey.q10 === 1}
-                  readOnly
-                  disabled={survey.q10 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q10 === 1,
+                        readOnly: true,
+                        disabled: survey.q10 !== 1,
+                      })}
                 />
                 Not sure
               </label>
@@ -538,37 +806,59 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q11"
                   className="mr-2"
                   type="radio"
                   name="Change Treatment"
                   value="0"
-                  checked={survey.q11 === 0}
-                  readOnly
-                  disabled={survey.q11 !== 0 && true}
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q11 === 0,
+                        readOnly: true,
+                        disabled: survey.q11 !== 0,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q11"
                   className="mr-2"
                   type="radio"
                   name="Change Treatment"
                   value="2"
-                  checked={survey.q11 === 2}
-                  readOnly
-                  disabled={survey.q11 !== 2 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q11 === 2,
+                        readOnly: true,
+                        disabled: survey.q11 !== 2,
+                      })}
                 />
                 No
               </label>
               <label>
                 <input
+                  id="q11"
                   className="mr-2"
                   type="radio"
                   name="Change Treatment"
                   value="1"
-                  checked={survey.q11 === 1}
-                  readOnly
-                  disabled={survey.q11 !== 1 && true}
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q11 === 1,
+                        readOnly: true,
+                        disabled: survey.q11 !== 1,
+                      })}
                 />
                 Not sure
               </label>
@@ -603,17 +893,28 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
                   </span>
                 </div>
                 <input
+                  id="q12"
                   type="range"
                   name="Overall IBD Control"
                   min={0}
                   max={10}
                   step={1}
-                  value={typeof survey.q12 === "number" ? `${survey.q12}` : "5"}
-                  readOnly
+                  {...(patientUserEdit
+                    ? {
+                        defaultValue: 5,
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        value:
+                          typeof survey.q12 === "number"
+                            ? `${survey.q12}`
+                            : "5",
+                        readOnly: true,
+                      })}
                 />
-                {survey.q12 === null
+                {formData.q12 === null
                   ? "Move the slider to see a response"
-                  : survey.q12}
+                  : formData.q12}
               </label>
             </div>
           </div>
@@ -645,7 +946,7 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             className="w-20 text-center bg-gray-100 border border-gray-300 rounded-sm"
             type="number"
             name="Score"
-            value={survey.contScore !== null ? survey.contScore : 0}
+            value={formData.contScore !== null ? formData.contScore : 0}
             readOnly
           />
         </label>
@@ -662,25 +963,40 @@ const IBDSurveyForm = ({survey, patientUserEdit}:IBDSurveyFormProps) => {
             <div className="flex flex-col">
               <label>
                 <input
+                  id="q13"
                   className="mr-2"
                   type="radio"
                   name="Smoking"
-                  value="0"
-                  checked={survey.q13 === 0}
-                  readOnly
-                  disabled={survey.q13 !== 0 && true}
+                  value="1"
+                  required
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q13 === 1,
+                        readOnly: true,
+                        disabled: survey.q13 !== 1,
+                      })}
                 />
                 Yes
               </label>
               <label>
                 <input
+                  id="q13"
                   className="mr-2"
                   type="radio"
                   name="Smoking"
-                  value="1"
-                  checked={survey.q13 === 1}
-                  readOnly
-                  disabled={survey.q13 !== 1 && true}
+                  value="0"
+                  {...(patientUserEdit
+                    ? {
+                        onChange: (e) => handleFormInput(e),
+                      }
+                    : {
+                        checked: survey.q13 === 0,
+                        readOnly: true,
+                        disabled: survey.q13 !== 0,
+                      })}
                 />
                 No
               </label>
