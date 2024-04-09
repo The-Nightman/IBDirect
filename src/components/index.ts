@@ -22,6 +22,7 @@ import Notes from "./Misc/Notes.tsx";
 import PatientSurveyCard from "./Patients/PatientSurveyCard.tsx";
 import PatientSurveyDetailsModal from "./Patients/PatientSurveyDetailsModal.tsx";
 import PatientSurveyStaffEditModal from "./Patients/PatientSurveyStaffEditModal.tsx";
+import PatientMyUpcomingAppSurvey from "./Patients/PatientMyUpcomingAppSurvey.tsx";
 
 export {
   Header,
@@ -48,4 +49,5 @@ export {
   PatientSurveyCard,
   PatientSurveyDetailsModal,
   PatientSurveyStaffEditModal,
+  PatientMyUpcomingAppSurvey,
 };
