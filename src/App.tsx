@@ -8,6 +8,7 @@ import {
   StaffDashboardPatients,
   StaffMyAppointments,
   PatientMyUpcomingAppSurvey,
+  PatientMyDetails,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
@@ -26,15 +27,12 @@ function App() {
             <Route path="portal/staff/Login" element={<StaffLogin />} />
           </Route>
           <Route element={<PrivateRoutes />}>
-            <Route
-              path="/patient-portal/dashboard"
-              element={<PatientDash />}
-            >
+            <Route path="/patient-portal/dashboard" element={<PatientDash />}>
+              <Route index element={<PatientMyUpcomingAppSurvey />} />
               <Route
-                index
-                element={<PatientMyUpcomingAppSurvey />}
+                path="/patient-portal/dashboard/my-details"
+                element={<PatientMyDetails />}
               />
-              
             </Route>
             <Route path="/dashboard" element={<StaffDash />}>
               <Route
