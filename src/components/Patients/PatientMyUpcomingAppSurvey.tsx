@@ -42,8 +42,8 @@ const PatientMyUpcomingAppSurvey = () => {
             message: err.response.data,
             color: "failure",
           });
-          setLoading(false);
         }
+        setLoading(false);
       });
   }, [user.userID]);
 
