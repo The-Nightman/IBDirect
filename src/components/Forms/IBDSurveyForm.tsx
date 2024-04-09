@@ -5,18 +5,20 @@ import { useState } from "react";
 interface IBDSurveyFormProps {
   survey: Survey;
   patientUserEdit?: boolean;
+  setParentFormData?: (formData: Survey) => void;
 }
 
-const IBDSurveyForm = ({ survey, patientUserEdit }: IBDSurveyFormProps) => {
+const IBDSurveyForm = ({ survey, patientUserEdit, setParentFormData }: IBDSurveyFormProps) => {
   const [formData, setFormData] = useState<Survey>(survey);
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => {
+    setFormData((prev: Survey) => {
       const updatedFormData = {
         ...prev,
         [e.target.id]: parseInt(e.target.value),
       };
       updatedFormData.contScore = calculateActivityScore(updatedFormData);
+      setParentFormData!(updatedFormData)
       return updatedFormData;
     });
   };
