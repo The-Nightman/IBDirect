@@ -97,10 +97,17 @@ const PatientSurveyCard = ({
           {controlPatientsDetailsModalAccess()}
           {!survey.completed && (
             <button
-              className="w-9"
+              className={`w-9 ${
+                patientUserEdit && new Date(survey.date) > new Date()
+                  ? "text-slate-500 cursor-not-allowed"
+                  : ""
+              }`}
               aria-label={`Edit Survey`}
               title="Edit Survey"
               onClick={() => setEditModalState(true)}
+              {...(patientUserEdit && new Date(survey.date) > new Date()
+                ? { disabled: true }
+                : {})}
             >
               <EditOutlined fontSize="large" />
             </button>
