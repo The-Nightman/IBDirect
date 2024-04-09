@@ -15,9 +15,9 @@ interface Staff {
 
 interface PatientAppointmentProps {
   appointment: Appointment;
-  staff: Staff;
+  staff?: Staff;
   index: number;
-  updateAppointmentState: (appointment: Appointment, index: number) => void;
+  updateAppointmentState?: (appointment: Appointment, index: number) => void;
   removeAppointment?: (index: number) => void;
 }
 
@@ -68,16 +68,18 @@ const PatientAppointmentCard = ({
           >
             <PageviewOutlined fontSize="inherit" />
           </button>
-          <button
-            className="w-9"
-            aria-label={`Edit Appointment ${parseIsoToDateTime(
-              appointment.dateTime
-            )}`}
-            title="Edit Appointment"
-            onClick={() => setEditModalState(true)}
-          >
-            <EditOutlined fontSize="large" />
-          </button>
+          {staff ? (
+            <button
+              className="w-9"
+              aria-label={`Edit Appointment ${parseIsoToDateTime(
+                appointment.dateTime
+              )}`}
+              title="Edit Appointment"
+              onClick={() => setEditModalState(true)}
+            >
+              <EditOutlined fontSize="large" />
+            </button>
+          ) : null}
         </div>
       </section>
       <PatientAppDetailsModal
@@ -89,9 +91,9 @@ const PatientAppointmentCard = ({
         appointment={appointment}
         editModalState={editModalState}
         setEditModalState={setEditModalState}
-        updateAppointmentState={updateAppointmentState}
+        updateAppointmentState={updateAppointmentState!}
         removeAppointment={removeAppointment}
-        staff={staff}
+        staff={staff!}
         index={index}
       />
     </>
