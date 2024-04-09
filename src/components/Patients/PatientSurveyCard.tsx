@@ -133,6 +133,7 @@ const PatientSurveyCard = ({
           survey={survey}
           editModalState={editModalState}
           setEditModalState={setEditModalState}
+          removeCompletedSurvey={removeSurvey!}
         />
       ) : (
         <PatientSurveyStaffEditModal
