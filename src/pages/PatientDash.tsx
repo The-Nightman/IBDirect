@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
 import { patientUserDetailsBrief } from "../api/getPatientUserDetailsBrief";
+import { parseDiagnosis } from "../utils/parseDiagnosis";
 
 interface userData {
   name: string;
@@ -27,14 +28,6 @@ const PatientDash = () => {
       });
   }, [user.userID]);
 
-  const parseDiagnosis = () => {
-    if (userData.diagnosis === "CD") {
-      return "Crohn's Disease";
-    } else if (userData.diagnosis === "UC") {
-      return "Ulcerative Colitis";
-    }
-  };
-
   return (
     <>
       <section className="flex flex-1 flex-col justify-center">
@@ -43,7 +36,7 @@ const PatientDash = () => {
             {userData.name.split(",").reverse().join(" ")}
           </h2>
           <div className="flex flex-col pt-2 md:flex-row md:justify-between md:text-lg">
-            <p>{parseDiagnosis()}</p>
+            <p>{parseDiagnosis(userData.diagnosis)}</p>
             <p>{userData.hospital}</p>
           </div>
         </aside>

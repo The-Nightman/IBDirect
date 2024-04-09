@@ -11,6 +11,7 @@ import { patientUserMyDetails } from "../../api/getPatientMyDetails";
 import { useAuth } from "../../context/AuthContext";
 import { StaffDetails } from "../../interfaces/StaffDetails";
 import { parseStoma } from "../../utils/parseStoma";
+import { parseDiagnosis } from "../../utils/parseDiagnosis";
 
 export interface PatientMyDetails {
   patientId: number;
@@ -63,14 +64,6 @@ const PatientMyDetails = () => {
     setError({ state: false, message: "" });
   };
 
-  const parseDiagnosis = () => {
-    if (patientData?.diagnosis === "CD") {
-      return "Crohn's Disease";
-    } else if (patientData?.diagnosis === "UC") {
-      return "Ulcerative Colitis";
-    }
-  };
-
   return (
     <>
       {loading && <SpinnerStatus />}
@@ -108,7 +101,9 @@ const PatientMyDetails = () => {
           <section>
             <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
             <div className="max-w-[30rem] flex flex-col mb-2 md:justify-between md:flex-row">
-              <p className="text-xl">Diagnosis: {parseDiagnosis()}</p>
+              <p className="text-xl">
+                Diagnosis: {parseDiagnosis(patientData?.diagnosis)}
+              </p>
               <p className="text-xl">Stoma: {parseStoma(patientData?.stoma)}</p>
             </div>
             <p className="mb-4">
