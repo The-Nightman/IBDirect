@@ -47,6 +47,15 @@ const PatientMyUpcomingAppSurvey = () => {
     setToastState({ state: false, message: "", color: "failure" });
   };
 
+  const removeCompletedSurvey = (id: number) => {
+    setUpcomingData({
+        ...upcomingData,
+        surveys: upcomingData.surveys.filter(
+          (survey) => survey.id !== id
+        ),
+      });
+  };
+
   return (
     <section className="flex flex-col lg:flex-row gap-8">
       {toastState.state && (
@@ -92,6 +101,7 @@ const PatientMyUpcomingAppSurvey = () => {
                     survey={survey}
                     patientUserEdit={true}
                     index={index}
+                    removeSurvey={removeCompletedSurvey}
                   />
                 </li>
               );
