@@ -63,12 +63,28 @@ const PatientSurveyCard = ({
     }
   };
 
+  const controlScoreSeverityColor = () => {
+    const { contScore, completed } = survey;
+    if (typeof contScore === "number" && completed) {
+      const scoreColorMap = [
+        { max: 16, min: 12, color: "bg-lime-200" },
+        { max: 12, min: 8, color: "bg-yellow-200" },
+        { max: 8, min: 4, color: "bg-orange-200" },
+        { max: 4, min: 0, color: "bg-red-200" },
+      ];
+
+      const scoreColor = scoreColorMap.find(
+        ({ max, min }) => contScore! <= max && contScore! > min
+      );
+      return scoreColor!.color;
+    }
+    return "bg-slate-200";
+  };
+
   return (
     <>
       <section
-        className={`w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 ${
-          survey.completed ? "bg-lime-200" : "bg-slate-200"
-        } text-sm`}
+        className={`w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 ${controlScoreSeverityColor()} text-sm`}
         tabIndex={0}
         aria-label="Patient IBD Survey Card"
       >
