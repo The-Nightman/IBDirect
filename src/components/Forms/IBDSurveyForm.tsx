@@ -1,6 +1,6 @@
 import { Tooltip } from "flowbite-react";
 import { Survey } from "../../interfaces/Survey";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IBDSurveyFormProps {
   survey: Survey;
@@ -11,6 +11,10 @@ interface IBDSurveyFormProps {
 const IBDSurveyForm = ({ survey, patientUserEdit, setParentFormData }: IBDSurveyFormProps) => {
   const [formData, setFormData] = useState<Survey>(survey);
 
+  useEffect(() => {
+    setParentFormData!(formData);
+  }, [formData]);
+
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev: Survey) => {
       const updatedFormData = {
@@ -18,7 +22,6 @@ const IBDSurveyForm = ({ survey, patientUserEdit, setParentFormData }: IBDSurvey
         [e.target.id]: parseInt(e.target.value),
       };
       updatedFormData.contScore = calculateActivityScore(updatedFormData);
-      setParentFormData!(updatedFormData)
       return updatedFormData;
     });
   };
