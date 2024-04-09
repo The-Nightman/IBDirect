@@ -16,6 +16,11 @@ const PatientSurveyDetailsModal = ({
   return (
     <Modal
       show={detailsModalState}
+      theme={{
+        content: {
+          base: "relative h-full w-full p-4 md:h-auto overflow-hidden",
+        },
+      }}
       size={"4xl"}
       aria-label={`Patient IBD Survey Details Modal ${parseIsoToDateOnly(
         survey.date
@@ -604,20 +609,26 @@ const PatientSurveyDetailsModal = ({
                   </h4>
                   <br />
                   <span className="text-black">
-                    (1 = worst control, 10 = best control)
+                    (0 = worst control, 10 = best control)
                   </span>
                 </legend>
-                <div className="flex flex-col px-2">
-                  <div className="flex flex-row justify-between" aria-hidden>
-                    <span>1</span>
-                    <span>5</span>
-                    <span>10</span>
-                  </div>
-                  <label className="w-full flex flex-col text-center">
+                <div className="flex flex-col px-2 items-center">
+                  <label className="w-11/12 flex flex-col text-center">
+                    <div className="flex mt-8 justify-between" aria-hidden>
+                      <span className="relative flex h-1 w-px bg-neutral-900 justify-center">
+                        <span className="absolute -top-6">0</span>
+                      </span>
+                      <span className="relative flex h-1 w-px bg-neutral-900 justify-center">
+                        <span className="absolute -top-6">5</span>
+                      </span>
+                      <span className="relative flex h-1 w-px bg-neutral-900 justify-center">
+                        <span className="absolute -top-6">10</span>
+                      </span>
+                    </div>
                     <input
                       type="range"
                       name="Overall IBD Control"
-                      min={1}
+                      min={0}
                       max={10}
                       step={1}
                       value={
@@ -634,8 +645,8 @@ const PatientSurveyDetailsModal = ({
             </fieldset>
           </div>
           <div className="my-2 py-3 border-b">
-            <div className="flex flex-col lg:flex-row lg:gap-x-8">
-              <div className="lg:w-[32rem]">
+            <label className="flex flex-col gap-8 md:flex-row">
+              <div className="md:w-[32rem]">
                 <span className="sr-only">
                   IBD Disease Activity Index score is calculated from the sum of
                   responses to 1a, 1b and 3a to 3f. Each option is allocated a
@@ -656,13 +667,13 @@ const PatientSurveyDetailsModal = ({
                 </Tooltip>
               </div>
               <input
-                className="h-fit-content w-20 text-center bg-gray-100 border border-gray-300 rounded-sm"
+                className="w-20 text-center bg-gray-100 border border-gray-300 rounded-sm"
                 type="number"
                 name="Score"
                 value={survey.contScore !== null ? survey.contScore : 0}
                 readOnly
               />
-            </div>
+            </label>
           </div>
           <div>
             <fieldset className="my-2 py-3 border-b">
