@@ -11,6 +11,7 @@ import {
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
 import StaffDash from "./pages/StaffDash";
+import PatientDash from "./pages/PatientDash";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
             <Route path="portal/staff/Login" element={<StaffLogin />} />
           </Route>
           <Route element={<PrivateRoutes />}>
+            <Route
+              path="/patient-portal/dashboard"
+              element={<PatientDash />}
+            ></Route>
             <Route path="/dashboard" element={<StaffDash />}>
               <Route
                 path="/dashboard/patients"
