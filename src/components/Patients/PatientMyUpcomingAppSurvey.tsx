@@ -61,7 +61,7 @@ const PatientMyUpcomingAppSurvey = () => {
   return (
     <>
       {loading && <SpinnerStatus />}
-      <section className="flex flex-col lg:flex-row gap-8">
+      <section className="flex flex-col lg:flex-row gap-8 p-4">
         {toastState.state && (
           <Toast
             color={toastState.color || "failure"}
