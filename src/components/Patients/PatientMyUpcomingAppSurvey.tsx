@@ -5,6 +5,7 @@ import { Appointment } from "../../interfaces/Appointment";
 import { Survey } from "../../interfaces/Survey";
 import { ErrorState } from "../../interfaces/ErrorState";
 import Toast from "../UX/Toast";
+import PatientAppointmentCard from "./PatientAppointmentCard";
 
 interface UpcomingData {
   appointments: Appointment[];
@@ -63,7 +64,10 @@ const PatientMyUpcomingAppSurvey = () => {
             upcomingData.appointments.map((appointment, index) => {
               return (
                 <li key={index}>
-                  <p>appointment</p>
+                  <PatientAppointmentCard
+                    appointment={appointment}
+                    index={index}
+                  />
                 </li>
               );
             })
