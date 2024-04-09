@@ -7,6 +7,7 @@ import {
   PrivateRoutes,
   StaffDashboardPatients,
   StaffMyAppointments,
+  PatientMyUpcomingAppSurvey,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
@@ -28,7 +29,13 @@ function App() {
             <Route
               path="/patient-portal/dashboard"
               element={<PatientDash />}
-            ></Route>
+            >
+              <Route
+                index
+                element={<PatientMyUpcomingAppSurvey />}
+              />
+              
+            </Route>
             <Route path="/dashboard" element={<StaffDash />}>
               <Route
                 path="/dashboard/patients"
