@@ -46,7 +46,7 @@ const PatientAppointmentCard = ({
     <>
       <section
         className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm"
-        aria-label="Patient Appointment Card"
+        aria-label={`Patient Appointment Card ${parseIsoToDateTime(appointment.dateTime)}`}
         tabIndex={0}
       >
         <div>
