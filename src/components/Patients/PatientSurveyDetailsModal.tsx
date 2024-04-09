@@ -27,7 +27,7 @@ const PatientSurveyDetailsModal = ({
         survey.date
       )}`}
     >
-      <div className="m-4 overflow-y-scroll">
+      <div className="m-4 px-2 overflow-y-scroll">
         <h3 className="flex flex-wrap justify-between mb-4 text-lg font-semibold">
           <p>IBD Survey</p>
           <time>{parseIsoToDateOnly(survey.date)}</time>
