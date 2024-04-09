@@ -20,16 +20,18 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
   const [userDetails, setUserDetails] = useState<StaffDetails | null>(null);
 
   useEffect(() => {
-    if (user.userID) {
-      userStaffDetails(user.userID)
-        .then((res) => {
-          setUserDetails(res.data);
-        })
-        .catch((err) => {
-          throw new Error(err);
-        });
+    if (user.userID && user.role) {
+      if ([2, 3, 4, 5].includes(Number(user.role))) {
+        userStaffDetails(user.userID)
+          .then((res) => {
+            setUserDetails(res.data);
+          })
+          .catch((err) => {
+            throw new Error(err);
+          });
+      }
     }
-  }, [user.userID]);
+  }, [user]);
 
   return (
     <UserDetailsContext.Provider value={{ userDetails }}>
