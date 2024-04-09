@@ -9,6 +9,7 @@ import {
   StaffMyAppointments,
   PatientMyUpcomingAppSurvey,
   PatientMyDetails,
+  PatientMyAppointments,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
@@ -32,6 +33,10 @@ function App() {
               <Route
                 path="/patient-portal/dashboard/my-details"
                 element={<PatientMyDetails />}
+              />
+              <Route
+                path="/patient-portal/dashboard/my-appointments"
+                element={<PatientMyAppointments />}
               />
             </Route>
             <Route path="/dashboard" element={<StaffDash />}>
