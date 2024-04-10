@@ -11,7 +11,9 @@ interface PatientSurveyPatientEditModalProps {
   survey: Survey;
   editModalState: boolean;
   setEditModalState: (state: boolean) => void;
-  removeCompletedSurvey: (id: number) => void;
+  removeCompletedSurvey?: (id: number) => void;
+  updateSurveyState?: (updatedSurvey: Survey, index: number) => void;
+  index: number;
 }
 
 const PatientSurveyPatientEditModal = ({
@@ -19,6 +21,8 @@ const PatientSurveyPatientEditModal = ({
   editModalState,
   setEditModalState,
   removeCompletedSurvey,
+  updateSurveyState,
+  index,
 }: PatientSurveyPatientEditModalProps) => {
   const [formData, setFormData] = useState<Survey>(survey);
   const [toastState, setToastState] = useState<ErrorState>({
@@ -38,7 +42,11 @@ const PatientSurveyPatientEditModal = ({
     }
     updateSurvey(survey.id, { ...formData, completed: true })
       .then((_res) => {
-        removeCompletedSurvey(survey.id!);
+        if (removeCompletedSurvey) {
+          removeCompletedSurvey(survey.id!);
+        } else if (updateSurveyState) {
+          updateSurveyState({...formData, completed: true }, index);
+        }
         setToastState({
           state: true,
           message: "Survey successfully updated",

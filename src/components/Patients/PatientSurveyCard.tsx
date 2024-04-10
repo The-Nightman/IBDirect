@@ -62,7 +62,7 @@ const PatientSurveyCard = ({
         { max: 16, min: 12, color: "bg-lime-200" },
         { max: 12, min: 8, color: "bg-yellow-200" },
         { max: 8, min: 4, color: "bg-orange-200" },
-        { max: 4, min: 0, color: "bg-red-200" },
+        { max: 4, min: -1, color: "bg-red-200" },
       ];
 
       const scoreColor = scoreColorMap.find(
@@ -133,7 +133,9 @@ const PatientSurveyCard = ({
           survey={survey}
           editModalState={editModalState}
           setEditModalState={setEditModalState}
-          removeCompletedSurvey={removeSurvey!}
+          removeCompletedSurvey={removeSurvey}
+          updateSurveyState={updateSurveyState}
+          index={index!}
         />
       ) : (
         <PatientSurveyStaffEditModal
