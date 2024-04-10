@@ -27,6 +27,7 @@ import IBDSurveyForm from "./Forms/IBDSurveyForm.tsx";
 import PatientSurveyPatientEditModal from "./Patients/PatientSurveyPatientEditModal.tsx";
 import PatientMyDetails from "./Patients/PatientMyDetails.tsx";
 import PatientMyAppointments from "./Patients/PatientMyAppointments.tsx";
+import PatientMyPrescriptions from "./Patients/PatientMyPrescriptions.tsx";
 
 export {
   Header,
@@ -58,4 +59,5 @@ export {
   PatientSurveyPatientEditModal,
   PatientMyDetails,
   PatientMyAppointments,
+  PatientMyPrescriptions,
 };
