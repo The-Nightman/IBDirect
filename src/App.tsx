@@ -15,6 +15,7 @@ import {
   StaffMyDashboardHome,
   StaffMyPersonalDetails,
   StaffDashboardStaff,
+  StaffMemberDetails,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
@@ -65,6 +66,10 @@ function App() {
               <Route
                 path="/dashboard/staff"
                 element={<StaffDashboardStaff />}
+              />
+              <Route
+                path="/dashboard/staff/details/:id"
+                element={<StaffMemberDetails />}
               />
               <Route
                 path="/dashboard/my-appointments"
