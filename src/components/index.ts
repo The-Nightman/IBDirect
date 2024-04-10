@@ -33,6 +33,7 @@ import StaffMyDashboardHome from "./Staff/StaffMyDashboardHome.tsx";
 import StaffMyPersonalDetails from "./Staff/StaffMyPersonalDetails.tsx";
 import StaffDashboardStaff from "./Staff/StaffDashboardStaff.tsx";
 import StaffMemberCard from "./Staff/StaffMemberCard.tsx";
+import StaffMemberDetails from "./Staff/StaffMemberDetails.tsx";
 
 export {
   Header,
@@ -70,4 +71,5 @@ export {
   StaffMyPersonalDetails,
   StaffDashboardStaff,
   StaffMemberCard,
+  StaffMemberDetails,
 };
