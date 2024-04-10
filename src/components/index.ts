@@ -30,6 +30,7 @@ import PatientMyAppointments from "./Patients/PatientMyAppointments.tsx";
 import PatientMyPrescriptions from "./Patients/PatientMyPrescriptions.tsx";
 import PatientMyIBDSurveys from "./Patients/PatientMyIBDSurveys.tsx";
 import StaffMyDashboardHome from "./Staff/StaffMyDashboardHome.tsx";
+import StaffMyPersonalDetails from "./Staff/StaffMyPersonalDetails.tsx";
 
 export {
   Header,
@@ -64,4 +65,5 @@ export {
   PatientMyPrescriptions,
   PatientMyIBDSurveys,
   StaffMyDashboardHome,
+  StaffMyPersonalDetails,
 };
