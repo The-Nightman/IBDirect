@@ -28,6 +28,7 @@ import PatientSurveyPatientEditModal from "./Patients/PatientSurveyPatientEditMo
 import PatientMyDetails from "./Patients/PatientMyDetails.tsx";
 import PatientMyAppointments from "./Patients/PatientMyAppointments.tsx";
 import PatientMyPrescriptions from "./Patients/PatientMyPrescriptions.tsx";
+import PatientMyIBDSurveys from "./Patients/PatientMyIBDSurveys.tsx";
 
 export {
   Header,
@@ -60,4 +61,5 @@ export {
   PatientMyDetails,
   PatientMyAppointments,
   PatientMyPrescriptions,
+  PatientMyIBDSurveys,
 };
