@@ -31,6 +31,8 @@ import PatientMyPrescriptions from "./Patients/PatientMyPrescriptions.tsx";
 import PatientMyIBDSurveys from "./Patients/PatientMyIBDSurveys.tsx";
 import StaffMyDashboardHome from "./Staff/StaffMyDashboardHome.tsx";
 import StaffMyPersonalDetails from "./Staff/StaffMyPersonalDetails.tsx";
+import StaffDashboardStaff from "./Staff/StaffDashboardStaff.tsx";
+import StaffMemberCard from "./Staff/StaffMemberCard.tsx";
 
 export {
   Header,
@@ -66,4 +68,6 @@ export {
   PatientMyIBDSurveys,
   StaffMyDashboardHome,
   StaffMyPersonalDetails,
+  StaffDashboardStaff,
+  StaffMemberCard,
 };
