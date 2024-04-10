@@ -3,7 +3,11 @@ import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
 import { patientUserDetailsBrief } from "../api/getPatientUserDetailsBrief";
 import { parseDiagnosis } from "../utils/parseDiagnosis";
-import { MenuOpenOutlined, MenuOutlined } from "@mui/icons-material";
+import {
+  ExitToAppOutlined,
+  MenuOpenOutlined,
+  MenuOutlined,
+} from "@mui/icons-material";
 
 interface userData {
   name: string;
@@ -18,7 +22,7 @@ const PatientDash = () => {
     diagnosis: "",
     hospital: "",
   });
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     patientUserDetailsBrief(user.userID)
@@ -108,6 +112,15 @@ const PatientDash = () => {
                 >
                   IBD Surveys
                 </Link>
+              </li>
+              <li>
+                <button
+                  className="mt-64 md:mt-12 select-none hover:text-blue-700 hover:underline active:text-blue-900"
+                  onClick={logout}
+                >
+                  <ExitToAppOutlined className="mr-4" />
+                  Logout
+                </button>
               </li>
             </ul>
           </nav>
