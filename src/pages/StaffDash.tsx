@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { userStaffDetails } from "../api/getStaffUserDetails";
 import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
+import { MenuOpenOutlined, MenuOutlined } from "@mui/icons-material";
 
 interface userData {
   name: string;
@@ -12,6 +13,7 @@ interface userData {
 }
 
 const StaffDash = () => {
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [userData, setUserData] = useState<userData>({
     name: "",
     practice: "",
@@ -44,8 +46,21 @@ const StaffDash = () => {
           </div>
         </aside>
         <div className="md:grid grid-cols-[max-content_auto] h-full">
+          <button
+            className="absolute top-0 md:hidden text-white"
+            aria-label={menuOpen ? "Close Menu" : "Open Menu"}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? (
+              <MenuOpenOutlined sx={{ fontSize: 60 }} />
+            ) : (
+              <MenuOutlined sx={{ fontSize: 60 }} />
+            )}
+          </button>
           <nav
-            className="hidden md:flex flex-col flex-1 p-5 border-slate-400 border-r"
+            className={`${
+              menuOpen ? "absolute" : "hidden"
+            } max-md:h-[calc(100%_-_12.3rem)] md:flex flex-col flex-1 p-5 bg-gray-200 border-slate-400 border-r`}
             aria-labelledby="dashboardmenulabel"
           >
             <h3 className="text-2xl mb-6" id="dashboardmenulabel">
