@@ -28,6 +28,7 @@ import { Appointment } from "../../interfaces/Appointment";
 import { Prescription } from "../../interfaces/Prescription";
 import { useUserDetails } from "../../context/userDetailsContext";
 import { Survey } from "../../interfaces/Survey";
+import { parseDiagnosis } from "../../utils/parseDiagnosis";
 
 const PatientDetailsView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
@@ -121,14 +122,6 @@ const PatientDetailsView = () => {
           });
         }
       });
-  };
-
-  const parseDiagnosis = () => {
-    if (patientData?.diagnosis === "CD") {
-      return "Crohn's Disease";
-    } else if (patientData?.diagnosis === "UC") {
-      return "Ulcerative Colitis";
-    }
   };
 
   const closeErrorState = () => {
@@ -304,7 +297,7 @@ const PatientDetailsView = () => {
               <section>
                 <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
                 <div className="max-w-[30rem] flex flex-col mb-2 md:justify-between md:flex-row">
-                  <p className="text-xl">Diagnosis: {parseDiagnosis()}</p>
+                  <p className="text-xl">Diagnosis: {parseDiagnosis(patientData?.diagnosis)}</p>
                   <p className="text-xl">
                     Stoma: {parseStoma(patientData?.stoma)}
                   </p>

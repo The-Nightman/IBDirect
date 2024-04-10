@@ -8,7 +8,7 @@ type NotesData<T extends NotesBase> = T;
 
 interface NotesProps<T extends NotesBase> {
   parentData: NotesData<T>;
-  setParentData: React.Dispatch<React.SetStateAction<NotesData<T>>>;
+  setParentData?: React.Dispatch<React.SetStateAction<NotesData<T>>>;
   ariaLabel: string;
   ariaDescription: string;
   editControls: boolean;
@@ -54,7 +54,7 @@ const Notes = <T extends NotesBase>({
   };
 
   const handleSaveNotes = () => {
-    setParentData({ ...parentData, notes: notes });
+    setParentData!({ ...parentData, notes: notes });
     setEditNotes(false);
   };
 

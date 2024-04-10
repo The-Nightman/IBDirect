@@ -3,6 +3,8 @@ import { DOBForm, SpinnerStatus, Toast } from "../index.js";
 import { patientLoginAPI } from "../../api/patientLogin.js";
 import { ErrorState } from "../../interfaces/ErrorState.js";
 import { DobData } from "../../interfaces/DobData.js";
+import { useAuth } from "../../context/AuthContext.js";
+import { useNavigate } from "react-router-dom";
 
 interface LoginForm {
   Name: string;
@@ -10,6 +12,9 @@ interface LoginForm {
 }
 
 const PatientLogin = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const [loading, setLoading] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(true);
@@ -53,8 +58,8 @@ const PatientLogin = () => {
     };
     patientLoginAPI(loginObj)
       .then((res) => {
-        setLoading(false);
-        console.log(res.data);
+        login(res.data.token);
+        navigate("/patient-portal/dashboard");
       })
       .catch((err) => {
         if (err.response === undefined) {

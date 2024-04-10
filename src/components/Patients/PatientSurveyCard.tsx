@@ -7,7 +7,11 @@ import { Survey } from "../../interfaces/Survey";
 import { parseIsoToDateOnly } from "../../utils/parseIsoToDateOnly";
 import { useState } from "react";
 import { Tooltip } from "flowbite-react";
-import { PatientSurveyDetailsModal, PatientSurveyStaffEditModal } from "..";
+import {
+  PatientSurveyDetailsModal,
+  PatientSurveyPatientEditModal,
+  PatientSurveyStaffEditModal,
+} from "..";
 
 interface PatientSurveyCardProps {
   survey: Survey;
@@ -18,6 +22,7 @@ interface PatientSurveyCardProps {
   ) => void;
   index?: number;
   removeSurvey?: (index: number) => void;
+  patientUserEdit?: boolean;
 }
 
 const PatientSurveyCard = ({
@@ -25,28 +30,53 @@ const PatientSurveyCard = ({
   updateSurveyState,
   index,
   removeSurvey,
+  patientUserEdit,
 }: PatientSurveyCardProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
 
-  const calculateActivityScore = () => {
-    const keys = [
-      "q3",
-      "q4",
-      ...Array.from({ length: 6 }, (_, i) => `q${i + 6}`),
-    ];
-    return keys.reduce(
-      (sum, key) => sum + Number(survey[key as keyof Survey] || 0),
-      0
+  const controlPatientsDetailsModalAccess = () => {
+    const detailsButton = (
+      <button
+        className="leading-3 text-4xl"
+        aria-label={`Open Survey Details`}
+        title="Open Survey Details"
+        onClick={() => setDetailsModalState(true)}
+      >
+        <PageviewOutlined fontSize="inherit" />
+      </button>
     );
+    if (patientUserEdit && survey.completed) {
+      return detailsButton;
+    } else if (!patientUserEdit) {
+      return detailsButton;
+    } else {
+      return null;
+    }
+  };
+
+  const controlScoreSeverityColor = () => {
+    const { contScore, completed } = survey;
+    if (typeof contScore === "number" && completed) {
+      const scoreColorMap = [
+        { max: 16, min: 12, color: "bg-lime-200" },
+        { max: 12, min: 8, color: "bg-yellow-200" },
+        { max: 8, min: 4, color: "bg-orange-200" },
+        { max: 4, min: -1, color: "bg-red-200" },
+      ];
+
+      const scoreColor = scoreColorMap.find(
+        ({ max, min }) => contScore! <= max && contScore! > min
+      );
+      return scoreColor!.color;
+    }
+    return "bg-slate-200";
   };
 
   return (
     <>
-      <section
-        className={`w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 ${
-          survey.completed ? "bg-lime-200" : "bg-slate-200"
-        } text-sm`}
+      <article
+        className={`w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 ${controlScoreSeverityColor()} text-sm`}
         tabIndex={0}
         aria-label="Patient IBD Survey Card"
       >
@@ -64,7 +94,8 @@ const PatientSurveyCard = ({
               (worst control and most activity) to 16 (best control and least activity)."
             >
               <p>
-                Activity Index Score: {calculateActivityScore()}{" "}
+                Activity Index Score:{" "}
+                {typeof survey.contScore === "number" ? survey.contScore : 0}{" "}
                 <InfoOutlined fontSize="small" aria-hidden="true" />
               </p>
             </Tooltip>
@@ -72,39 +103,50 @@ const PatientSurveyCard = ({
           </div>
         </div>
         <div>
-          <button
-            className="leading-3 text-4xl"
-            aria-label={`Open Survey Details`}
-            title="Open Survey Details"
-            onClick={() => setDetailsModalState(true)}
-          >
-            <PageviewOutlined fontSize="inherit" />
-          </button>
+          {controlPatientsDetailsModalAccess()}
           {!survey.completed && (
             <button
-              className="w-9"
+              className={`w-9 ${
+                patientUserEdit && new Date(survey.date) > new Date()
+                  ? "text-slate-500 cursor-not-allowed"
+                  : ""
+              }`}
               aria-label={`Edit Survey`}
               title="Edit Survey"
               onClick={() => setEditModalState(true)}
+              {...(patientUserEdit && new Date(survey.date) > new Date()
+                ? { disabled: true }
+                : {})}
             >
               <EditOutlined fontSize="large" />
             </button>
           )}
         </div>
-      </section>
+      </article>
       <PatientSurveyDetailsModal
         survey={survey}
         detailsModalState={detailsModalState}
         setDetailsModalState={setDetailsModalState}
       />
-      <PatientSurveyStaffEditModal
-        survey={survey}
-        editModalState={editModalState}
-        setEditModalState={setEditModalState}
-        updateSurveyState={updateSurveyState!}
-        index={index!}
-        removeSurvey={removeSurvey}
-      />
+      {patientUserEdit ? (
+        <PatientSurveyPatientEditModal
+          survey={survey}
+          editModalState={editModalState}
+          setEditModalState={setEditModalState}
+          removeCompletedSurvey={removeSurvey}
+          updateSurveyState={updateSurveyState}
+          index={index!}
+        />
+      ) : (
+        <PatientSurveyStaffEditModal
+          survey={survey}
+          editModalState={editModalState}
+          setEditModalState={setEditModalState}
+          updateSurveyState={updateSurveyState!}
+          index={index!}
+          removeSurvey={removeSurvey}
+        />
+      )}
     </>
   );
 };

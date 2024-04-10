@@ -15,9 +15,9 @@ interface Staff {
 
 interface PatientAppointmentProps {
   appointment: Appointment;
-  staff: Staff;
+  staff?: Staff;
   index: number;
-  updateAppointmentState: (appointment: Appointment, index: number) => void;
+  updateAppointmentState?: (appointment: Appointment, index: number) => void;
   removeAppointment?: (index: number) => void;
 }
 
@@ -44,7 +44,7 @@ const PatientAppointmentCard = ({
 
   return (
     <>
-      <section
+      <article
         className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm"
         aria-label="Patient Appointment Card"
         tabIndex={0}
@@ -68,18 +68,20 @@ const PatientAppointmentCard = ({
           >
             <PageviewOutlined fontSize="inherit" />
           </button>
-          <button
-            className="w-9"
-            aria-label={`Edit Appointment ${parseIsoToDateTime(
-              appointment.dateTime
-            )}`}
-            title="Edit Appointment"
-            onClick={() => setEditModalState(true)}
-          >
-            <EditOutlined fontSize="large" />
-          </button>
+          {staff ? (
+            <button
+              className="w-9"
+              aria-label={`Edit Appointment ${parseIsoToDateTime(
+                appointment.dateTime
+              )}`}
+              title="Edit Appointment"
+              onClick={() => setEditModalState(true)}
+            >
+              <EditOutlined fontSize="large" />
+            </button>
+          ) : null}
         </div>
-      </section>
+      </article>
       <PatientAppDetailsModal
         appointment={appointment}
         detailsModalState={detailsModalState}
@@ -89,9 +91,9 @@ const PatientAppointmentCard = ({
         appointment={appointment}
         editModalState={editModalState}
         setEditModalState={setEditModalState}
-        updateAppointmentState={updateAppointmentState}
+        updateAppointmentState={updateAppointmentState!}
         removeAppointment={removeAppointment}
-        staff={staff}
+        staff={staff!}
         index={index}
       />
     </>

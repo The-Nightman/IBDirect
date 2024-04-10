@@ -22,6 +22,13 @@ import Notes from "./Misc/Notes.tsx";
 import PatientSurveyCard from "./Patients/PatientSurveyCard.tsx";
 import PatientSurveyDetailsModal from "./Patients/PatientSurveyDetailsModal.tsx";
 import PatientSurveyStaffEditModal from "./Patients/PatientSurveyStaffEditModal.tsx";
+import PatientMyUpcomingAppSurvey from "./Patients/PatientMyUpcomingAppSurvey.tsx";
+import IBDSurveyForm from "./Forms/IBDSurveyForm.tsx";
+import PatientSurveyPatientEditModal from "./Patients/PatientSurveyPatientEditModal.tsx";
+import PatientMyDetails from "./Patients/PatientMyDetails.tsx";
+import PatientMyAppointments from "./Patients/PatientMyAppointments.tsx";
+import PatientMyPrescriptions from "./Patients/PatientMyPrescriptions.tsx";
+import PatientMyIBDSurveys from "./Patients/PatientMyIBDSurveys.tsx";
 
 export {
   Header,
@@ -48,4 +55,11 @@ export {
   PatientSurveyCard,
   PatientSurveyDetailsModal,
   PatientSurveyStaffEditModal,
+  PatientMyUpcomingAppSurvey,
+  IBDSurveyForm,
+  PatientSurveyPatientEditModal,
+  PatientMyDetails,
+  PatientMyAppointments,
+  PatientMyPrescriptions,
+  PatientMyIBDSurveys,
 };

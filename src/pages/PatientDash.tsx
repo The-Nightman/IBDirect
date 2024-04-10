@@ -1,30 +1,31 @@
 import { useEffect, useState } from "react";
-import { userStaffDetails } from "../api/getStaffUserDetails";
 import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
-import { ExitToAppOutlined, MenuOpenOutlined, MenuOutlined } from "@mui/icons-material";
+import { patientUserDetailsBrief } from "../api/getPatientUserDetailsBrief";
+import { parseDiagnosis } from "../utils/parseDiagnosis";
+import {
+  ExitToAppOutlined,
+  MenuOpenOutlined,
+  MenuOutlined,
+} from "@mui/icons-material";
 
 interface userData {
   name: string;
-  practice: string;
-  role: string;
-  speciality: string;
-  staffId: number | null;
+  diagnosis: string;
+  hospital: string;
 }
 
-const StaffDash = () => {
+const PatientDash = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [userData, setUserData] = useState<userData>({
     name: "",
-    practice: "",
-    role: "",
-    speciality: "",
-    staffId: null,
+    diagnosis: "",
+    hospital: "",
   });
   const { user, logout } = useAuth();
 
   useEffect(() => {
-    userStaffDetails(user.userID)
+    patientUserDetailsBrief(user.userID)
       .then((res) => {
         setUserData(res.data);
       })
@@ -36,13 +37,13 @@ const StaffDash = () => {
   return (
     <>
       <section className="flex flex-1 flex-col justify-center">
-        <aside className="flex flex-nowrap flex-col md:flex-row justify-between text-white md:min-h-[5rem] h-fit py-1 px-2 bg-gradient-to-br from-sky-700 to-blue-400">
-          <h2 className="text-3xl">{userData.name}</h2>
-          <div className="flex flex-col pt-2 md:pl-8 md:items-end md:flex-row">
-            <p className="md:pr-4">
-              {userData.speciality} {userData.role}
-            </p>
-            <p>{userData.practice}</p>
+        <aside className="flex flex-nowrap flex-col  justify-between text-white md:min-h-[5rem] h-fit py-1 px-2 bg-gradient-to-br from-sky-700 to-blue-400">
+          <h2 className="text-3xl">
+            {userData.name.split(",").reverse().join(" ")}
+          </h2>
+          <div className="flex flex-col pt-2 md:flex-row md:justify-between md:text-lg">
+            <p>{parseDiagnosis(userData.diagnosis)}</p>
+            <p>{userData.hospital}</p>
           </div>
         </aside>
         <div className="md:grid grid-cols-[max-content_auto] h-full">
@@ -71,25 +72,25 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/patients"}
+                  to={"/patient-portal/dashboard"}
                 >
-                  Patients
+                  Home
                 </Link>
               </li>
               <li>
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/staff"}
+                  to={"/patient-portal/dashboard/my-details"}
                 >
-                  Staff
+                  My Details
                 </Link>
               </li>
               <li>
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/my-appointments"}
+                  to={"/patient-portal/dashboard/my-appointments"}
                 >
                   My Appointments
                 </Link>
@@ -98,9 +99,18 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/mydetails"}
+                  to={"/patient-portal/dashboard/my-prescriptions"}
                 >
-                  My Personal Details
+                  My Prescriptions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
+                  draggable="false"
+                  to={"/patient-portal/dashboard/ibd-surveys"}
+                >
+                  IBD Surveys
                 </Link>
               </li>
               <li>
@@ -123,4 +133,4 @@ const StaffDash = () => {
   );
 };
 
-export default StaffDash;
+export default PatientDash;
