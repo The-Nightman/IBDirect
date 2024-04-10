@@ -76,6 +76,7 @@ const StaffDash = () => {
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
                   to={"/dashboard"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Home
                 </Link>
@@ -85,6 +86,7 @@ const StaffDash = () => {
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
                   to={"/dashboard/patients"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Patients
                 </Link>
@@ -103,6 +105,7 @@ const StaffDash = () => {
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
                   to={"/dashboard/my-appointments"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   My Appointments
                 </Link>
@@ -111,7 +114,8 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/mydetails"}
+                  to={"/dashboard/my-details"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   My Personal Details
                 </Link>
