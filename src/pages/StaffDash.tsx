@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { userStaffDetails } from "../api/getStaffUserDetails";
 import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
-import { ExitToAppOutlined, MenuOpenOutlined, MenuOutlined } from "@mui/icons-material";
+import {
+  ExitToAppOutlined,
+  MenuOpenOutlined,
+  MenuOutlined,
+} from "@mui/icons-material";
 
 interface userData {
   name: string;
@@ -67,6 +71,15 @@ const StaffDash = () => {
               Dashboard Menu
             </h3>
             <ul className="list-none text-lg space-y-4">
+              <li>
+                <Link
+                  className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
+                  draggable="false"
+                  to={"/dashboard"}
+                >
+                  Home
+                </Link>
+              </li>
               <li>
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
