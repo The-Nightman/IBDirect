@@ -3,7 +3,7 @@ import { Appointment } from "../../interfaces/Appointment";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { Toast, SpinnerStatus, PatientAppointmentCard } from "..";
 import { useAuth } from "../../context/AuthContext";
-import { getPatientMyAppointments } from "../../api/getPatientMyAppointments";
+import { getMyAppointmentsPatient } from "../../api/getMyAppointmentsPatient";
 
 const PatientMyAppointments = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -16,7 +16,7 @@ const PatientMyAppointments = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    getPatientMyAppointments(user.userID)
+    getMyAppointmentsPatient(user.userID)
       .then((res) => {
         setAppoinments(res.data);
         setLoading(false);
