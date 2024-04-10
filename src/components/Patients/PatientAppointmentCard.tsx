@@ -44,9 +44,9 @@ const PatientAppointmentCard = ({
 
   return (
     <>
-      <section
+      <article
         className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm"
-        aria-label={`Patient Appointment Card ${parseIsoToDateTime(appointment.dateTime)}`}
+        aria-label="Patient Appointment Card"
         tabIndex={0}
       >
         <div>
@@ -81,7 +81,7 @@ const PatientAppointmentCard = ({
             </button>
           ) : null}
         </div>
-      </section>
+      </article>
       <PatientAppDetailsModal
         appointment={appointment}
         detailsModalState={detailsModalState}

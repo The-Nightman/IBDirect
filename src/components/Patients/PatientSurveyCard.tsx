@@ -75,7 +75,7 @@ const PatientSurveyCard = ({
 
   return (
     <>
-      <section
+      <article
         className={`w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 ${controlScoreSeverityColor()} text-sm`}
         tabIndex={0}
         aria-label="Patient IBD Survey Card"
@@ -122,7 +122,7 @@ const PatientSurveyCard = ({
             </button>
           )}
         </div>
-      </section>
+      </article>
       <PatientSurveyDetailsModal
         survey={survey}
         detailsModalState={detailsModalState}

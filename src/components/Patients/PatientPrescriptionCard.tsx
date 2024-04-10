@@ -25,7 +25,7 @@ const PatientPrescriptionCard = ({
 
   return (
     <>
-      <section
+      <article
         className={`w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 ${
           prescription.cancelled! ? "bg-red-200" : "bg-slate-200"
         } text-sm`}
@@ -77,7 +77,7 @@ const PatientPrescriptionCard = ({
             </button>
           ) : null}
         </div>
-      </section>
+      </article>
       <PatientPrescriptDetailsModal
         prescription={prescription}
         detailsModalState={detailsModalState}
