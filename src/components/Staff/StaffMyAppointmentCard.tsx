@@ -14,7 +14,7 @@ const StaffMyAppointmentCard = ({
 
   return (
     <>
-      <div className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm">
+      <article className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm">
         <div>
           <div className="flex flex-wrap max-md:flex-col justify-between gap-x-8 text-lg font-semibold">
             <p>{parseIsoToDateTime(appointment.dateTime)}</p>
@@ -39,7 +39,7 @@ const StaffMyAppointmentCard = ({
             <OpenInNewOutlined fontSize="inherit" />
           </button>
         </div>
-      </div>
+      </article>
     </>
   );
 };
