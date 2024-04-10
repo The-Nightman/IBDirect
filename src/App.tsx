@@ -14,6 +14,7 @@ import {
   PatientMyIBDSurveys,
   StaffMyDashboardHome,
   StaffMyPersonalDetails,
+  StaffDashboardStaff,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
@@ -52,10 +53,7 @@ function App() {
               />
             </Route>
             <Route path="/dashboard" element={<StaffDash />}>
-            <Route
-                index
-                element={<StaffMyDashboardHome />}
-              />
+              <Route index element={<StaffMyDashboardHome />} />
               <Route
                 path="/dashboard/patients"
                 element={<StaffDashboardPatients />}
@@ -63,6 +61,10 @@ function App() {
               <Route
                 path="/dashboard/patients/details/:id"
                 element={<PatientDetailsView />}
+              />
+              <Route
+                path="/dashboard/staff"
+                element={<StaffDashboardStaff />}
               />
               <Route
                 path="/dashboard/my-appointments"
