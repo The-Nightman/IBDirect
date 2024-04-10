@@ -6,14 +6,19 @@ import { PatientPrescriptDetailsModal, PatientPrescriptEditModal } from "..";
 
 interface PatientPrescriptionCardProps {
   prescription: Prescription;
-  updatePrescriptionsState: (prescription: Prescription, index: number) => void;
+  updatePrescriptionsState?: (
+    prescription: Prescription,
+    index: number
+  ) => void;
   index: number;
+  patientUser?: boolean;
 }
 
 const PatientPrescriptionCard = ({
   prescription,
   updatePrescriptionsState,
   index,
+  patientUser,
 }: PatientPrescriptionCardProps) => {
   const [detailsModalState, setDetailsModalState] = useState<boolean>(false);
   const [editModalState, setEditModalState] = useState<boolean>(false);
@@ -61,14 +66,16 @@ const PatientPrescriptionCard = ({
           >
             <PageviewOutlined fontSize="inherit" />
           </button>
-          <button
-            className="w-9"
-            aria-label={`Edit Prescription`}
-            title="Edit Prescription"
-            onClick={() => setEditModalState(true)}
-          >
-            <EditOutlined fontSize="large" />
-          </button>
+          {!patientUser ? (
+            <button
+              className="w-9"
+              aria-label={`Edit Prescription`}
+              title="Edit Prescription"
+              onClick={() => setEditModalState(true)}
+            >
+              <EditOutlined fontSize="large" />
+            </button>
+          ) : null}
         </div>
       </section>
       <PatientPrescriptDetailsModal
@@ -80,7 +87,7 @@ const PatientPrescriptionCard = ({
         prescription={prescription}
         editModalState={editModalState}
         setEditModalState={setEditModalState}
-        updatePrescriptionsState={updatePrescriptionsState}
+        updatePrescriptionsState={updatePrescriptionsState!}
         index={index}
       />
     </>
