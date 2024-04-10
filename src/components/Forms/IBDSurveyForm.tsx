@@ -8,11 +8,17 @@ interface IBDSurveyFormProps {
   setParentFormData?: (formData: Survey) => void;
 }
 
-const IBDSurveyForm = ({ survey, patientUserEdit, setParentFormData }: IBDSurveyFormProps) => {
+const IBDSurveyForm = ({
+  survey,
+  patientUserEdit,
+  setParentFormData,
+}: IBDSurveyFormProps) => {
   const [formData, setFormData] = useState<Survey>(survey);
 
   useEffect(() => {
-    setParentFormData!(formData);
+    if (setParentFormData) {
+      setParentFormData(formData);
+    }
   }, [formData]);
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
