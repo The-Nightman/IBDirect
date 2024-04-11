@@ -3,7 +3,7 @@ import {
   LoginSwitchBoard,
   PatientLogin,
   StaffLogin,
-  PatientDetailsView,
+  PatientDetailsStaffView,
   PrivateRoutes,
   StaffDashboardPatients,
   StaffMyAppointments,
@@ -61,7 +61,7 @@ function App() {
               />
               <Route
                 path="/dashboard/patients/details/:id"
-                element={<PatientDetailsView />}
+                element={<PatientDetailsStaffView />}
               />
               <Route
                 path="/dashboard/staff"

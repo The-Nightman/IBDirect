@@ -30,7 +30,7 @@ import { useUserDetails } from "../../context/userDetailsContext";
 import { Survey } from "../../interfaces/Survey";
 import { parseDiagnosis } from "../../utils/parseDiagnosis";
 
-const PatientDetailsView = () => {
+const PatientDetailsStaffView = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const [notesError, setNotesError] = useState<ErrorState>({
     state: false,
@@ -671,4 +671,4 @@ const PatientDetailsView = () => {
   );
 };
 
-export default PatientDetailsView;
+export default PatientDetailsStaffView;
