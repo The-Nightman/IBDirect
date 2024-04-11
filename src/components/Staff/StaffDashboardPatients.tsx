@@ -44,11 +44,14 @@ const StaffDashboardPatients = () => {
     <>
       {loading && <SpinnerStatus />}
       <section className="flex flex-col">
-        <div className="grid grid-cols-[25%_20%_auto_20%_10%] min-h-10 px-4 lg:text-lg border-b border-slate-700 items-center">
+        <div className="grid grid-cols-[35%_25%_25%_15%] md:grid-cols-[25%_20%_auto_20%_10%] min-h-10 pl-1 md:pl-2 lg:text-lg border-b border-slate-700 text-center items-center">
           <p>Name</p>
-          <p>Date Of Birth</p>
+          <p>
+            <span className="md:hidden">DOB</span>
+            <span className="max-md:sr-only">Date Of Birth</span>
+          </p>
           <p>Diagnosis</p>
-          <p>Stoma</p>
+          <p className="hidden md:inline">Stoma</p>
           <p>Details</p>
         </div>
         <ul>
