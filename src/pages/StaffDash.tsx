@@ -66,7 +66,7 @@ const StaffDash = () => {
           <nav
             className={`${
               menuOpen ? "max-md:fixed" : "max-md:hidden"
-            } md:flex flex-col flex-1 max-md:h-full top-0 max-md:pt-24 p-5 bg-gray-200 border-slate-400 border-r z-10 `}
+            } md:flex flex-col flex-1 max-md:h-full top-0 max-md:pt-24 p-5 bg-gray-200 border-slate-400 border-r z-10`}
             aria-labelledby="dashboardmenulabel"
           >
             <h3 className="text-2xl mb-6" id="dashboardmenulabel">
