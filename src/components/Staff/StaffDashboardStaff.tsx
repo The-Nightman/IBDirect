@@ -6,9 +6,11 @@ import { ErrorState } from "../../interfaces/ErrorState";
 import { Toast, SpinnerStatus, StaffMemberCard } from "..";
 import useDebounce from "../../hooks/useDebounce";
 import { getStaffByName } from "../../api/getStaffByName";
+import { Spinner } from "flowbite-react";
 
 const StaffDashboardStaff = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
   const [myColleagues, setMyColleagues] = useState<StaffDetails[]>([]);
   const [searchResults, setSearchResults] = useState<StaffDetails[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -41,14 +43,17 @@ const StaffDashboardStaff = () => {
 
   useEffect(() => {
     if (!debouncedSearch) {
+      setSearchLoading(false);
       setSearchResults([]);
       return;
     }
     getStaffByName(debouncedSearch)
       .then((res) => {
+        setSearchLoading(false);
         setSearchResults(res.data);
       })
       .catch((err) => {
+        setSearchLoading(false);
         if (err.response === undefined) {
           setToastState({ ...toastState, state: true });
         } else {
@@ -60,6 +65,11 @@ const StaffDashboardStaff = () => {
         }
       });
   }, [debouncedSearch]);
+
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setSearchLoading(true);
+  };
 
   const closeToastState = () => {
     setToastState({ state: false, message: "", color: "failure" });
@@ -81,14 +91,23 @@ const StaffDashboardStaff = () => {
           <section className="w-full">
             <label>
               Search for a Staff Member
-              <div className="flex flex-col">
+              <div className="relative flex flex-col z-0">
                 <input
                   type="text"
                   placeholder="Search for a Staff Member"
                   className="w-full p-2 mb-2 border border-slate-500"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => handleSearchInput(e)}
                 />
+                {searchLoading && (
+                  <div
+                    role="status"
+                    className="absolute h-[2.6rem] right-1 top-0 animate-pulse flex items-center justify-center"
+                  >
+                    <Spinner size={"lg"} />
+                    <span className="sr-only">Loading search results</span>
+                  </div>
+                )}
               </div>
             </label>
             <ol className="mb-8 border-x border-t border-slate-500">
