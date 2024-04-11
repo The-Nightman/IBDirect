@@ -64,7 +64,7 @@ const StaffDash = () => {
           <nav
             className={`${
               menuOpen ? "absolute" : "hidden"
-            } max-md:h-[calc(100%_-_12.3rem)] md:flex flex-col flex-1 p-5 bg-gray-200 border-slate-400 border-r`}
+            } max-md:h-[calc(100%_-_12.3rem)] md:flex flex-col flex-1 p-5 bg-gray-200 border-slate-400 border-r z-10`}
             aria-labelledby="dashboardmenulabel"
           >
             <h3 className="text-2xl mb-6" id="dashboardmenulabel">
@@ -96,6 +96,7 @@ const StaffDash = () => {
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
                   to={"/dashboard/staff"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Staff
                 </Link>
