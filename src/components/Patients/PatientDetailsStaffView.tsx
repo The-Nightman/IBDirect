@@ -29,8 +29,20 @@ import { Prescription } from "../../interfaces/Prescription";
 import { useUserDetails } from "../../context/userDetailsContext";
 import { Survey } from "../../interfaces/Survey";
 import { parseDiagnosis } from "../../utils/parseDiagnosis";
+import { StaffDetails } from "../../interfaces/StaffDetails";
+
+interface PatientDetailsEditData {
+  name: string;
+  address: string;
+  diagnosis: string;
+  stoma: boolean;
+  consultantId: number;
+  nurseId: number;
+  stomaNurseId: number | null;
+}
 
 const PatientDetailsStaffView = () => {
+  const { userDetails } = useUserDetails();
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const [notesError, setNotesError] = useState<ErrorState>({
     state: false,
@@ -40,6 +52,10 @@ const PatientDetailsStaffView = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
   const [editNotes, setEditNotes] = useState<boolean>(false);
+  const [editDetails, setEditDetails] = useState<boolean>(false);
+  const [editDetailsData, setEditDetailsData] =
+    useState<PatientDetailsEditData | null>(null);
+  const [hospitalStaff, setHospitalStaff] = useState<StaffDetails[]>([userDetails!]);
   const [notes, setNotes] = useState<string>("");
   const [newAppointmentModalState, setNewAppointmentModalState] =
     useState<boolean>(false);
@@ -49,19 +65,18 @@ const PatientDetailsStaffView = () => {
     useState<boolean>(false);
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
-  const { userDetails } = useUserDetails();
   const navigate = useNavigate();
 
-  if (id === undefined) {
-    return null;
-  }
-
   useEffect(() => {
-    setError({ state: false, message: "" });
+    if (isNaN(parseInt(id!))) {
+      navigate(-1);
+      return;
+    }
     getPatientDetails(id)
       .then((res) => {
         setLoading(false);
         setPatientData(res.data);
+        setNotes(res.data.notes ?? "");
       })
       .catch((err) => {
         if (err.response === undefined) {
@@ -74,7 +89,17 @@ const PatientDetailsStaffView = () => {
   }, [id]);
 
   useEffect(() => {
-    setNotes(patientData?.notes ?? "");
+    if (patientData) {
+      setEditDetailsData({
+        name: patientData.name,
+        address: patientData.address,
+        diagnosis: patientData.diagnosis,
+        stoma: patientData.stoma,
+        consultantId: patientData.consultant.staffId,
+        nurseId: patientData.nurse.staffId,
+        stomaNurseId: patientData.stomaNurse?.staffId ?? null,
+      });
+    }
   }, [patientData]);
 
   useEffect(() => {
@@ -105,6 +130,7 @@ const PatientDetailsStaffView = () => {
     updatePatientNotes(id, notes)
       .then((_res) => {
         setEditNotes(false);
+        setPatientData({ ...patientData!, notes: notes });
         setNotesError({
           state: true,
           message: "Notes updated successfully",
@@ -297,13 +323,15 @@ const PatientDetailsStaffView = () => {
               <section>
                 <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
                 <div className="max-w-[30rem] flex flex-col mb-2 md:justify-between md:flex-row">
-                  <p className="text-xl">Diagnosis: {parseDiagnosis(patientData?.diagnosis)}</p>
+                  <p className="text-xl">
+                    Diagnosis: {parseDiagnosis(patientData?.diagnosis)}
+                  </p>
                   <p className="text-xl">
                     Stoma: {parseStoma(patientData?.stoma)}
                   </p>
                 </div>
                 <p className="mb-4">
-                  Date of diagnosis:
+                  Date of diagnosis:{" "}
                   <time>
                     {patientData &&
                     typeof patientData.diagnosisDate === "string"
