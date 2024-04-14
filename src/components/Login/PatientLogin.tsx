@@ -59,7 +59,7 @@ const PatientLogin = () => {
     patientLoginAPI(loginObj)
       .then((res) => {
         login(res.data.token);
-        navigate("/patient-portal/dashboard");
+        navigate("/portal/patient/dashboard");
       })
       .catch((err) => {
         if (err.response === undefined) {

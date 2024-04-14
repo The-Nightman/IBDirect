@@ -6,7 +6,7 @@ import DOBForm from "./Forms/DOBform.tsx";
 import PrivateRoutes from "./utility/PrivateRoutes.tsx";
 import StaffDashboardPatients from "./Staff/StaffDashboardPatients.tsx";
 import PatientCard from "./Patients/PatientCard.tsx";
-import PatientDetailsView from "./Patients/PatientDetailsView.tsx";
+import PatientDetailsStaffView from "./Patients/PatientDetailsStaffView.tsx";
 import Toast from "./UX/Toast.tsx";
 import SpinnerStatus from "./UX/Spinner.tsx";
 import SkeletonPatientCard from "./UX/SkeletonPatientCard.tsx";
@@ -29,6 +29,11 @@ import PatientMyDetails from "./Patients/PatientMyDetails.tsx";
 import PatientMyAppointments from "./Patients/PatientMyAppointments.tsx";
 import PatientMyPrescriptions from "./Patients/PatientMyPrescriptions.tsx";
 import PatientMyIBDSurveys from "./Patients/PatientMyIBDSurveys.tsx";
+import StaffMyDashboardHome from "./Staff/StaffMyDashboardHome.tsx";
+import StaffMyPersonalDetails from "./Staff/StaffMyPersonalDetails.tsx";
+import StaffDashboardStaff from "./Staff/StaffDashboardStaff.tsx";
+import StaffMemberCard from "./Staff/StaffMemberCard.tsx";
+import StaffMemberDetails from "./Staff/StaffMemberDetails.tsx";
 
 export {
   Header,
@@ -39,7 +44,7 @@ export {
   PrivateRoutes,
   StaffDashboardPatients,
   PatientCard,
-  PatientDetailsView,
+  PatientDetailsStaffView,
   Toast,
   SpinnerStatus,
   SkeletonPatientCard,
@@ -62,4 +67,9 @@ export {
   PatientMyAppointments,
   PatientMyPrescriptions,
   PatientMyIBDSurveys,
+  StaffMyDashboardHome,
+  StaffMyPersonalDetails,
+  StaffDashboardStaff,
+  StaffMemberCard,
+  StaffMemberDetails,
 };

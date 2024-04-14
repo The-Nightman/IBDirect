@@ -48,7 +48,9 @@ const PatientDash = () => {
         </aside>
         <div className="md:grid grid-cols-[max-content_auto] h-full">
           <button
-            className="absolute top-0 md:hidden text-white"
+            className={`${
+              menuOpen ? "fixed text-stone-900" : "absolute text-white"
+            } top-0 md:hidden z-20`}
             aria-label={menuOpen ? "Close Menu" : "Open Menu"}
             onClick={() => setMenuOpen(!menuOpen)}
           >
@@ -60,8 +62,8 @@ const PatientDash = () => {
           </button>
           <nav
             className={`${
-              menuOpen ? "absolute" : "hidden"
-            } max-md:h-[calc(100%_-_12.3rem)] md:flex flex-col flex-1 p-5 bg-gray-200 border-slate-400 border-r`}
+              menuOpen ? "max-md:fixed" : "max-md:hidden"
+            } md:flex flex-col flex-1 max-md:h-full top-0 max-md:pt-24 p-5 bg-gray-200 border-slate-400 border-r z-10`}
             aria-labelledby="dashboardmenulabel"
           >
             <h3 className="text-2xl mb-6" id="dashboardmenulabel">
@@ -72,7 +74,8 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard"}
+                  to={"/portal/patient/dashboard"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Home
                 </Link>
@@ -81,7 +84,8 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard/my-details"}
+                  to={"/portal/patient/dashboard/my-details"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   My Details
                 </Link>
@@ -90,7 +94,8 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard/my-appointments"}
+                  to={"/portal/patient/dashboard/my-appointments"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   My Appointments
                 </Link>
@@ -99,7 +104,8 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard/my-prescriptions"}
+                  to={"/portal/patient/dashboard/my-prescriptions"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   My Prescriptions
                 </Link>
@@ -108,14 +114,15 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard/ibd-surveys"}
+                  to={"/portal/patient/dashboard/ibd-surveys"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   IBD Surveys
                 </Link>
               </li>
               <li>
                 <button
-                  className="mt-64 md:mt-12 select-none hover:text-blue-700 hover:underline active:text-blue-900"
+                  className="mt-96 md:mt-12 select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   onClick={logout}
                 >
                   <ExitToAppOutlined className="mr-4" />

@@ -15,16 +15,19 @@ const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
   const navigate = useNavigate();
 
   const openPatientDetails = () => {
-    navigate(`/dashboard/patients/details/${id}`);
+    navigate(`/portal/staff/dashboard/patients/details/${id}`);
   };
 
   return (
     <>
-      <div className="grid grid-cols-[25%_20%_auto_20%_10%] min-h-[3.5rem] pl-1 pr-2 md:px-4 lg:text-xl items-center" tabIndex={0}>
+      <div
+        className="grid grid-cols-[35%_25%_25%_15%] md:grid-cols-[25%_20%_auto_20%_10%] min-h-[3.5rem] pl-1 md:pl-2 lg:text-xl items-center"
+        tabIndex={0}
+      >
         <p>{name}</p>
-        <time>{parseDate(dob, true)}</time>
-        <p className="text-center md:text-justify">{diagnosis}</p>
-        <p>Stoma: {parseStoma(stoma)}</p>
+        <time className="text-center">{parseDate(dob, true)}</time>
+        <p className="text-center">{diagnosis}</p>
+        <p className="hidden md:inline text-center">Stoma: {parseStoma(stoma)}</p>
         <button
           className="rounded-full w-10 place-self-center leading-none hover:bg-slate-300 hover:text-blue-600 active:bg-slate-400 active:text-blue-200"
           type="button"

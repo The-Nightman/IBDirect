@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { userStaffDetails } from "../api/getStaffUserDetails";
 import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
-import { ExitToAppOutlined, MenuOpenOutlined, MenuOutlined } from "@mui/icons-material";
+import {
+  ExitToAppOutlined,
+  MenuOpenOutlined,
+  MenuOutlined,
+} from "@mui/icons-material";
 
 interface userData {
   name: string;
@@ -47,7 +51,9 @@ const StaffDash = () => {
         </aside>
         <div className="md:grid grid-cols-[max-content_auto] h-full">
           <button
-            className="absolute top-0 md:hidden text-white"
+            className={`${
+              menuOpen ? "fixed text-stone-900" : "absolute text-white"
+            } top-0 md:hidden z-20`}
             aria-label={menuOpen ? "Close Menu" : "Open Menu"}
             onClick={() => setMenuOpen(!menuOpen)}
           >
@@ -59,8 +65,8 @@ const StaffDash = () => {
           </button>
           <nav
             className={`${
-              menuOpen ? "absolute" : "hidden"
-            } max-md:h-[calc(100%_-_12.3rem)] md:flex flex-col flex-1 p-5 bg-gray-200 border-slate-400 border-r`}
+              menuOpen ? "max-md:fixed" : "max-md:hidden"
+            } md:flex flex-col flex-1 max-md:h-full top-0 max-md:pt-24 p-5 bg-gray-200 border-slate-400 border-r z-10`}
             aria-labelledby="dashboardmenulabel"
           >
             <h3 className="text-2xl mb-6" id="dashboardmenulabel">
@@ -71,7 +77,18 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/patients"}
+                  to={"/portal/staff/dashboard"}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
+                  draggable="false"
+                  to={"/portal/staff/dashboard/patients"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Patients
                 </Link>
@@ -80,7 +97,8 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/staff"}
+                  to={"/portal/staff/dashboard/staff"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Staff
                 </Link>
@@ -89,7 +107,8 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/my-appointments"}
+                  to={"/portal/staff/dashboard/my-appointments"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   My Appointments
                 </Link>
@@ -98,14 +117,15 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/mydetails"}
+                  to={"/portal/staff/dashboard/my-details"}
+                  onClick={() => setMenuOpen(false)}
                 >
                   My Personal Details
                 </Link>
               </li>
               <li>
                 <button
-                  className="mt-64 md:mt-12 select-none hover:text-blue-700 hover:underline active:text-blue-900"
+                  className="mt-96 md:mt-12 select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   onClick={logout}
                 >
                   <ExitToAppOutlined className="mr-4" />

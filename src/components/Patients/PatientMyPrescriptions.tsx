@@ -42,7 +42,7 @@ const PatientMyPrescriptions = () => {
   return (
     <>
       {loading && <SpinnerStatus />}
-      <section className="flex flex-col lg:flex-row gap-8 p-4">
+      <section className="flex flex-col p-4">
         {toastState.state && (
           <Toast
             color={toastState.color || "failure"}
@@ -50,7 +50,7 @@ const PatientMyPrescriptions = () => {
             handleErrorState={closeToastState}
           />
         )}
-        <h3 className="border-b border-slate-400 mb-4">My Appointments</h3>
+        <h3 className="border-b border-slate-400 mb-4">My Prescriptions</h3>
         <section>
           <h4>Repeat Prescriptions</h4>
           <ol className="border-x border-t border-slate-500">

@@ -29,9 +29,28 @@ import { Prescription } from "../../interfaces/Prescription";
 import { useUserDetails } from "../../context/userDetailsContext";
 import { Survey } from "../../interfaces/Survey";
 import { parseDiagnosis } from "../../utils/parseDiagnosis";
+import { StaffDetails } from "../../interfaces/StaffDetails";
+import { getStaffMyColleagues } from "../../api/getStaffMyColleagues";
+import { updatePatientDetails } from "../../api/updatePatientDetails";
 
-const PatientDetailsView = () => {
-  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
+interface PatientDetailsEditData {
+  name: string;
+  address: string;
+  diagnosis: string;
+  diagnosisDate: string;
+  stoma: boolean;
+  consultantId: number;
+  nurseId: number;
+  stomaNurseId: number | null;
+}
+
+const PatientDetailsStaffView = () => {
+  const { userDetails } = useUserDetails();
+  const [error, setError] = useState<ErrorState>({
+    state: false,
+    message: "",
+    color: "failure",
+  });
   const [notesError, setNotesError] = useState<ErrorState>({
     state: false,
     message: "",
@@ -40,6 +59,12 @@ const PatientDetailsView = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
   const [editNotes, setEditNotes] = useState<boolean>(false);
+  const [editDetails, setEditDetails] = useState<boolean>(false);
+  const [editDetailsData, setEditDetailsData] =
+    useState<PatientDetailsEditData | null>(null);
+  const [hospitalStaff, setHospitalStaff] = useState<StaffDetails[]>([
+    userDetails!,
+  ]);
   const [notes, setNotes] = useState<string>("");
   const [newAppointmentModalState, setNewAppointmentModalState] =
     useState<boolean>(false);
@@ -49,19 +74,18 @@ const PatientDetailsView = () => {
     useState<boolean>(false);
   const notesAreaRef = useRef<HTMLTextAreaElement>(null);
   const { id } = useParams<{ id: string }>();
-  const { userDetails } = useUserDetails();
   const navigate = useNavigate();
 
-  if (id === undefined) {
-    return null;
-  }
-
   useEffect(() => {
-    setError({ state: false, message: "" });
+    if (isNaN(parseInt(id!))) {
+      navigate(-1);
+      return;
+    }
     getPatientDetails(id)
       .then((res) => {
         setLoading(false);
         setPatientData(res.data);
+        setNotes(res.data.notes ?? "");
       })
       .catch((err) => {
         if (err.response === undefined) {
@@ -74,7 +98,18 @@ const PatientDetailsView = () => {
   }, [id]);
 
   useEffect(() => {
-    setNotes(patientData?.notes ?? "");
+    if (patientData) {
+      setEditDetailsData({
+        name: patientData.name,
+        address: patientData.address,
+        diagnosis: patientData.diagnosis,
+        diagnosisDate: patientData.diagnosisDate,
+        stoma: patientData.stoma,
+        consultantId: patientData.consultant.staffId,
+        nurseId: patientData.nurse.staffId,
+        stomaNurseId: patientData.stomaNurse?.staffId ?? null,
+      });
+    }
   }, [patientData]);
 
   useEffect(() => {
@@ -105,6 +140,7 @@ const PatientDetailsView = () => {
     updatePatientNotes(id, notes)
       .then((_res) => {
         setEditNotes(false);
+        setPatientData({ ...patientData!, notes: notes });
         setNotesError({
           state: true,
           message: "Notes updated successfully",
@@ -122,6 +158,84 @@ const PatientDetailsView = () => {
           });
         }
       });
+  };
+
+  const handleEditDetails = () => {
+    const staffListUserRedacted = hospitalStaff.filter(
+      (staff) => staff.staffId !== userDetails?.staffId
+    );
+    if (!staffListUserRedacted.length) {
+      getStaffMyColleagues(userDetails!.staffId)
+        .then((res) => {
+          setHospitalStaff([...hospitalStaff, ...res.data]);
+        })
+        .catch((err) => {
+          if (err.response === undefined) {
+            setError({ ...error, state: true });
+          } else {
+            setError({ state: true, message: err.response.data });
+          }
+        });
+    }
+    if (editDetails && patientData) {
+      setEditDetailsData({
+        name: patientData.name,
+        address: patientData.address,
+        diagnosis: patientData.diagnosis,
+        diagnosisDate: patientData.diagnosisDate,
+        stoma: patientData.stoma,
+        consultantId: patientData.consultant.staffId,
+        nurseId: patientData.nurse.staffId,
+        stomaNurseId: patientData.stomaNurse?.staffId ?? null,
+      });
+    }
+    setEditDetails(!editDetails);
+  };
+
+  const handleSaveDetails = () => {
+    if (editDetailsData) {
+      updatePatientDetails(id, editDetailsData!)
+        .then((_res) => {
+          setPatientData((prev) => ({
+            ...prev!,
+            name: editDetailsData.name,
+            address: editDetailsData.address,
+            diagnosis: editDetailsData.diagnosis,
+            diagnosisDate: editDetailsData.diagnosisDate,
+            stoma: editDetailsData.stoma,
+            consultant: hospitalStaff.find(
+              (staff) =>
+                staff.staffId === editDetailsData.consultantId &&
+                staff.role === "Consultant"
+            )!,
+            nurse: hospitalStaff.find(
+              (staff) =>
+                staff.staffId === editDetailsData.nurseId &&
+                staff.role === "Nurse"
+            )!,
+            stomaNurse: editDetailsData.stomaNurseId
+              ? hospitalStaff.find(
+                  (staff) =>
+                    staff.staffId === editDetailsData.stomaNurseId &&
+                    staff.role === "Stoma Nurse"
+                )!
+              : null,
+          }));
+          setError({
+            state: true,
+            message: "Patient details updated successfully",
+            color: "success",
+          });
+          setEditDetails(false);
+        })
+        .catch((err) => {
+          if (err.response === undefined) {
+            setError({ ...error, state: true });
+          } else {
+            setError({ state: true, message: err.response.data });
+          }
+        });
+    }
   };
 
   const closeErrorState = () => {
@@ -249,7 +363,7 @@ const PatientDetailsView = () => {
             className="flex flex-row items-center gap-2 text-lg p-1 hover:bg-zinc-300 hover:text-blue-600 active:bg-slate-300 active:text-blue-700"
             type="button"
             aria-label="Back to Patients"
-            onClick={() => navigate("/dashboard/patients")}
+            onClick={() => navigate("/portal/staff/dashboard/patients")}
           >
             <ArrowBackOutlined />
             Back to Patients
@@ -257,16 +371,65 @@ const PatientDetailsView = () => {
         </section>
         {error.state && (
           <Toast
-            color={"failure"}
+            color={error.color || "failure"}
             message={error.message}
             handleErrorState={closeErrorState}
           />
         )}
         <section className="m-4">
+          {patientData && (
+            <div className="flex mb-4">
+              <button
+                className={`rounded-sm px-1 ${
+                  !editDetails
+                    ? "bg-zinc-400 hover:bg-zinc-700 active:bg-zinc-500"
+                    : "bg-red-400 hover:bg-red-700 active:bg-red-500"
+                } hover:text-white`}
+                onClick={handleEditDetails}
+                aria-description={
+                  editDetails
+                    ? "Cancel Edit Patient Details"
+                    : "Edit Patient Details"
+                }
+              >
+                {editDetails ? "Cancel Edit" : "Edit Details"}
+              </button>
+              {editDetails && (
+                <button
+                  className="ml-auto rounded-sm px-1 bg-blue-400 hover:bg-sky-700 active:bg-sky-500 hover:text-white"
+                  onClick={handleSaveDetails}
+                  aria-description="Save Patient Details"
+                >
+                  Save Details
+                </button>
+              )}
+            </div>
+          )}
           <section className="mb-10">
-            <h2 className="text-3xl font-bold mb-4">
-              {`${patientData?.name.split(",").reverse().join(" ")}`}
-            </h2>
+            {editDetails ? (
+              <label className="flex flex-col">
+                <span className="flex flex-row">
+                  Name:<span aria-hidden>(Last name, First name format)</span>
+                </span>
+                <input
+                  type="text"
+                  className="text-2xl font-bold mb-4"
+                  aria-description="Patient Name in Last name comma First name format"
+                  autoComplete="off"
+                  defaultValue={editDetailsData?.name}
+                  onChange={(e) =>
+                    setEditDetailsData({
+                      ...editDetailsData!,
+                      name: e.target.value,
+                    })
+                  }
+                />
+              </label>
+            ) : (
+              <h2 className="text-3xl font-bold mb-4">
+                {`${patientData?.name.split(",").reverse().join(" ")}`}
+              </h2>
+            )}
             <div className="w-72 flex flex-col flex-wrap gap-6 md:flex-row">
               <div className="flex gap-2 mb-1">
                 <PermContactCalendarOutlined />
@@ -277,12 +440,30 @@ const PatientDetailsView = () => {
                 </time>
               </div>
               <p className="mb-1 text-lg">Sex: {patientData?.sex}</p>
-              <div className="w-60 flex gap-2 mb-1">
-                <HomeOutlined />
-                <p className="text-lg whitespace-pre-line">
-                  Address: {patientData?.address}
-                </p>
-              </div>
+              {editDetails ? (
+                <label className="flex flex-col">
+                  Address:
+                  <input
+                    type="text"
+                    aria-description="Patient Address"
+                    autoComplete="off"
+                    defaultValue={editDetailsData?.address}
+                    onChange={(e) =>
+                      setEditDetailsData({
+                        ...editDetailsData!,
+                        address: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+              ) : (
+                <div className="w-60 flex gap-2 mb-1">
+                  <HomeOutlined />
+                  <p className="text-lg text-pretty">
+                    Address: {patientData?.address}
+                  </p>
+                </div>
+              )}
             </div>
           </section>
           <TabsComponent
@@ -297,36 +478,182 @@ const PatientDetailsView = () => {
               <section>
                 <h3 className="border-b border-slate-400 mb-4">Care Notes</h3>
                 <div className="max-w-[30rem] flex flex-col mb-2 md:justify-between md:flex-row">
-                  <p className="text-xl">Diagnosis: {parseDiagnosis(patientData?.diagnosis)}</p>
-                  <p className="text-xl">
-                    Stoma: {parseStoma(patientData?.stoma)}
-                  </p>
+                  {editDetails ? (
+                    <>
+                      <label className="flex flex-col mb-4">
+                        Diagnosis:
+                        <select
+                          aria-description="Patient Diagnosis"
+                          defaultValue={editDetailsData?.diagnosis}
+                          onChange={(e) =>
+                            setEditDetailsData({
+                              ...editDetailsData!,
+                              diagnosis: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="CD">Crohn's Disease</option>
+                          <option value="UC">Ulcerative Colitis</option>
+                          <option value="IBDU">IBD Unclassified</option>
+                          <option value="MC">Microscopic Colitis</option>
+                        </select>
+                      </label>
+                      <label className="flex flex-col mb-4">
+                        Stoma:
+                        <select
+                          aria-description="Does the patient have a stoma?"
+                          defaultValue={editDetailsData?.stoma.toString()}
+                          onChange={(e) =>
+                            setEditDetailsData({
+                              ...editDetailsData!,
+                              stoma: e.target.value === "true",
+                            })
+                          }
+                        >
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+                        </select>
+                      </label>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-xl">
+                        Diagnosis: {parseDiagnosis(patientData?.diagnosis)}
+                      </p>
+                      <p className="text-xl">
+                        Stoma: {parseStoma(patientData?.stoma)}
+                      </p>
+                    </>
+                  )}
                 </div>
-                <p className="mb-4">
-                  Date of diagnosis:
-                  <time>
-                    {patientData &&
-                    typeof patientData.diagnosisDate === "string"
-                      ? parseDate(patientData.diagnosisDate)
-                      : null}
-                  </time>
-                </p>
+                {editDetails ? (
+                  <label>
+                    Date Of Diagnosis:
+                    <input
+                      className="flex flex-col mb-4 invalid:bg-red-500"
+                      type="text"
+                      aria-description="Date of Diagnosis in Day Day / Month Month / Full Year format"
+                      value={parseDate(editDetailsData?.diagnosisDate)}
+                      minLength={10}
+                      maxLength={10}
+                      pattern="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19|20)\d\d$"
+                      autoComplete="off"
+                      placeholder="DD/MM/YYYY"
+                      onChange={(e) =>
+                        setEditDetailsData({
+                          ...editDetailsData!,
+                          diagnosisDate: e.target.value
+                            .split("/")
+                            .reverse()
+                            .join("-"),
+                        })
+                      }
+                    />
+                  </label>
+                ) : (
+                  <p className="mb-4">
+                    Date of diagnosis:{" "}
+                    <time>
+                      {patientData &&
+                      typeof patientData.diagnosisDate === "string"
+                        ? parseDate(patientData.diagnosisDate)
+                        : "ERROR"}
+                    </time>
+                  </p>
+                )}
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2">
                     <LocalHospitalOutlined />
                     <p>{patientData?.hospital}</p>
                   </div>
-                  <section className="md:flex-row md:columns-2 ">
-                    <p>Consultant: {patientData?.consultant.name}</p>
-                    <p>IBD Nurse: {patientData?.nurse.name}</p>
-                    <p>
-                      Stoma Care Nurse:{" "}
-                      {patientData?.stomaNurse?.name != null
-                        ? patientData?.stomaNurse?.name
-                        : "N/A"}
-                    </p>
-                    <p>GP: {patientData?.genpract.name}</p>
-                  </section>
+                  {editDetails ? (
+                    <section className="md:flex-row md:columns-2 ">
+                      <label className="flex flex-col mb-4">
+                        Consultant:
+                        <select
+                          aria-description="Consultant"
+                          defaultValue={editDetailsData?.consultantId}
+                          onChange={(e) =>
+                            setEditDetailsData({
+                              ...editDetailsData!,
+                              consultantId: parseInt(e.target.value),
+                            })
+                          }
+                        >
+                          {hospitalStaff
+                            .filter((staff) => staff.role === "Consultant")
+                            .map((staff) => (
+                              <option key={staff.staffId} value={staff.staffId}>
+                                {staff.name} - {staff.role}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <label className="flex flex-col mb-4">
+                        IBD Nurse:
+                        <select
+                          aria-description="IBD Nurse"
+                          defaultValue={editDetailsData?.nurseId}
+                          onChange={(e) =>
+                            setEditDetailsData({
+                              ...editDetailsData!,
+                              nurseId: parseInt(e.target.value),
+                            })
+                          }
+                        >
+                          {hospitalStaff
+                            .filter((staff) => staff.role === "Nurse")
+                            .map((staff) => (
+                              <option key={staff.staffId} value={staff.staffId}>
+                                {staff.name} - {staff.role}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <label className="flex flex-col mb-4">
+                        Stoma Care Nurse:
+                        <select
+                          aria-description="Stoma Care Nurse"
+                          value={editDetailsData?.stomaNurseId ?? "null"}
+                          onChange={(e) =>
+                            setEditDetailsData({
+                              ...editDetailsData!,
+                              stomaNurseId:
+                                e.target.value === "null"
+                                  ? null
+                                  : parseInt(e.target.value),
+                            })
+                          }
+                        >
+                          {hospitalStaff
+                            .filter((staff) => staff.role === "Stoma Nurse")
+                            .map((staff) => (
+                              <option key={staff.staffId} value={staff.staffId}>
+                                {staff.name} - {staff.role}
+                              </option>
+                            ))}
+                          <option value={"null"}>N/A</option>
+                        </select>
+                        <span className="text-xs">
+                          Note: Stoma Nurse is not required if the patient does
+                          not have or is not being prepped for a stoma
+                        </span>
+                      </label>
+                      <p>GP: {patientData?.genpract.name}</p>
+                    </section>
+                  ) : (
+                    <section className="md:flex-row md:columns-2 ">
+                      <p>Consultant: {patientData?.consultant.name}</p>
+                      <p>IBD Nurse: {patientData?.nurse.name}</p>
+                      <p>
+                        Stoma Care Nurse:{" "}
+                        {patientData?.stomaNurse?.name != null
+                          ? patientData?.stomaNurse?.name
+                          : "N/A"}
+                      </p>
+                      <p>GP: {patientData?.genpract.name}</p>
+                    </section>
+                  )}
                 </div>
                 <section className="my-4">
                   {notesError.state && (
@@ -671,4 +998,4 @@ const PatientDetailsView = () => {
   );
 };
 
-export default PatientDetailsView;
+export default PatientDetailsStaffView;

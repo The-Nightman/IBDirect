@@ -14,7 +14,11 @@ const StaffMyAppointmentCard = ({
 
   return (
     <>
-      <div className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm">
+      <article
+        className="w-full p-1 grid grid-cols-[auto_min-content] gap-3 border-b border-slate-600 bg-slate-200 text-sm"
+        tabIndex={0}
+        aria-label="My Appointment Card"
+      >
         <div>
           <div className="flex flex-wrap max-md:flex-col justify-between gap-x-8 text-lg font-semibold">
             <p>{parseIsoToDateTime(appointment.dateTime)}</p>
@@ -32,14 +36,14 @@ const StaffMyAppointmentCard = ({
             title={`Open Appointment Details ${appointment.patientName}`}
             onClick={() =>
               navigate(
-                `/dashboard/patients/details/${appointment.patientId}?edit-appointment=${appointment.id}`
+                `/portal/staff/dashboard/patients/details/${appointment.patientId}?edit-appointment=${appointment.id}`
               )
             }
           >
             <OpenInNewOutlined fontSize="inherit" />
           </button>
         </div>
-      </div>
+      </article>
     </>
   );
 };
