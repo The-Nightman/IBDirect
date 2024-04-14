@@ -31,6 +31,7 @@ import { Survey } from "../../interfaces/Survey";
 import { parseDiagnosis } from "../../utils/parseDiagnosis";
 import { StaffDetails } from "../../interfaces/StaffDetails";
 import { getStaffMyColleagues } from "../../api/getStaffMyColleagues";
+import { updatePatientDetails } from "../../api/updatePatientDetails";
 
 interface PatientDetailsEditData {
   name: string;
@@ -45,7 +46,11 @@ interface PatientDetailsEditData {
 
 const PatientDetailsStaffView = () => {
   const { userDetails } = useUserDetails();
-  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
+  const [error, setError] = useState<ErrorState>({
+    state: false,
+    message: "",
+    color: "failure",
+  });
   const [notesError, setNotesError] = useState<ErrorState>({
     state: false,
     message: "",
@@ -187,7 +192,51 @@ const PatientDetailsStaffView = () => {
     setEditDetails(!editDetails);
   };
 
-  const handleSaveDetails = () => {};
+  const handleSaveDetails = () => {
+    if (editDetailsData) {
+      updatePatientDetails(id, editDetailsData!)
+        .then((_res) => {
+          setPatientData((prev) => ({
+            ...prev!,
+            name: editDetailsData.name,
+            address: editDetailsData.address,
+            diagnosis: editDetailsData.diagnosis,
+            diagnosisDate: editDetailsData.diagnosisDate,
+            stoma: editDetailsData.stoma,
+            consultant: hospitalStaff.find(
+              (staff) =>
+                staff.staffId === editDetailsData.consultantId &&
+                staff.role === "Consultant"
+            )!,
+            nurse: hospitalStaff.find(
+              (staff) =>
+                staff.staffId === editDetailsData.nurseId &&
+                staff.role === "Nurse"
+            )!,
+            stomaNurse: editDetailsData.stomaNurseId
+              ? hospitalStaff.find(
+                  (staff) =>
+                    staff.staffId === editDetailsData.stomaNurseId &&
+                    staff.role === "Stoma Nurse"
+                )!
+              : null,
+          }));
+          setError({
+            state: true,
+            message: "Patient details updated successfully",
+            color: "success",
+          });
+          setEditDetails(false);
+        })
+        .catch((err) => {
+          if (err.response === undefined) {
+            setError({ ...error, state: true });
+          } else {
+            setError({ state: true, message: err.response.data });
+          }
+        });
+    }
+  };
 
   const closeErrorState = () => {
     setError({ state: false, message: "" });
@@ -322,7 +371,7 @@ const PatientDetailsStaffView = () => {
         </section>
         {error.state && (
           <Toast
-            color={"failure"}
+            color={error.color || "failure"}
             message={error.message}
             handleErrorState={closeErrorState}
           />
