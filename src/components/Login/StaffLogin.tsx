@@ -54,7 +54,7 @@ const StaffLogin = () => {
     staffLoginAPI(formData)
       .then((res) => {
         login(res.data.token);
-        navigate("/dashboard");
+        navigate("/portal/staff/dashboard");
       })
       .catch((err) => {
         if (err.response === undefined) {

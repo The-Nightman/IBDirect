@@ -77,7 +77,7 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard"}
+                  to={"/portal/staff/dashboard"}
                   onClick={() => setMenuOpen(false)}
                 >
                   Home
@@ -87,7 +87,7 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/patients"}
+                  to={"/portal/staff/dashboard/patients"}
                   onClick={() => setMenuOpen(false)}
                 >
                   Patients
@@ -97,7 +97,7 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/staff"}
+                  to={"/portal/staff/dashboard/staff"}
                   onClick={() => setMenuOpen(false)}
                 >
                   Staff
@@ -107,7 +107,7 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/my-appointments"}
+                  to={"/portal/staff/dashboard/my-appointments"}
                   onClick={() => setMenuOpen(false)}
                 >
                   My Appointments
@@ -117,7 +117,7 @@ const StaffDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/dashboard/my-details"}
+                  to={"/portal/staff/dashboard/my-details"}
                   onClick={() => setMenuOpen(false)}
                 >
                   My Personal Details

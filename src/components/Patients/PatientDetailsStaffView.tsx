@@ -363,7 +363,7 @@ const PatientDetailsStaffView = () => {
             className="flex flex-row items-center gap-2 text-lg p-1 hover:bg-zinc-300 hover:text-blue-600 active:bg-slate-300 active:text-blue-700"
             type="button"
             aria-label="Back to Patients"
-            onClick={() => navigate("/dashboard/patients")}
+            onClick={() => navigate("/portal/staff/dashboard/patients")}
           >
             <ArrowBackOutlined />
             Back to Patients

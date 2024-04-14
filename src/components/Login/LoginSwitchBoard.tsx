@@ -10,7 +10,7 @@ const LoginSwitchBoard = () => {
         <div className="h-80 px-8 py-14 rounded-b bg-white">
           <div className="flex flex-col justify-between h-full">
             <Link
-              to="/Portal/Patient/Login"
+              to="/portal/patient/login"
               className="flex items-center justify-center w-full h-16 rounded text-2xl bg-zinc-300 select-none"
               draggable="false"
               aria-label="Patient Login Button"
@@ -18,7 +18,7 @@ const LoginSwitchBoard = () => {
               Patient Login
             </Link>
             <Link
-              to="/Portal/Staff/Login"
+              to="/portal/staff/login"
               className="flex items-center justify-center w-full h-16 rounded text-2xl bg-zinc-300 select-none"
               draggable="false"
               aria-label="Staff Login Button"

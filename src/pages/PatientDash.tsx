@@ -74,7 +74,7 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard"}
+                  to={"/portal/patient/dashboard"}
                   onClick={() => setMenuOpen(false)}
                 >
                   Home
@@ -84,7 +84,7 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard/my-details"}
+                  to={"/portal/patient/dashboard/my-details"}
                   onClick={() => setMenuOpen(false)}
                 >
                   My Details
@@ -94,7 +94,7 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard/my-appointments"}
+                  to={"/portal/patient/dashboard/my-appointments"}
                   onClick={() => setMenuOpen(false)}
                 >
                   My Appointments
@@ -104,7 +104,7 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard/my-prescriptions"}
+                  to={"/portal/patient/dashboard/my-prescriptions"}
                   onClick={() => setMenuOpen(false)}
                 >
                   My Prescriptions
@@ -114,7 +114,7 @@ const PatientDash = () => {
                 <Link
                   className="select-none hover:text-blue-700 hover:underline active:text-blue-900"
                   draggable="false"
-                  to={"/patient-portal/dashboard/ibd-surveys"}
+                  to={"/portal/patient/dashboard/ibd-surveys"}
                   onClick={() => setMenuOpen(false)}
                 >
                   IBD Surveys

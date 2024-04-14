@@ -15,7 +15,7 @@ const PatientCard = ({ id, name, dob, diagnosis, stoma }: PatientCardProps) => {
   const navigate = useNavigate();
 
   const openPatientDetails = () => {
-    navigate(`/dashboard/patients/details/${id}`);
+    navigate(`/portal/staff/dashboard/patients/details/${id}`);
   };
 
   return (

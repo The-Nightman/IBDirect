@@ -30,7 +30,7 @@ const StaffMemberCard = ({ staffDetails }: StaffMyAppointmentCardProps) => {
             aria-label={`Open Staff Details ${staffDetails.name} ${staffDetails.practice} ${staffDetails.role} ${staffDetails.speciality}`}
             title={`Open Staff Details ${staffDetails.name}`}
             onClick={() =>
-              navigate(`/dashboard/staff/details/${staffDetails.staffId}`)
+              navigate(`/portal/staff/dashboard/staff/details/${staffDetails.staffId}`)
             }
           >
             <OpenInNewOutlined fontSize="inherit" />

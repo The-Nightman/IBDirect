@@ -29,54 +29,54 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Root />}>
-            <Route path="" element={<LoginSwitchBoard />} />
-            <Route path="portal/patient/Login" element={<PatientLogin />} />
-            <Route path="portal/staff/Login" element={<StaffLogin />} />
+            <Route index element={<LoginSwitchBoard />} />
+            <Route path="portal/patient/login" element={<PatientLogin />} />
+            <Route path="portal/staff/login" element={<StaffLogin />} />
           </Route>
           <Route element={<PrivateRoutes />}>
-            <Route path="/patient-portal/dashboard" element={<PatientDash />}>
+            <Route path="/portal/patient/dashboard" element={<PatientDash />}>
               <Route index element={<PatientMyUpcomingAppSurvey />} />
               <Route
-                path="/patient-portal/dashboard/my-details"
+                path="my-details"
                 element={<PatientMyDetails />}
               />
               <Route
-                path="/patient-portal/dashboard/my-appointments"
+                path="my-appointments"
                 element={<PatientMyAppointments />}
               />
               <Route
-                path="/patient-portal/dashboard/my-prescriptions"
+                path="my-prescriptions"
                 element={<PatientMyPrescriptions />}
               />
               <Route
-                path="/patient-portal/dashboard/ibd-surveys"
+                path="ibd-surveys"
                 element={<PatientMyIBDSurveys />}
               />
             </Route>
-            <Route path="/dashboard" element={<StaffDash />}>
+            <Route path="/portal/staff/dashboard" element={<StaffDash />}>
               <Route index element={<StaffMyDashboardHome />} />
               <Route
-                path="/dashboard/patients"
+                path="patients"
                 element={<StaffDashboardPatients />}
               />
               <Route
-                path="/dashboard/patients/details/:id"
+                path="patients/details/:id"
                 element={<PatientDetailsStaffView />}
               />
               <Route
-                path="/dashboard/staff"
+                path="staff"
                 element={<StaffDashboardStaff />}
               />
               <Route
-                path="/dashboard/staff/details/:id"
+                path="staff/details/:id"
                 element={<StaffMemberDetails />}
               />
               <Route
-                path="/dashboard/my-appointments"
+                path="my-appointments"
                 element={<StaffMyAppointments />}
               />
               <Route
-                path="/dashboard/my-details"
+                path="my-details"
                 element={<StaffMyPersonalDetails />}
               />
             </Route>

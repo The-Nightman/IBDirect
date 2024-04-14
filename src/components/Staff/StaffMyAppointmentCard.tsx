@@ -36,7 +36,7 @@ const StaffMyAppointmentCard = ({
             title={`Open Appointment Details ${appointment.patientName}`}
             onClick={() =>
               navigate(
-                `/dashboard/patients/details/${appointment.patientId}?edit-appointment=${appointment.id}`
+                `/portal/staff/dashboard/patients/details/${appointment.patientId}?edit-appointment=${appointment.id}`
               )
             }
           >
