@@ -1,5 +1,6 @@
 import axios from "axios";
+const API_URL = import.meta.env.VITE_APP_API_URL;
 
 export const IBDirectAPI = axios.create({
-  baseURL: "http://127.0.0.1:5022/api",
+  baseURL: API_URL,
 });
