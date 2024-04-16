@@ -2,7 +2,7 @@ import { IBDirectAPI } from "./api";
 
 export const cancelPrescription = (id) => {
   const jwt = sessionStorage.getItem("jwt");
-  return IBDirectAPI.patch(`/Patients/cancelPrescription/${id}`, {}, {
+  return IBDirectAPI.patch(`/patients/cancel-prescription/${id}`, {}, {
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
