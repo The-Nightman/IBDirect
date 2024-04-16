@@ -2,7 +2,7 @@ import { IBDirectAPI } from "./api";
 
 export const getStaffByName = (searchName) => {
   const jwt = sessionStorage.getItem("jwt");
-  return IBDirectAPI.get(`/Staff/findStaff/${searchName}`, {
+  return IBDirectAPI.get(`/staff/find-staff/${searchName}`, {
     headers: {
       Authorization: `Bearer ${jwt}`,
     },

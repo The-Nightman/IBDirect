@@ -2,7 +2,7 @@ import { IBDirectAPI } from "./api";
 
 export const patientUserDetailsBrief = (id) => {
   const jwt = sessionStorage.getItem("jwt");
-  return IBDirectAPI.get(`/Patients/${id}/myDetailsBrief`, {
+  return IBDirectAPI.get(`/patients/${id}/my-details-brief`, {
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
