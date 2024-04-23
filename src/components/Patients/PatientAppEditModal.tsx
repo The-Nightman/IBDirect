@@ -64,10 +64,10 @@ const PatientAppEditModal = ({
   const handleSelectStaff = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const staffId = parseInt(e.target.value);
     const staffName = e.target.selectedOptions[0].text.split(" - ")[0];
-    setAppointmentData({ ...appointmentData, staffId, staffName });
-    const { practice } = Object.values(staff).find(
-      (member) => member.staffId === staffId
-    ) as StaffDetails;
+    const { practice } = Object.values(staff)
+      .filter(Boolean)
+      .find((member) => member.staffId === staffId) as StaffDetails;
+    setAppointmentData({ ...appointmentData, staffId, staffName, location: practice});
     setSelectedStaffPractice(practice);
   };
 
@@ -290,6 +290,12 @@ const PatientAppEditModal = ({
               <select
                 aria-describedby="appLocationHint"
                 defaultValue={appointmentData.location}
+                onChange={(e) => {
+                  setAppointmentData({
+                    ...appointmentData,
+                    location: e.target.value,
+                  });
+                }}
               >
                 <option value={selectedStaffPractice}>
                   {selectedStaffPractice}
@@ -322,14 +328,14 @@ const PatientAppEditModal = ({
                 <option
                   value={staff.nurse.staffId}
                 >{`${staff.nurse.name} - ${staff.nurse.role}`}</option>
+                <option
+                  value={staff.genpract.staffId}
+                >{`${staff.genpract.name} - ${staff.genpract.role}`}</option>
                 {staff.stomaNurse != null ? (
                   <option
                     value={staff.stomaNurse.staffId}
                   >{`${staff.stomaNurse.name} - ${staff.stomaNurse.role}`}</option>
                 ) : null}
-                <option
-                  value={staff.genpract.staffId}
-                >{`${staff.genpract.name} - ${staff.genpract.role}`}</option>
               </select>
             </label>
             <label>
