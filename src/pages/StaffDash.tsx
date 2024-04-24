@@ -6,7 +6,9 @@ import {
   ExitToAppOutlined,
   MenuOpenOutlined,
   MenuOutlined,
+  QuestionAnswerOutlined,
 } from "@mui/icons-material";
+import { StaffChat } from "../components";
 
 interface userData {
   name: string;
@@ -25,6 +27,7 @@ const StaffDash = () => {
     speciality: "",
     staffId: null,
   });
+  const [chatState, setChatState] = useState<boolean>(false);
   const { user, logout } = useAuth();
 
   useEffect(() => {
@@ -135,6 +138,16 @@ const StaffDash = () => {
             </ul>
           </nav>
           <main>
+            {chatState ? (
+              <StaffChat setChatState={setChatState} />
+            ) : (
+              <button
+                className="fixed bottom-8 right-8 rounded-full p-2 bg-blue-500 text-white"
+                onClick={() => setChatState(true)}
+              >
+                <QuestionAnswerOutlined fontSize="large" />
+              </button>
+            )}
             <Outlet />
           </main>
         </div>
