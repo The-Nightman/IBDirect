@@ -34,6 +34,7 @@ import StaffMyPersonalDetails from "./Staff/StaffMyPersonalDetails.tsx";
 import StaffDashboardStaff from "./Staff/StaffDashboardStaff.tsx";
 import StaffMemberCard from "./Staff/StaffMemberCard.tsx";
 import StaffMemberDetails from "./Staff/StaffMemberDetails.tsx";
+import StaffChat from "./Staff/StaffChat.tsx";
 
 export {
   Header,
@@ -72,4 +73,5 @@ export {
   StaffDashboardStaff,
   StaffMemberCard,
   StaffMemberDetails,
+  StaffChat,
 };
