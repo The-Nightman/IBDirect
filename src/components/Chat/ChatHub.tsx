@@ -11,6 +11,7 @@ import { getMyChatInbox } from "../../api/getMyChatInbox";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { ChatInbox } from "../../interfaces/ChatInbox";
 import ChatWindow from "./ChatWindow";
+import { getPatientMyStaff } from "../../api/getPatientMyStaff";
 
 interface ChatUserDetails {
   userId: number;
@@ -50,13 +51,27 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
   });
 
   useEffect(() => {
-    getStaffMyColleagues(userDetails.userId)
-      .then((res) => {
-        setStaffChats(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (userDetails.role === "Patient") {
+      getPatientMyStaff(userDetails.userId)
+        .then((res) => {
+          setStaffChats(
+            Object.values(res.data).filter(
+              (staff) => staff !== null
+            ) as StaffDetails[]
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      getStaffMyColleagues(userDetails.userId)
+        .then((res) => {
+          setStaffChats(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
 
     getMyChatInbox(userDetails.userId)
       .then((res) => {
@@ -329,9 +344,7 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
                     className="flex justify-between p-1 bg-slate-100 border-b border-slate-300"
                     key={staff.staffId}
                   >
-                    <p>
-                      {`${staff.name} - ${staff.role}`}
-                    </p>
+                    <p>{`${staff.name} - ${staff.role}`}</p>
                     <button
                       className="h-7 w-7 rounded-full bg-blue-300 hover:bg-blue-400 active:bg-blue-600 active:text-white text-center"
                       aria-label={`open staff chat ${staff.name}`}
