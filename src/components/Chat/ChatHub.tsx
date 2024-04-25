@@ -10,7 +10,7 @@ import { StaffDetails } from "../../interfaces/StaffDetails";
 import { getMyChatInbox } from "../../api/getMyChatInbox";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { ChatInbox } from "../../interfaces/ChatInbox";
-import ChatWindow from "../Chat/ChatWindow";
+import ChatWindow from "./ChatWindow";
 
 interface ChatUserDetails {
   userId: number;
@@ -24,12 +24,12 @@ interface InboxTabsCollapse {
   recentCollapsed: boolean;
 }
 
-interface StaffChatProps {
+interface ChatHubProps {
   setChatState: React.Dispatch<React.SetStateAction<boolean>>;
   userDetails: ChatUserDetails;
 }
 
-const StaffChat = ({ setChatState, userDetails }: StaffChatProps) => {
+const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
   const [staffChats, setStaffChats] = useState<StaffDetails[]>([]);
   const [myInbox, setMyInbox] = useState<ChatInbox>({
     unreadChats: [],
@@ -352,4 +352,4 @@ const StaffChat = ({ setChatState, userDetails }: StaffChatProps) => {
   );
 };
 
-export default StaffChat;
+export default ChatHub;

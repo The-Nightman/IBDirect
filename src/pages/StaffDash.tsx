@@ -8,7 +8,7 @@ import {
   MenuOutlined,
   QuestionAnswerOutlined,
 } from "@mui/icons-material";
-import { StaffChat } from "../components";
+import { ChatHub } from "../components";
 
 interface userData {
   name: string;
@@ -139,7 +139,7 @@ const StaffDash = () => {
           </nav>
           <main>
             {userData.staffId && chatState ? (
-              <StaffChat
+              <ChatHub
               setChatState={setChatState}
               userDetails={{
                 userId: userData.staffId,
