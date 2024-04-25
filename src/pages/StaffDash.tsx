@@ -138,8 +138,15 @@ const StaffDash = () => {
             </ul>
           </nav>
           <main>
-            {chatState ? (
-              <StaffChat setChatState={setChatState} />
+            {userData.staffId && chatState ? (
+              <StaffChat
+              setChatState={setChatState}
+              userDetails={{
+                userId: userData.staffId,
+                name: userData.name,
+                role: userData.role,
+              }}
+              />
             ) : (
               <button
                 className="fixed bottom-8 right-8 rounded-full p-2 bg-blue-500 text-white"
