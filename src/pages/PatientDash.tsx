@@ -7,12 +7,15 @@ import {
   ExitToAppOutlined,
   MenuOpenOutlined,
   MenuOutlined,
+  QuestionAnswerOutlined,
 } from "@mui/icons-material";
+import { ChatHub } from "../components";
 
 interface userData {
   name: string;
   diagnosis: string;
   hospital: string;
+  id: number | null;
 }
 
 const PatientDash = () => {
@@ -21,7 +24,9 @@ const PatientDash = () => {
     name: "",
     diagnosis: "",
     hospital: "",
+    id: null,
   });
+  const [chatState, setChatState] = useState<boolean>(false);
   const { user, logout } = useAuth();
 
   useEffect(() => {
@@ -132,6 +137,23 @@ const PatientDash = () => {
             </ul>
           </nav>
           <main>
+            {userData.id && chatState ? (
+              <ChatHub
+                setChatState={setChatState}
+                userDetails={{
+                  userId: userData.id,
+                  name: userData.name,
+                  role: "Patient",
+                }}
+              />
+            ) : (
+              <button
+                className="fixed bottom-8 right-8 rounded-full p-2 bg-blue-500 text-white"
+                onClick={() => setChatState(true)}
+              >
+                <QuestionAnswerOutlined fontSize="large" />
+              </button>
+            )}
             <Outlet />
           </main>
         </div>
