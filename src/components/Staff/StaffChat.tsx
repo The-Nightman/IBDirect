@@ -198,8 +198,7 @@ const StaffChat = ({ setChatState, userDetails }: StaffChatProps) => {
                             >
                               <div className="flex justify-between">
                                 <p>
-                                  {unreadChat.senderName} -{" "}
-                                  {unreadChat.senderRole}
+                                  {`${unreadChat.senderName} - ${unreadChat.senderRole}`}
                                 </p>
                                 <span
                                   className="w-6 rounded-full bg-red-400 text-center"
@@ -273,15 +272,14 @@ const StaffChat = ({ setChatState, userDetails }: StaffChatProps) => {
                               onClick={() =>
                                 handleOpenChat(
                                   recentChat.senderId,
-                                  recentChat.senderName,
-                                  recentChat.senderRole
+                                  recentChat.senderRole,
+                                  recentChat.senderName
                                 )
                               }
                             >
                               <div className="flex justify-between">
                                 <p>
-                                  {recentChat.senderName} -{" "}
-                                  {recentChat.senderRole}
+                                  {`${recentChat.senderName} - ${recentChat.senderRole}`}
                                 </p>
                               </div>
                               <div>
@@ -332,11 +330,14 @@ const StaffChat = ({ setChatState, userDetails }: StaffChatProps) => {
                     key={staff.staffId}
                   >
                     <p>
-                      {staff.name} - {staff.role}
+                      {`${staff.name} - ${staff.role}`}
                     </p>
                     <button
                       className="h-7 w-7 rounded-full bg-blue-300 hover:bg-blue-400 active:bg-blue-600 active:text-white text-center"
                       aria-label={`open staff chat ${staff.name}`}
+                      onClick={() =>
+                        handleOpenChat(staff.staffId, staff.role, staff.name)
+                      }
                     >
                       <ChatBubbleOutline fontSize="small" />
                     </button>
