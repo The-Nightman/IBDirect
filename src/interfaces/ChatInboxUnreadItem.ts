@@ -1,4 +1,4 @@
-export interface ChatInboxItem {
+export interface ChatInboxUnreadItem {
   mostRecent: string;
   senderId: number;
   unreadMessages: number;
