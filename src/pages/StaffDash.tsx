@@ -9,6 +9,7 @@ import {
   QuestionAnswerOutlined,
 } from "@mui/icons-material";
 import { ChatHub } from "../components";
+import { presenceConnection } from "../SignalR/presenceConnection";
 
 interface userData {
   name: string;
@@ -28,6 +29,7 @@ const StaffDash = () => {
     staffId: null,
   });
   const [chatState, setChatState] = useState<boolean>(false);
+  const [onlineUsers, setOnlineUsers] = useState<number[]>([]);
   const { user, logout } = useAuth();
 
   useEffect(() => {
@@ -38,6 +40,26 @@ const StaffDash = () => {
       .catch((res) => {
         console.log(res);
       });
+  }, [user.userID]);
+
+  useEffect(() => {
+    presenceConnection
+      .start()
+      .then(() => {
+        console.log("SignalR connection started");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      presenceConnection.on("GetOnlineUsers", (onlineUsers: number[]) => {
+        setOnlineUsers(onlineUsers);
+      });
+
+    return () => {
+      presenceConnection.off("GetOnlineUsers");
+      presenceConnection.stop();
+    };
   }, [user.userID]);
 
   return (
@@ -140,12 +162,13 @@ const StaffDash = () => {
           <main>
             {userData.staffId && chatState ? (
               <ChatHub
-              setChatState={setChatState}
-              userDetails={{
-                userId: userData.staffId,
-                name: userData.name,
-                role: userData.role,
-              }}
+                setChatState={setChatState}
+                userDetails={{
+                  userId: userData.staffId,
+                  name: userData.name,
+                  role: userData.role,
+                }}
+                parentOnlineUsers={onlineUsers}
               />
             ) : (
               <button
