@@ -95,7 +95,7 @@ const ChatWindow = ({
   };
 
   return (
-    <section className="flex flex-col overflow-y-auto">
+    <section className="flex flex-grow flex-col overflow-y-auto">
       <div className="flex justify-between p-1 bg-slate-200 border-b border-slate-400">
         <button title="Back to Inbox" onClick={handleCloseChat}>
           <ArrowBackOutlined fontSize="inherit" /> Inbox
@@ -152,7 +152,7 @@ const ChatWindow = ({
               );
             }
           })}
-          <div ref={messagesEndRef} />
+          <div aria-hidden ref={messagesEndRef} />
         </ul>
       </section>
       <form
