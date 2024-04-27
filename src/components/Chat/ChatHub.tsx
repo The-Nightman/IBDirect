@@ -28,9 +28,14 @@ interface InboxTabsCollapse {
 interface ChatHubProps {
   setChatState: React.Dispatch<React.SetStateAction<boolean>>;
   userDetails: ChatUserDetails;
+  parentOnlineUsers: number[];
 }
 
-const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
+const ChatHub = ({
+  setChatState,
+  userDetails,
+  parentOnlineUsers,
+}: ChatHubProps) => {
   const [staffChats, setStaffChats] = useState<StaffDetails[]>([]);
   const [myInbox, setMyInbox] = useState<ChatInbox>({
     unreadChats: [],
@@ -49,6 +54,7 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
     name: "",
     role: "",
   });
+  const [onlineUsers, setOnlineUsers] = useState<number[]>(parentOnlineUsers);
 
   useEffect(() => {
     if (userDetails.role === "Patient") {
@@ -82,6 +88,10 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
       });
   }, [userDetails.userId]);
 
+  useEffect(() => {
+    setOnlineUsers(parentOnlineUsers);
+  }, [parentOnlineUsers]);
+
   const truncatePreview = (message: string) => {
     return message.length > 30 ? `${message.substring(0, 30)}...` : message;
   };
@@ -95,7 +105,7 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
     <div className="flex flex-col fixed bottom-4 right-4 z-10 h-[30rem] w-80 rounded border border-slate-400 bg-white">
       <div className="flex justify-between p-1 rounded-t bg-gradient-to-br from-sky-700 to-blue-400 text-white">
         <h3>IBDirect Chat</h3>
-        <button onClick={() => setChatState(false)}>
+        <button title="Close" aria-label="Close chat window" onClick={() => setChatState(false)}>
           <CloseOutlined />
         </button>
       </div>
@@ -212,9 +222,23 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
                               }
                             >
                               <div className="flex justify-between">
-                                <p>
-                                  {`${unreadChat.senderName} - ${unreadChat.senderRole}`}
-                                </p>
+                                <div className="flex">
+                                  <span
+                                    className={`h-3 w-3 mr-1 place-self-center rounded-full border border-slate-300/75 shadow-sm shadow-slate-400 ${
+                                      onlineUsers.includes(unreadChat.senderId)
+                                        ? "bg-lime-500 animate-pulse"
+                                        : "bg-slate-400"
+                                    }`}
+                                  />
+                                  <p>
+                                    {`${unreadChat.senderName} - ${unreadChat.senderRole}`}
+                                  </p>
+                                  <span className="sr-only">
+                                    {onlineUsers.includes(unreadChat.senderId)
+                                      ? " is Online"
+                                      : " is Offline"}
+                                  </span>
+                                </div>
                                 <span
                                   className="w-6 rounded-full bg-red-400 text-center"
                                   aria-label="unread messages"
@@ -293,9 +317,23 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
                               }
                             >
                               <div className="flex justify-between">
-                                <p>
-                                  {`${recentChat.senderName} - ${recentChat.senderRole}`}
-                                </p>
+                                <div className="flex">
+                                  <span
+                                    className={`h-3 w-3 mr-1 place-self-center rounded-full border border-slate-300/75 shadow-sm shadow-slate-400 ${
+                                      onlineUsers.includes(recentChat.senderId)
+                                        ? "bg-lime-500 animate-pulse"
+                                        : "bg-slate-400"
+                                    }`}
+                                  />
+                                  <p>
+                                    {`${recentChat.senderName} - ${recentChat.senderRole}`}
+                                  </p>
+                                  <span className="sr-only">
+                                    {onlineUsers.includes(recentChat.senderId)
+                                      ? " is Online"
+                                      : " is Offline"}
+                                  </span>
+                                </div>
                               </div>
                               <div>
                                 <p>{truncatePreview(recentChat.content)}</p>
@@ -317,7 +355,7 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
               </>
             )}
           </section>
-          <section>
+          <section aria-live="polite">
             <div className="flex justify-between p-1 bg-neutral-300 border-b border-slate-400">
               <h4>My Staff</h4>
               <button
@@ -344,7 +382,19 @@ const ChatHub = ({ setChatState, userDetails }: ChatHubProps) => {
                     className="flex justify-between p-1 bg-slate-100 border-b border-slate-300"
                     key={staff.staffId}
                   >
-                    <p>{`${staff.name} - ${staff.role}`}</p>
+                    <div className="flex place-items-center">
+                      <span
+                        className={`h-3 w-3 mr-1 place-self-center rounded-full border border-slate-300/75 shadow-sm shadow-slate-400 ${
+                          onlineUsers.includes(staff.staffId)
+                            ? "bg-lime-500 animate-pulse"
+                            : "bg-slate-400"
+                        }`}
+                      />
+                      <p>{`${staff.name} - ${staff.role}`}</p>
+                      {onlineUsers.includes(staff.staffId)
+                        ? " is Online"
+                        : " is Offline"}
+                    </div>
                     <button
                       className="h-7 w-7 rounded-full bg-blue-300 hover:bg-blue-400 active:bg-blue-600 active:text-white text-center"
                       aria-label={`open staff chat ${staff.name}`}
