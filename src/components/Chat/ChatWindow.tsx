@@ -1,9 +1,9 @@
 import { ArrowBackOutlined, SendOutlined } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
-import { getUserChatThread } from "../../api/getUserChatThread";
 import { ChatMessage } from "../../interfaces/ChatMessage";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
-import { postNewChatMessage } from "../../api/postNewChatMessage";
+import { messageConnection } from "../../SignalR/messageConnection";
+import { HubConnection } from "@microsoft/signalr";
 
 interface ChatUsersData {
   currentId: number;
@@ -33,17 +33,41 @@ const ChatWindow = ({
 }: ChatWindowProps) => {
   const [chatThread, setChatThread] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState<string>("");
+  const [chatConnection, setChatConnection] = useState<HubConnection | null>(
+    null
+  );
   const messageAreaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    getUserChatThread(chatUsers.currentId, chatUsers.recipientId)
-      .then((res) => {
-        setChatThread(res.data);
+    const connection = messageConnection(
+      chatUsers.currentId,
+      chatUsers.recipientId
+    );
+
+    connection
+      .start()
+      .then(() => {
+        console.log("SignalR connection started");
+        setChatConnection(connection);
       })
       .catch((err) => {
         console.log(err);
       });
+
+    connection.on("ReceiveMessageThread", (messages: ChatMessage[]) => {
+      setChatThread(messages);
+    });
+
+    connection.on("NewMessage", (message: ChatMessage) => {
+      setChatThread((prev) => [...prev, message]);
+    });
+
+    return () => {
+      connection.off("ReceiveMessageThread");
+      connection.off("NewMessage");
+      connection.stop();
+    };
   }, []);
 
   useEffect(() => {
@@ -84,9 +108,9 @@ const ChatWindow = ({
       recipientRole: chatUsers.recipientRole,
       read: false,
     };
-    postNewChatMessage(newMessage)
-      .then((res) => {
-        setChatThread([...chatThread, res.data]);
+    chatConnection
+      ?.invoke("SendMessage", newMessage)
+      .then((_res) => {
         setMessage("");
       })
       .catch((err) => {
