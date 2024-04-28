@@ -105,7 +105,11 @@ const ChatHub = ({
     <div className="flex flex-col fixed bottom-4 right-4 z-10 h-[30rem] w-80 rounded border border-slate-400 bg-white">
       <div className="flex justify-between p-1 rounded-t bg-gradient-to-br from-sky-700 to-blue-400 text-white">
         <h3>IBDirect Chat</h3>
-        <button title="Close" aria-label="Close chat window" onClick={() => setChatState(false)}>
+        <button
+          title="Close"
+          aria-label="Close chat window"
+          onClick={() => setChatState(false)}
+        >
           <CloseOutlined />
         </button>
       </div>
@@ -391,9 +395,11 @@ const ChatHub = ({
                         }`}
                       />
                       <p>{`${staff.name} - ${staff.role}`}</p>
-                      {onlineUsers.includes(staff.staffId)
-                        ? " is Online"
-                        : " is Offline"}
+                      <span className="sr-only">
+                        {onlineUsers.includes(staff.staffId)
+                          ? " is Online"
+                          : " is Offline"}
+                      </span>
                     </div>
                     <button
                       className="h-7 w-7 rounded-full bg-blue-300 hover:bg-blue-400 active:bg-blue-600 active:text-white text-center"
