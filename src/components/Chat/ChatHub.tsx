@@ -13,6 +13,7 @@ import { ChatInbox } from "../../interfaces/ChatInbox";
 import { ChatWindow, Toast } from "../";
 import { getPatientMyStaff } from "../../api/getPatientMyStaff";
 import { ErrorState } from "../../interfaces/ErrorState";
+import { ChatInboxUnreadItem } from "../../interfaces/ChatInboxUnreadItem";
 
 interface ChatUserDetails {
   userId: number;
@@ -30,12 +31,14 @@ interface ChatHubProps {
   setChatState: React.Dispatch<React.SetStateAction<boolean>>;
   userDetails: ChatUserDetails;
   parentOnlineUsers: number[];
+  parentNewUnreads: ChatInboxUnreadItem[];
 }
 
 const ChatHub = ({
   setChatState,
   userDetails,
   parentOnlineUsers,
+  parentNewUnreads,
 }: ChatHubProps) => {
   const [staffChats, setStaffChats] = useState<StaffDetails[]>([]);
   const [myInbox, setMyInbox] = useState<ChatInbox>({
@@ -120,6 +123,10 @@ const ChatHub = ({
   useEffect(() => {
     setOnlineUsers(parentOnlineUsers);
   }, [parentOnlineUsers]);
+
+  useEffect(() => {
+    setMyInbox((prev) => ({ ...prev, unreadChats: parentNewUnreads }));
+  }, [parentNewUnreads]);
 
   const truncatePreview = (message: string) => {
     return message.length > 30 ? `${message.substring(0, 30)}...` : message;

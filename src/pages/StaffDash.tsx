@@ -11,6 +11,7 @@ import {
 import { ChatHub, Toast } from "../components";
 import { presenceConnection } from "../SignalR/presenceConnection";
 import { ErrorState } from "../interfaces/ErrorState";
+import { ChatInboxUnreadItem } from "../interfaces/ChatInboxUnreadItem";
 
 interface userData {
   name: string;
@@ -32,6 +33,9 @@ const StaffDash = () => {
   const [chatState, setChatState] = useState<boolean>(false);
   const [onlineUsers, setOnlineUsers] = useState<number[]>([]);
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
+  const [updatedUnreads, setUpdatedUnreads] = useState<ChatInboxUnreadItem[]>(
+    []
+  );
   const { user, logout } = useAuth();
 
   useEffect(() => {
@@ -59,8 +63,13 @@ const StaffDash = () => {
       setOnlineUsers(onlineUsers);
     });
 
+    presenceConnection.on("NewMessageReceived", (unreads) => {
+      setUpdatedUnreads(unreads);
+    });
+
     return () => {
       presenceConnection.off("GetOnlineUsers");
+      presenceConnection.off("NewMessageReceived");
       presenceConnection.stop();
     };
   }, [user.userID]);
@@ -183,6 +192,7 @@ const StaffDash = () => {
                   role: userData.role,
                 }}
                 parentOnlineUsers={onlineUsers}
+                parentNewUnreads={updatedUnreads}
               />
             ) : (
               <button
