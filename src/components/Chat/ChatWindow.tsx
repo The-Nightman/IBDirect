@@ -4,6 +4,8 @@ import { ChatMessage } from "../../interfaces/ChatMessage";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { messageConnection } from "../../SignalR/messageConnection";
 import { HubConnection } from "@microsoft/signalr";
+import { ErrorState } from "../../interfaces/ErrorState";
+import { Toast } from "../";
 
 interface ChatUsersData {
   currentId: number;
@@ -36,6 +38,10 @@ const ChatWindow = ({
   const [chatConnection, setChatConnection] = useState<HubConnection | null>(
     null
   );
+  const [error, setError] = useState<ErrorState>({
+    state: false,
+    message: "",
+  });
   const messageAreaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -48,11 +54,15 @@ const ChatWindow = ({
     connection
       .start()
       .then(() => {
-        console.log("SignalR connection started");
         setChatConnection(connection);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((_err) => {
+        setError({
+          ...error,
+          state: true,
+          message:
+            "An error has occurred while trying to connect to chat services",
+        });
       });
 
     connection.on("ReceiveMessageThread", (messages: ChatMessage[]) => {
@@ -114,8 +124,21 @@ const ChatWindow = ({
         setMessage("");
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response === undefined) {
+          setError({
+            ...error,
+            state: true,
+            message:
+              "An error has occurred while trying to send the message, please try again later or contact an administrator",
+          });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
       });
+  };
+
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
   };
 
   return (
@@ -178,6 +201,13 @@ const ChatWindow = ({
           })}
           <div aria-hidden ref={messagesEndRef} />
         </ul>
+        {error.state && (
+          <Toast
+            color={"failure"}
+            message={error.message}
+            handleErrorState={closeErrorState}
+          />
+        )}
       </section>
       <form
         className="flex justify-between"
