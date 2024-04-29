@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
 import { patientUserDetailsBrief } from "../api/getPatientUserDetailsBrief";
@@ -13,6 +13,7 @@ import { ChatHub, Toast } from "../components";
 import { presenceConnection } from "../SignalR/presenceConnection";
 import { ErrorState } from "../interfaces/ErrorState";
 import { ChatInboxUnreadItem } from "../interfaces/ChatInboxUnreadItem";
+import notifcation from "../../public/notificationSound.mp3";
 
 interface userData {
   name: string;
@@ -35,6 +36,9 @@ const PatientDash = () => {
   const [updatedUnreads, setUpdatedUnreads] = useState<ChatInboxUnreadItem[]>(
     []
   );
+  const [unreadNotif, setUnreadNotif] = useState<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
   const { user, logout } = useAuth();
 
   useEffect(() => {
@@ -63,7 +67,11 @@ const PatientDash = () => {
     });
 
     presenceConnection.on("NewMessageReceived", (unreads) => {
+      if (unreads.length) {
+        audioRef.current?.play();
+      }
       setUpdatedUnreads(unreads);
+      setUnreadNotif(true);
     });
 
     return () => {
@@ -80,6 +88,7 @@ const PatientDash = () => {
   return (
     <>
       <section className="flex flex-1 flex-col justify-center">
+        <audio ref={audioRef} src={notifcation} />
         <aside className="flex flex-nowrap flex-col  justify-between text-white md:min-h-[5rem] h-fit py-1 px-2 bg-gradient-to-br from-sky-700 to-blue-400">
           <h2 className="text-3xl">
             {userData.name.split(",").reverse().join(" ")}
@@ -192,14 +201,23 @@ const PatientDash = () => {
                 }}
                 parentOnlineUsers={onlineUsers}
                 parentNewUnreads={updatedUnreads}
+                setParentUnreadAlert={setUnreadNotif}
               />
             ) : (
-              <button
-                className="fixed bottom-8 right-8 rounded-full p-2 bg-blue-500 text-white"
-                onClick={() => setChatState(true)}
-              >
-                <QuestionAnswerOutlined fontSize="large" />
-              </button>
+              <div>
+                <button
+                  className="fixed bottom-8 right-8 rounded-full p-2 bg-blue-500 text-white"
+                  onClick={() => setChatState(true)}
+                >
+                  <QuestionAnswerOutlined fontSize="large" />
+                </button>
+                {unreadNotif && (
+                  <div>
+                    <span className="animate-ping fixed bottom-[4.25rem] right-7 h-4 w-4 rounded-full bg-red-600" />
+                    <span className="fixed bottom-[4.25rem] right-7 h-4 w-4 rounded-full bg-red-600 shadow-sm shadow-slate-400" />
+                  </div>
+                )}
+              </div>
             )}
             <Outlet />
           </main>

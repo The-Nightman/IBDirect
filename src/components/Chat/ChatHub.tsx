@@ -32,6 +32,7 @@ interface ChatHubProps {
   userDetails: ChatUserDetails;
   parentOnlineUsers: number[];
   parentNewUnreads: ChatInboxUnreadItem[];
+  setParentUnreadAlert: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ChatHub = ({
@@ -39,6 +40,7 @@ const ChatHub = ({
   userDetails,
   parentOnlineUsers,
   parentNewUnreads,
+  setParentUnreadAlert
 }: ChatHubProps) => {
   const [staffChats, setStaffChats] = useState<StaffDetails[]>([]);
   const [myInbox, setMyInbox] = useState<ChatInbox>({
@@ -70,6 +72,7 @@ const ChatHub = ({
               (staff) => staff !== null
             ) as StaffDetails[]
           );
+          setParentUnreadAlert(false);
         })
         .catch((err) => {
           if (err.response === undefined) {
@@ -87,6 +90,7 @@ const ChatHub = ({
       getStaffMyColleagues(userDetails.userId)
         .then((res) => {
           setStaffChats(res.data);
+          setParentUnreadAlert(false);
         })
         .catch((err) => {
           if (err.response === undefined) {
