@@ -10,8 +10,9 @@ import { StaffDetails } from "../../interfaces/StaffDetails";
 import { getMyChatInbox } from "../../api/getMyChatInbox";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
 import { ChatInbox } from "../../interfaces/ChatInbox";
-import ChatWindow from "./ChatWindow";
+import { ChatWindow, Toast } from "../";
 import { getPatientMyStaff } from "../../api/getPatientMyStaff";
+import { ErrorState } from "../../interfaces/ErrorState";
 
 interface ChatUserDetails {
   userId: number;
@@ -55,6 +56,7 @@ const ChatHub = ({
     role: "",
   });
   const [onlineUsers, setOnlineUsers] = useState<number[]>(parentOnlineUsers);
+  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
 
   useEffect(() => {
     if (userDetails.role === "Patient") {
@@ -67,7 +69,16 @@ const ChatHub = ({
           );
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response === undefined) {
+            setError({
+              ...error,
+              state: true,
+              message:
+                "An error has occurred while retrieving staff users details",
+            });
+          } else {
+            setError({ state: true, message: err.response.data });
+          }
         });
     } else {
       getStaffMyColleagues(userDetails.userId)
@@ -75,7 +86,16 @@ const ChatHub = ({
           setStaffChats(res.data);
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response === undefined) {
+            setError({
+              ...error,
+              state: true,
+              message:
+                "An error has occurred while retrieving staff users details",
+            });
+          } else {
+            setError({ state: true, message: err.response.data });
+          }
         });
     }
 
@@ -84,7 +104,16 @@ const ChatHub = ({
         setMyInbox(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response === undefined) {
+          setError({
+            ...error,
+            state: true,
+            message:
+              "An error has occurred while trying to retrieve inbox data",
+          });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
       });
   }, [userDetails.userId]);
 
@@ -101,6 +130,10 @@ const ChatHub = ({
     setChatWindowState(true);
   };
 
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
+  };
+
   return (
     <div className="flex flex-col fixed bottom-4 right-4 z-10 h-[30rem] w-80 rounded border border-slate-400 bg-white">
       <div className="flex justify-between p-1 rounded-t bg-gradient-to-br from-sky-700 to-blue-400 text-white">
@@ -113,6 +146,13 @@ const ChatHub = ({
           <CloseOutlined />
         </button>
       </div>
+      {error.state && (
+        <Toast
+          color={"failure"}
+          message={error.message}
+          handleErrorState={closeErrorState}
+        />
+      )}
       {chatWindowState ? (
         <ChatWindow
           chatUsers={{
