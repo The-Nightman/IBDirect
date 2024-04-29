@@ -125,7 +125,15 @@ const ChatHub = ({
   }, [parentOnlineUsers]);
 
   useEffect(() => {
-    setMyInbox((prev) => ({ ...prev, unreadChats: parentNewUnreads }));
+    setMyInbox((prev) => ({
+      recentChats: prev.recentChats.filter(
+        (recentChat) =>
+          !parentNewUnreads.some(
+            (unreadChat) => unreadChat.senderId === recentChat.senderId
+          )
+      ),
+      unreadChats: parentNewUnreads,
+    }));
   }, [parentNewUnreads]);
 
   const truncatePreview = (message: string) => {
@@ -135,6 +143,18 @@ const ChatHub = ({
   const handleOpenChat = (id: number, role: string, name: string) => {
     setSelectedUserData({ userId: id, role, name });
     setChatWindowState(true);
+  };
+
+  const handleUpdateReadChats = (id: number) => {
+    const newRecentChat = myInbox.unreadChats.find(
+      (unread) => unread.senderId === id
+    );
+    setMyInbox((prev) => ({
+      recentChats: newRecentChat
+        ? [newRecentChat, ...prev.recentChats]
+        : prev.recentChats,
+      unreadChats: prev.unreadChats.filter((chat) => chat.senderId !== id),
+    }));
   };
 
   const closeErrorState = () => {
@@ -172,6 +192,7 @@ const ChatHub = ({
           }}
           setChatWindowState={setChatWindowState}
           setSelectedUserData={setSelectedUserData}
+          handleUpdateReadChats={handleUpdateReadChats}
         />
       ) : (
         <div className="flex-grow overflow-y-auto">

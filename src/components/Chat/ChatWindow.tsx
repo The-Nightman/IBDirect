@@ -31,12 +31,14 @@ interface ChatWindowProps {
   chatUsers: ChatUsersData;
   setChatWindowState: (state: boolean) => void;
   setSelectedUserData: (data: ChatUserDetails) => void;
+  handleUpdateReadChats: (id: number) => void;
 }
 
 const ChatWindow = ({
   chatUsers,
   setChatWindowState,
   setSelectedUserData,
+  handleUpdateReadChats,
 }: ChatWindowProps) => {
   const [chatThread, setChatThread] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState<string>("");
@@ -51,6 +53,8 @@ const ChatWindow = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    handleUpdateReadChats(chatUsers.recipientId);
+
     const connection = messageConnection(
       chatUsers.currentId,
       chatUsers.recipientId
