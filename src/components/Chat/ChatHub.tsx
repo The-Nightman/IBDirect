@@ -18,6 +18,7 @@ import { Spinner } from "flowbite-react";
 import useDebounce from "../../hooks/useDebounce";
 import { getPatientByName } from "../../api/getPatientByName";
 import { PatientsBrief } from "../../interfaces/PatientDetailsBrief";
+import { getStaffByName } from "../../api/getStaffByName";
 
 interface ChatUserDetails {
   userId: number;
@@ -67,9 +68,13 @@ const ChatHub = ({
   const [onlineUsers, setOnlineUsers] = useState<number[]>(parentOnlineUsers);
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTermStaff, setSearchTermStaff] = useState<string>("");
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
+  const [searchLoadingStaff, setSearchLoadingStaff] = useState<boolean>(false);
   const [patientsResults, setPatientsResults] = useState<PatientsBrief[]>([]);
+  const [staffResults, setStaffResults] = useState<StaffDetails[]>([]);
   const debouncedSearch = useDebounce<string>(searchTerm, 700);
+  const debouncedSearchStaff = useDebounce<string>(searchTermStaff, 700);
 
   useEffect(() => {
     if (userDetails.role === "Patient") {
@@ -169,6 +174,31 @@ const ChatHub = ({
       });
   }, [debouncedSearch]);
 
+  useEffect(() => {
+    if (!debouncedSearchStaff) {
+      setSearchLoadingStaff(false);
+      setStaffResults([]);
+      return;
+    }
+    getStaffByName(debouncedSearchStaff)
+      .then((res) => {
+        setSearchLoadingStaff(false);
+        setStaffResults(res.data);
+      })
+      .catch((err) => {
+        setSearchLoadingStaff(false);
+        if (err.response === undefined) {
+          setError({ ...error, state: true });
+        } else {
+          setError({
+            state: true,
+            message: err.response.data,
+            color: "failure",
+          });
+        }
+      });
+  }, [debouncedSearchStaff]);
+
   const truncatePreview = (message: string) => {
     return message.length > 30 ? `${message.substring(0, 30)}...` : message;
   };
@@ -203,6 +233,11 @@ const ChatHub = ({
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setSearchLoading(true);
+  };
+
+  const handleStaffSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTermStaff(e.target.value);
+    setSearchLoadingStaff(true);
   };
 
   const closeErrorState = () => {
@@ -246,7 +281,7 @@ const ChatHub = ({
         <div className="flex-grow overflow-y-auto">
           <section aria-live="polite">
             {userDetails.role !== "Patient" && (
-              <section className="w-full overflow-hidden">
+              <section className="w-full overflow-hidden bg-slate-100">
                 <label>
                   <span className="ml-2 md:ml-4">Search for a Patient</span>
                   <div className="relative flex flex-col z-0">
@@ -560,39 +595,107 @@ const ChatHub = ({
               </button>
             </div>
             {!staffCollapsed && (
-              <ul>
-                {staffChats.map((staff) => (
-                  <li
-                    className="flex justify-between p-1 bg-slate-100 border-b border-slate-300"
-                    key={staff.staffId}
-                  >
-                    <div className="flex place-items-center">
-                      <span
-                        className={`h-3 w-3 mr-1 place-self-center rounded-full border border-slate-300/75 shadow-sm shadow-slate-400 ${
-                          onlineUsers.includes(staff.staffId)
-                            ? "bg-lime-500 animate-pulse"
-                            : "bg-slate-400"
-                        }`}
-                      />
-                      <p>{`${staff.name} - ${staff.role}`}</p>
-                      <span className="sr-only">
-                        {onlineUsers.includes(staff.staffId)
-                          ? " is Online"
-                          : " is Offline"}
-                      </span>
-                    </div>
-                    <button
-                      className="h-7 w-7 rounded-full bg-blue-300 hover:bg-blue-400 active:bg-blue-600 active:text-white text-center"
-                      aria-label={`open staff chat ${staff.name}`}
-                      onClick={() =>
-                        handleOpenChat(staff.staffId, staff.role, staff.name)
-                      }
+              <>
+                {userDetails.role !== "Patient" && (
+                  <section className="w-full overflow-hidden bg-slate-100 border-b border-slate-700">
+                    <label>
+                      Search for a Staff Member
+                      <div className="relative flex flex-col z-0">
+                        <input
+                          type="text"
+                          placeholder="Search for a Staff Member"
+                          className="w-full p-2 border border-slate-500"
+                          value={searchTermStaff}
+                          onChange={(e) => handleStaffSearchInput(e)}
+                        />
+                        {searchLoadingStaff && (
+                          <div
+                            role="status"
+                            className="absolute h-[2.6rem] right-1 top-0 animate-pulse flex items-center justify-center"
+                          >
+                            <Spinner size={"lg"} />
+                            <span className="sr-only">
+                              Loading search results
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </label>
+                    {staffResults && (
+                      <ul>
+                        {staffResults.map((staff) => (
+                          <li
+                            className="flex justify-between p-1 bg-slate-100 border-b border-slate-300"
+                            key={staff.staffId}
+                          >
+                            <div className="flex place-items-center">
+                              <span
+                                className={`h-3 w-3 mr-1 place-self-center rounded-full border border-slate-300/75 shadow-sm shadow-slate-400 ${
+                                  onlineUsers.includes(staff.staffId)
+                                    ? "bg-lime-500 animate-pulse"
+                                    : "bg-slate-400"
+                                }`}
+                              />
+                              <p>{`${staff.name} - ${staff.role}`}</p>
+                              <span className="sr-only">
+                                {onlineUsers.includes(staff.staffId)
+                                  ? " is Online"
+                                  : " is Offline"}
+                              </span>
+                            </div>
+                            <button
+                              className="h-7 w-7 rounded-full bg-blue-300 hover:bg-blue-400 active:bg-blue-600 active:text-white text-center"
+                              aria-label={`open staff chat ${staff.name}`}
+                              onClick={() =>
+                                handleOpenChat(
+                                  staff.staffId,
+                                  staff.role,
+                                  staff.name
+                                )
+                              }
+                            >
+                              <ChatBubbleOutline fontSize="small" />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                )}
+                <ul>
+                  {staffChats.map((staff) => (
+                    <li
+                      className="flex justify-between p-1 bg-slate-100 border-b border-slate-300"
+                      key={staff.staffId}
                     >
-                      <ChatBubbleOutline fontSize="small" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+                      <div className="flex place-items-center">
+                        <span
+                          className={`h-3 w-3 mr-1 place-self-center rounded-full border border-slate-300/75 shadow-sm shadow-slate-400 ${
+                            onlineUsers.includes(staff.staffId)
+                              ? "bg-lime-500 animate-pulse"
+                              : "bg-slate-400"
+                          }`}
+                        />
+                        <p>{`${staff.name} - ${staff.role}`}</p>
+                        <span className="sr-only">
+                          {onlineUsers.includes(staff.staffId)
+                            ? " is Online"
+                            : " is Offline"}
+                        </span>
+                      </div>
+                      <button
+                        className="h-7 w-7 rounded-full bg-blue-300 hover:bg-blue-400 active:bg-blue-600 active:text-white text-center"
+                        aria-label={`open staff chat ${staff.name}`}
+                        onClick={() =>
+                          handleOpenChat(staff.staffId, staff.role, staff.name)
+                        }
+                      >
+                        <ChatBubbleOutline fontSize="small" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
           </section>
         </div>
