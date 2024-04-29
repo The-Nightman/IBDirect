@@ -14,6 +14,10 @@ import { ChatWindow, Toast } from "../";
 import { getPatientMyStaff } from "../../api/getPatientMyStaff";
 import { ErrorState } from "../../interfaces/ErrorState";
 import { ChatInboxUnreadItem } from "../../interfaces/ChatInboxUnreadItem";
+import { Spinner } from "flowbite-react";
+import useDebounce from "../../hooks/useDebounce";
+import { getPatientByName } from "../../api/getPatientByName";
+import { PatientsBrief } from "../../interfaces/PatientDetailsBrief";
 
 interface ChatUserDetails {
   userId: number;
@@ -62,6 +66,10 @@ const ChatHub = ({
   });
   const [onlineUsers, setOnlineUsers] = useState<number[]>(parentOnlineUsers);
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
+  const [patientsResults, setPatientsResults] = useState<PatientsBrief[]>([]);
+  const debouncedSearch = useDebounce<string>(searchTerm, 700);
 
   useEffect(() => {
     if (userDetails.role === "Patient") {
@@ -140,6 +148,27 @@ const ChatHub = ({
     }));
   }, [parentNewUnreads]);
 
+  useEffect(() => {
+    if (!debouncedSearch) {
+      setSearchLoading(false);
+      setPatientsResults([]);
+      return;
+    }
+    getPatientByName(debouncedSearch)
+      .then((res) => {
+        setSearchLoading(false);
+        setPatientsResults(res.data);
+      })
+      .catch((err) => {
+        setSearchLoading(false);
+        if (err.response === undefined) {
+          setError({ ...error, state: true });
+        } else {
+          setError({ state: true, message: err.response.data });
+        }
+      });
+  }, [debouncedSearch]);
+
   const truncatePreview = (message: string) => {
     return message.length > 30 ? `${message.substring(0, 30)}...` : message;
   };
@@ -169,6 +198,11 @@ const ChatHub = ({
       }`;
       return newState;
     });
+  };
+
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setSearchLoading(true);
   };
 
   const closeErrorState = () => {
@@ -211,6 +245,70 @@ const ChatHub = ({
       ) : (
         <div className="flex-grow overflow-y-auto">
           <section aria-live="polite">
+            {userDetails.role !== "Patient" && (
+              <section className="w-full overflow-hidden">
+                <label>
+                  <span className="ml-2 md:ml-4">Search for a Patient</span>
+                  <div className="relative flex flex-col z-0">
+                    <input
+                      type="text"
+                      placeholder="Patient Search (Surname, Firstname)"
+                      className="w-full p-2 border border-slate-500"
+                      value={searchTerm}
+                      onChange={(e) => handleSearchInput(e)}
+                    />
+                    {searchLoading && (
+                      <div
+                        role="status"
+                        className="absolute h-[2.6rem] right-1 top-0 animate-pulse flex items-center justify-center"
+                      >
+                        <Spinner size={"md"} />
+                        <span className="sr-only">Loading search results</span>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                {patientsResults && (
+                  <ul>
+                    {patientsResults.map((patient) => (
+                      <li
+                        className="flex justify-between p-1 bg-slate-100 border-b border-slate-300"
+                        key={patient.patientId}
+                      >
+                        <div className="flex place-items-center">
+                          <span
+                            className={`h-3 w-3 mr-1 place-self-center rounded-full border border-slate-300/75 shadow-sm shadow-slate-400 ${
+                              onlineUsers.includes(patient.patientId)
+                                ? "bg-lime-500 animate-pulse"
+                                : "bg-slate-400"
+                            }`}
+                          />
+                          <p>{`${patient.name} - ${patient.diagnosis}`}</p>
+                          <span className="sr-only">
+                            {onlineUsers.includes(patient.patientId)
+                              ? " is Online"
+                              : " is Offline"}
+                          </span>
+                        </div>
+                        <button
+                          className="h-7 w-7 rounded-full bg-blue-300 hover:bg-blue-400 active:bg-blue-600 active:text-white text-center"
+                          aria-label={`open patient chat ${patient.name}`}
+                          onClick={() =>
+                            handleOpenChat(
+                              patient.patientId,
+                              "Patient",
+                              patient.name
+                            )
+                          }
+                        >
+                          <ChatBubbleOutline fontSize="small" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
             <div className="flex justify-between p-1 bg-neutral-300 border-b border-slate-400">
               <h4>
                 My Inbox <span className="sr-only">Unread messages:</span>
