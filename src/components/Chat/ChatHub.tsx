@@ -67,13 +67,14 @@ const ChatHub = ({
   });
   const [onlineUsers, setOnlineUsers] = useState<number[]>(parentOnlineUsers);
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTermPatient, setSearchTermPatient] = useState<string>("");
   const [searchTermStaff, setSearchTermStaff] = useState<string>("");
-  const [searchLoading, setSearchLoading] = useState<boolean>(false);
+  const [searchLoadingPatient, setSearchLoadingPatient] =
+    useState<boolean>(false);
   const [searchLoadingStaff, setSearchLoadingStaff] = useState<boolean>(false);
   const [patientsResults, setPatientsResults] = useState<PatientsBrief[]>([]);
   const [staffResults, setStaffResults] = useState<StaffDetails[]>([]);
-  const debouncedSearch = useDebounce<string>(searchTerm, 700);
+  const debouncedSearch = useDebounce<string>(searchTermPatient, 700);
   const debouncedSearchStaff = useDebounce<string>(searchTermStaff, 700);
 
   useEffect(() => {
@@ -155,17 +156,17 @@ const ChatHub = ({
 
   useEffect(() => {
     if (!debouncedSearch) {
-      setSearchLoading(false);
+      setSearchLoadingPatient(false);
       setPatientsResults([]);
       return;
     }
     getPatientByName(debouncedSearch)
       .then((res) => {
-        setSearchLoading(false);
+        setSearchLoadingPatient(false);
         setPatientsResults(res.data);
       })
       .catch((err) => {
-        setSearchLoading(false);
+        setSearchLoadingPatient(false);
         if (err.response === undefined) {
           setError({ ...error, state: true });
         } else {
@@ -230,9 +231,9 @@ const ChatHub = ({
     });
   };
 
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setSearchLoading(true);
+  const handlePatientSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTermPatient(e.target.value);
+    setSearchLoadingPatient(true);
   };
 
   const handleStaffSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -289,10 +290,10 @@ const ChatHub = ({
                       type="text"
                       placeholder="Patient Search (Surname, Firstname)"
                       className="w-full p-2 border border-slate-500"
-                      value={searchTerm}
-                      onChange={(e) => handleSearchInput(e)}
+                      value={searchTermPatient}
+                      onChange={(e) => handlePatientSearchInput(e)}
                     />
-                    {searchLoading && (
+                    {searchLoadingPatient && (
                       <div
                         role="status"
                         className="absolute h-[2.6rem] right-1 top-0 animate-pulse flex items-center justify-center"
