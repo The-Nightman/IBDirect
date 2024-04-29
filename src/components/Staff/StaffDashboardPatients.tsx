@@ -6,14 +6,7 @@ import { ErrorState } from "../../interfaces/ErrorState";
 import { Spinner } from "flowbite-react";
 import useDebounce from "../../hooks/useDebounce";
 import { getPatientByName } from "../../api/getPatientByName";
-
-interface PatientsBrief {
-  patientId: number;
-  name: string;
-  dateOfBirth: string;
-  diagnosis: string;
-  stoma: boolean;
-}
+import { PatientsBrief } from "../../interfaces/PatientDetailsBrief";
 
 const StaffDashboardPatients = () => {
   const [error, setError] = useState<ErrorState>({ state: false, message: "" });
