@@ -183,7 +183,7 @@ const StaffDash = () => {
               </li>
             </ul>
           </nav>
-          <main>
+          <main className="mb-24">
             {error.state && (
               <Toast
                 color={"failure"}
