@@ -40,7 +40,7 @@ const ChatHub = ({
   userDetails,
   parentOnlineUsers,
   parentNewUnreads,
-  setParentUnreadAlert
+  setParentUnreadAlert,
 }: ChatHubProps) => {
   const [staffChats, setStaffChats] = useState<StaffDetails[]>([]);
   const [myInbox, setMyInbox] = useState<ChatInbox>({
@@ -153,12 +153,22 @@ const ChatHub = ({
     const newRecentChat = myInbox.unreadChats.find(
       (unread) => unread.senderId === id
     );
-    setMyInbox((prev) => ({
-      recentChats: newRecentChat
-        ? [newRecentChat, ...prev.recentChats]
-        : prev.recentChats,
-      unreadChats: prev.unreadChats.filter((chat) => chat.senderId !== id),
-    }));
+    setMyInbox((prev) => {
+      const newState = {
+        recentChats: newRecentChat
+          ? [newRecentChat, ...prev.recentChats]
+          : prev.recentChats,
+        unreadChats: prev.unreadChats.filter((chat) => chat.senderId !== id),
+      };
+      const newUnreadSum = newState.unreadChats.reduce(
+        (acc: number, curr: ChatInboxUnreadItem) => acc + curr.unreadMessages,
+        0
+      );
+      document.title = `IBDirect${
+        newUnreadSum > 0 ? ` (${newUnreadSum})` : ""
+      }`;
+      return newState;
+    });
   };
 
   const closeErrorState = () => {

@@ -66,9 +66,11 @@ const StaffDash = () => {
       setOnlineUsers(onlineUsers);
     });
 
-    presenceConnection.on("NewMessageReceived", (unreads) => {
+    presenceConnection.on("NewMessageReceived", (unreads: ChatInboxUnreadItem[]) => {
       if (unreads.length) {
         audioRef.current?.play();
+        const unreadSum = unreads.reduce((acc: number, curr: ChatInboxUnreadItem) => acc + curr.unreadMessages, 0);
+        document.title = `IBDirect (${unreadSum})`;
       }
       setUpdatedUnreads(unreads);
       setUnreadNotif(true);

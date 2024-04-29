@@ -69,6 +69,11 @@ const PatientDash = () => {
     presenceConnection.on("NewMessageReceived", (unreads) => {
       if (unreads.length) {
         audioRef.current?.play();
+        const unreadSum = unreads.reduce(
+          (acc: number, curr: ChatInboxUnreadItem) => acc + curr.unreadMessages,
+          0
+        );
+        document.title = `IBDirect (${unreadSum})`;
       }
       setUpdatedUnreads(unreads);
       setUnreadNotif(true);
