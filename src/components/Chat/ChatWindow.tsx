@@ -1,4 +1,9 @@
-import { ArrowBackOutlined, SendOutlined } from "@mui/icons-material";
+import {
+  ArrowBackOutlined,
+  CheckCircle,
+  RemoveCircle,
+  SendOutlined,
+} from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { ChatMessage } from "../../interfaces/ChatMessage";
 import { parseIsoToDateTime } from "../../utils/parseIsoToDateTime";
@@ -152,6 +157,7 @@ const ChatWindow = ({
       <section
         className="flex-grow overflow-y-scroll border-b border-slate-400"
         aria-live="polite"
+        tabIndex={0}
       >
         <ul>
           {chatThread.map((message) => {
@@ -170,7 +176,26 @@ const ChatWindow = ({
                       className="flex justify-between mx-2 text-xs text-neutral-700"
                       aria-hidden
                     >
-                      <span>{`${message.senderName} - ${message.senderRole}`}</span>
+                      <span>
+                        {message.senderName}{" "}
+                        <span
+                          className="text-sm"
+                          title={message.read ? "Read" : "Unread"}
+                          aria-label={message.read ? "Read" : "Unread"}
+                        >
+                          {message.read ? (
+                            <CheckCircle
+                              className="text-blue-500"
+                              fontSize="inherit"
+                            />
+                          ) : (
+                            <RemoveCircle
+                              className="text-neutral-400"
+                              fontSize="inherit"
+                            />
+                          )}
+                        </span>
+                      </span>
                       <span>{parseIsoToDateTime(message.dateSent)}</span>
                     </div>
                   </section>
@@ -191,7 +216,7 @@ const ChatWindow = ({
                       className="flex justify-between mx-2 text-xs text-neutral-700"
                       aria-hidden
                     >
-                      <span>{`${message.senderName} - ${message.senderRole}`}</span>
+                      <span>{message.senderName}</span>
                       <span>{parseIsoToDateTime(message.dateSent)}</span>
                     </div>
                   </section>
