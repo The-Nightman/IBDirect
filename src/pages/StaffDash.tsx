@@ -8,8 +8,9 @@ import {
   MenuOutlined,
   QuestionAnswerOutlined,
 } from "@mui/icons-material";
-import { ChatHub } from "../components";
+import { ChatHub, Toast } from "../components";
 import { presenceConnection } from "../SignalR/presenceConnection";
+import { ErrorState } from "../interfaces/ErrorState";
 
 interface userData {
   name: string;
@@ -30,6 +31,7 @@ const StaffDash = () => {
   });
   const [chatState, setChatState] = useState<boolean>(false);
   const [onlineUsers, setOnlineUsers] = useState<number[]>([]);
+  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
   const { user, logout } = useAuth();
 
   useEffect(() => {
@@ -37,30 +39,35 @@ const StaffDash = () => {
       .then((res) => {
         setUserData(res.data);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((_err) => {
+        setError({
+          state: true,
+          message: "An error has occured trying to retrieve user details",
+        });
       });
   }, [user.userID]);
 
   useEffect(() => {
-    presenceConnection
-      .start()
-      .then(() => {
-        console.log("SignalR connection started");
-      })
-      .catch((err) => {
-        console.log(err);
+    presenceConnection.start().catch((_err) => {
+      setError({
+        state: true,
+        message: "An error has occured trying to connect to presence services",
       });
+    });
 
-      presenceConnection.on("GetOnlineUsers", (onlineUsers: number[]) => {
-        setOnlineUsers(onlineUsers);
-      });
+    presenceConnection.on("GetOnlineUsers", (onlineUsers: number[]) => {
+      setOnlineUsers(onlineUsers);
+    });
 
     return () => {
       presenceConnection.off("GetOnlineUsers");
       presenceConnection.stop();
     };
   }, [user.userID]);
+
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
+  };
 
   return (
     <>
@@ -160,6 +167,13 @@ const StaffDash = () => {
             </ul>
           </nav>
           <main>
+            {error.state && (
+              <Toast
+                color={"failure"}
+                message={error.message}
+                handleErrorState={closeErrorState}
+              />
+            )}
             {userData.staffId && chatState ? (
               <ChatHub
                 setChatState={setChatState}
