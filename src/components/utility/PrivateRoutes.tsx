@@ -5,10 +5,6 @@ import SpinnerStatus from "../UX/Spinner";
 const PrivateRoutes = () => {
   const { user, loading } = useAuth();
   const jwt = sessionStorage.getItem("jwt");
-  let auth = false;
-  if (user.userID && jwt) {
-    auth = true;
-  }
   if (loading) {
     return (
       <div className="h-screen w-screen flex justify-center items-center">
