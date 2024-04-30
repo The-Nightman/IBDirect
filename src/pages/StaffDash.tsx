@@ -12,7 +12,7 @@ import { ChatHub, Toast } from "../components";
 import { presenceConnection } from "../SignalR/presenceConnection";
 import { ErrorState } from "../interfaces/ErrorState";
 import { ChatInboxUnreadItem } from "../interfaces/ChatInboxUnreadItem";
-import notifcation from "../../public/notificationSound.mp3";
+import notifcation from "../assets/notificationSound.mp3";
 
 interface userData {
   name: string;
