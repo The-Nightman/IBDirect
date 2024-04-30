@@ -17,7 +17,7 @@ import {
   StaffDashboardStaff,
   StaffMemberDetails,
 } from "./components";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Root from "./pages/Root";
 import StaffDash from "./pages/StaffDash";
 import PatientDash from "./pages/PatientDash";
@@ -81,6 +81,7 @@ function App() {
               />
             </Route>
           </Route>
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
     </>
