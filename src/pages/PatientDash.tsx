@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, Outlet } from "react-router-dom";
 import { patientUserDetailsBrief } from "../api/getPatientUserDetailsBrief";
@@ -7,12 +7,19 @@ import {
   ExitToAppOutlined,
   MenuOpenOutlined,
   MenuOutlined,
+  QuestionAnswerOutlined,
 } from "@mui/icons-material";
+import { ChatHub, Toast } from "../components";
+import { presenceConnection } from "../SignalR/presenceConnection";
+import { ErrorState } from "../interfaces/ErrorState";
+import { ChatInboxUnreadItem } from "../interfaces/ChatInboxUnreadItem";
+import notifcation from "../../public/notificationSound.mp3";
 
 interface userData {
   name: string;
   diagnosis: string;
   hospital: string;
+  id: number | null;
 }
 
 const PatientDash = () => {
@@ -21,7 +28,17 @@ const PatientDash = () => {
     name: "",
     diagnosis: "",
     hospital: "",
+    id: null,
   });
+  const [chatState, setChatState] = useState<boolean>(false);
+  const [onlineUsers, setOnlineUsers] = useState<number[]>([]);
+  const [error, setError] = useState<ErrorState>({ state: false, message: "" });
+  const [updatedUnreads, setUpdatedUnreads] = useState<ChatInboxUnreadItem[]>(
+    []
+  );
+  const [unreadNotif, setUnreadNotif] = useState<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
   const { user, logout } = useAuth();
 
   useEffect(() => {
@@ -29,14 +46,54 @@ const PatientDash = () => {
       .then((res) => {
         setUserData(res.data);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((_err) => {
+        setError({
+          state: true,
+          message: "An error has occured trying to retrieve user details",
+        });
       });
   }, [user.userID]);
+
+  useEffect(() => {
+    presenceConnection.start().catch((_err) => {
+      setError({
+        state: true,
+        message: "An error has occured trying to connect to presence services",
+      });
+    });
+
+    presenceConnection.on("GetOnlineUsers", (onlineUsers: number[]) => {
+      setOnlineUsers(onlineUsers);
+    });
+
+    presenceConnection.on("NewMessageReceived", (unreads) => {
+      if (unreads.length) {
+        audioRef.current?.play();
+        const unreadSum = unreads.reduce(
+          (acc: number, curr: ChatInboxUnreadItem) => acc + curr.unreadMessages,
+          0
+        );
+        document.title = `IBDirect (${unreadSum})`;
+      }
+      setUpdatedUnreads(unreads);
+      setUnreadNotif(true);
+    });
+
+    return () => {
+      presenceConnection.off("GetOnlineUsers");
+      presenceConnection.off("NewMessageReceived");
+      presenceConnection.stop();
+    };
+  }, [user.userID]);
+
+  const closeErrorState = () => {
+    setError({ state: false, message: "" });
+  };
 
   return (
     <>
       <section className="flex flex-1 flex-col justify-center">
+        <audio ref={audioRef} src={notifcation} />
         <aside className="flex flex-nowrap flex-col  justify-between text-white md:min-h-[5rem] h-fit py-1 px-2 bg-gradient-to-br from-sky-700 to-blue-400">
           <h2 className="text-3xl">
             {userData.name.split(",").reverse().join(" ")}
@@ -131,7 +188,42 @@ const PatientDash = () => {
               </li>
             </ul>
           </nav>
-          <main>
+          <main className="mb-24">
+            {error.state && (
+              <Toast
+                color={"failure"}
+                message={error.message}
+                handleErrorState={closeErrorState}
+              />
+            )}
+            {userData.id && chatState ? (
+              <ChatHub
+                setChatState={setChatState}
+                userDetails={{
+                  userId: userData.id,
+                  name: userData.name,
+                  role: "Patient",
+                }}
+                parentOnlineUsers={onlineUsers}
+                parentNewUnreads={updatedUnreads}
+                setParentUnreadAlert={setUnreadNotif}
+              />
+            ) : (
+              <div>
+                <button
+                  className="fixed bottom-8 right-8 rounded-full p-2 bg-blue-500 text-white"
+                  onClick={() => setChatState(true)}
+                >
+                  <QuestionAnswerOutlined fontSize="large" />
+                </button>
+                {unreadNotif && (
+                  <div>
+                    <span className="animate-ping fixed bottom-[4.25rem] right-7 h-4 w-4 rounded-full bg-red-600" />
+                    <span className="fixed bottom-[4.25rem] right-7 h-4 w-4 rounded-full bg-red-600 shadow-sm shadow-slate-400" />
+                  </div>
+                )}
+              </div>
+            )}
             <Outlet />
           </main>
         </div>
