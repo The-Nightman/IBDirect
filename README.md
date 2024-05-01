@@ -132,7 +132,7 @@ This project is a Single-Page-Application built with ReactJS 18, TypeScript and 
 1. copy the following code into your terminal after using `cd` to navigate to your desired directory:
 
 ```
-git clone https://github.com/The-Nightman/NC-News.git
+git clone https://github.com/The-Nightman/IBDirect.git
 ```
 
 2. navigate into the repo folder using `cd`
